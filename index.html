@@ -1,0 +1,371 @@
+
+<style>
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+  .ark-root {
+    font-family: 'DM Sans', sans-serif;
+    background: #08090A;
+    color: #E8E6E1;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* OPCIÓN 3 — Grid de fondo */
+  .ark-root::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* OPCIÓN 1 — Glows ambientales */
+  .glow-tl {
+    position: fixed;
+    width: 700px; height: 700px;
+    background: #2DD4BF;
+    filter: blur(180px);
+    opacity: .055;
+    top: -200px; left: -200px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-br {
+    position: fixed;
+    width: 600px; height: 600px;
+    background: #378ADD;
+    filter: blur(160px);
+    opacity: .045;
+    bottom: -150px; right: -150px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-mid {
+    position: absolute;
+    width: 500px; height: 400px;
+    background: #7F77DD;
+    filter: blur(150px);
+    opacity: .04;
+    top: 900px; left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Nav */
+  .ark-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 40px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    position: sticky; top: 0;
+    background: rgba(8,9,10,0.88);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+  }
+  .ark-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; color: #E8E6E1; }
+  .ark-logo span { color: #2DD4BF; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; color: rgba(232,230,225,0.5); text-decoration: none; cursor: pointer; transition: color .2s; }
+  .nav-links a:hover { color: #E8E6E1; }
+  .nav-cta { background: #2DD4BF; color: #08090A !important; padding: 8px 18px; border-radius: 6px; font-weight: 500; font-size: 13px !important; }
+
+  /* Hero */
+  .ark-hero {
+    padding: 100px 40px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* OPCIÓN 4 — Línea luminosa animada */
+  @keyframes scanline { 0% { left: -220px; } 100% { left: calc(100% + 20px); } }
+  .hero-line {
+    position: absolute;
+    top: 0; left: -220px;
+    height: 2px; width: 200px;
+    background: linear-gradient(90deg, transparent, #2DD4BF, transparent);
+    animation: scanline 8s linear infinite;
+    pointer-events: none;
+  }
+
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #2DD4BF; margin-bottom: 24px; }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #2DD4BF; }
+  .hero-h1 { font-family: 'Syne', sans-serif; font-size: 52px; font-weight: 800; line-height: 1.05; letter-spacing: -1.5px; color: #F0EDE8; margin: 0 0 24px; }
+  .hero-h1 em { font-style: normal; color: #2DD4BF; }
+  .hero-sub { font-size: 16px; color: rgba(232,230,225,0.5); line-height: 1.7; max-width: 420px; margin: 0 0 36px; font-weight: 300; }
+  .hero-actions { display: flex; gap: 12px; align-items: center; }
+  .btn-primary { background: #2DD4BF; color: #08090A; padding: 12px 24px; border-radius: 7px; font-weight: 500; font-size: 14px; cursor: pointer; border: none; }
+  .btn-ghost { background: transparent; color: rgba(232,230,225,0.65); padding: 12px 24px; border-radius: 7px; font-size: 14px; cursor: pointer; border: 0.5px solid rgba(255,255,255,0.1); }
+
+  /* Roadmap card */
+  .hero-visual { position: relative; z-index: 1; }
+  .roadmap-card { background: #111214; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 20px 24px; }
+  .roadmap-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,230,225,0.3); margin-bottom: 16px; }
+  .rm-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid rgba(255,255,255,0.04); }
+  .rm-item:last-child { border-bottom: none; }
+  .rm-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .rm-dot.done  { background: #2DD4BF; }
+  .rm-dot.active{ background: #2DD4BF; box-shadow: 0 0 0 3px rgba(45,212,191,.15); }
+  .rm-dot.next  { background: rgba(255,255,255,.1); }
+  .rm-label { font-size: 13px; color: rgba(232,230,225,0.7); flex: 1; }
+  .rm-label.done  { color: rgba(232,230,225,.4); text-decoration: line-through; }
+  .rm-label.active{ color: #E8E6E1; font-weight: 500; }
+  .rm-badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; }
+  .rm-badge.live { background: rgba(45,212,191,.12); color: #2DD4BF; }
+  .rm-badge.wip  { background: rgba(45,212,191,.06); color: rgba(45,212,191,.6); }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(255,255,255,.04); border-radius: 10px; overflow: hidden; margin-top: 16px; }
+  .stat-box { background: #111214; padding: 16px; text-align: center; }
+  .stat-n { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #F0EDE8; }
+  .stat-l { font-size: 11px; color: rgba(232,230,225,.3); margin-top: 2px; letter-spacing: .05em; }
+
+  /* Sections */
+  .section { padding: 80px 40px; position: relative; z-index: 1; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(232,230,225,.3); margin-bottom: 10px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 700; letter-spacing: -.5px; color: #F0EDE8; margin: 0 0 12px; }
+  .section-desc { font-size: 15px; color: rgba(232,230,225,.45); max-width: 480px; line-height: 1.7; font-weight: 300; }
+
+  /* OPCIÓN 2 — Cards con personalidad + glow en hover */
+  .modules-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 40px; }
+
+  .module-card {
+    background: #0F1012;
+    border-radius: 12px;
+    padding: 24px;
+    cursor: pointer;
+    transition: border-color .25s, box-shadow .25s, transform .2s;
+  }
+  .module-card.teal   { border: 0.5px solid rgba(45,212,191,.18); }
+  .module-card.amber  { border: 0.5px solid rgba(239,159,39,.18); }
+  .module-card.blue   { border: 0.5px solid rgba(55,138,221,.18); }
+  .module-card.purple { border: 0.5px solid rgba(127,119,221,.18); }
+
+  .module-card.teal:hover   { border-color: rgba(45,212,191,.5);  box-shadow: 0 0 24px rgba(45,212,191,.08);  transform: translateY(-2px); }
+  .module-card.amber:hover  { border-color: rgba(239,159,39,.5);  box-shadow: 0 0 24px rgba(239,159,39,.08);  transform: translateY(-2px); }
+  .module-card.blue:hover   { border-color: rgba(55,138,221,.5);  box-shadow: 0 0 24px rgba(55,138,221,.08);  transform: translateY(-2px); }
+  .module-card.purple:hover { border-color: rgba(127,119,221,.5); box-shadow: 0 0 24px rgba(127,119,221,.08); transform: translateY(-2px); }
+
+  .module-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 16px; }
+  .ic-teal   { background: rgba(45,212,191,.1);   color: #2DD4BF; }
+  .ic-amber  { background: rgba(239,159,39,.1);   color: #EF9F27; }
+  .ic-blue   { background: rgba(55,138,221,.1);   color: #378ADD; }
+  .ic-purple { background: rgba(127,119,221,.1);  color: #7F77DD; }
+
+  .module-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: #F0EDE8; margin-bottom: 6px; }
+  .module-desc { font-size: 13px; color: rgba(232,230,225,.4); line-height: 1.6; font-weight: 300; }
+  .module-link { margin-top: 16px; font-size: 12px; color: rgba(232,230,225,.25); display: flex; align-items: center; gap: 4px; }
+
+  /* Book */
+  .book-section { background: #0B0D0F; border-top: 0.5px solid rgba(255,255,255,.04); border-bottom: 0.5px solid rgba(255,255,255,.04); position: relative; z-index: 1; }
+  .book-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1100px; margin: 0 auto; padding: 80px 40px; }
+  .new-badge { display: inline-block; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #2DD4BF; background: rgba(45,212,191,.1); padding: 4px 10px; border-radius: 4px; margin-bottom: 18px; }
+  .book-title { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -.5px; color: #F0EDE8; margin: 0 0 16px; }
+  .book-sub { font-size: 14px; color: rgba(232,230,225,.45); line-height: 1.7; font-weight: 300; margin-bottom: 28px; }
+  .book-cover { background: #0D1115; border: 0.5px solid rgba(45,212,191,.15); border-radius: 10px; aspect-ratio: 3/4; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; position: relative; overflow: hidden; transition: box-shadow .3s; }
+  .book-cover:hover { box-shadow: 0 0 40px rgba(45,212,191,.1); }
+  .book-cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #2DD4BF; }
+  .book-cover-label { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: #F0EDE8; line-height: 1.2; }
+  .book-cover-author { font-size: 11px; color: rgba(232,230,225,.3); margin-top: 8px; letter-spacing: .05em; }
+  .book-cover-accent { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(45,212,191,.08); border: 0.5px solid rgba(45,212,191,.2); display: flex; align-items: center; justify-content: center; font-size: 16px; color: #2DD4BF; }
+
+  /* Feed */
+  .feed-preview { margin-top: 40px; display: flex; flex-direction: column; gap: 12px; }
+  .feed-card { background: #0F1012; border: 0.5px solid rgba(255,255,255,.05); border-radius: 10px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; transition: border-color .2s; }
+  .feed-card:hover { border-color: rgba(255,255,255,.12); }
+  .feed-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(45,212,191,.12); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #2DD4BF; }
+  .feed-meta { font-size: 11px; color: rgba(232,230,225,.3); margin-bottom: 6px; }
+  .feed-meta strong { color: rgba(232,230,225,.7); font-weight: 500; }
+  .feed-text { font-size: 13px; color: rgba(232,230,225,.55); line-height: 1.6; font-weight: 300; }
+  .feed-cat { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 4px; margin-top: 8px; }
+  .cat-ia      { background: rgba(127,119,221,.1); color: #7F77DD; }
+  .cat-proyecto{ background: rgba(45,212,191,.1);  color: #2DD4BF; }
+  .cat-recurso { background: rgba(55,138,221,.1);  color: #378ADD; }
+
+  /* CTA */
+  .cta-wrap { padding: 0 40px 60px; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .cta-box { background: #0F1012; border: 0.5px solid rgba(45,212,191,.15); border-radius: 14px; padding: 48px; text-align: center; position: relative; overflow: hidden; }
+  .cta-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(45,212,191,.05), transparent); pointer-events: none; }
+  .cta-h { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #F0EDE8; letter-spacing: -.5px; margin-bottom: 10px; }
+  .cta-p { font-size: 14px; color: rgba(232,230,225,.4); max-width: 400px; margin: 0 auto 28px; font-weight: 300; line-height: 1.7; }
+
+  /* Footer */
+  .ark-footer { padding: 32px 40px; border-top: 0.5px solid rgba(255,255,255,.05); display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: rgba(232,230,225,.2); }
+  .footer-logo span { color: rgba(45,212,191,.35); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 12px; color: rgba(232,230,225,.2); text-decoration: none; cursor: pointer; }
+
+  .divider { height: 0.5px; background: rgba(255,255,255,.04); position: relative; z-index: 1; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,.03); color: rgba(232,230,225,.35); border: 0.5px solid rgba(255,255,255,.06); }
+  .pills-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+</style>
+
+<div class="ark-root">
+  <div class="glow-tl"></div>
+  <div class="glow-br"></div>
+  <div class="glow-mid"></div>
+
+  <nav class="ark-nav">
+    <div> <img src="assets/logo.png" alt="" width="100"></div>
+    <div class="nav-links">
+      <a>Comunidad</a>
+      <a>Academia</a>
+      <a>Herramientas</a>
+      <a>Roadmap</a>
+      <a class="nav-cta">Entrar</a>
+    </div>
+  </nav>
+
+  <section class="ark-hero">
+    <div class="hero-line"></div>
+    <div class="hero-grid">
+      <div>
+        <div class="hero-tag">Ecosistema IA · Datos · Automatización</div>
+        <h1 class="hero-h1">Construimos herramientas, productos y <em>formación</em> para proyectos reales.</h1>
+        <p class="hero-sub">ArkOS reúne comunidad, academia y herramientas para profesionales que quieren aprender IA y crear proyectos que importan.</p>
+        <div class="hero-actions">
+          <button class="btn-primary">Entrar a la Comunidad</button>
+          <button class="btn-ghost">Explorar Academia</button>
+        </div>
+        <div class="pills-row">
+          <span class="pill"><i class="ti ti-users" aria-hidden="true"></i> Comunidad</span>
+          <span class="pill"><i class="ti ti-book" aria-hidden="true"></i> Academia</span>
+          <span class="pill"><i class="ti ti-tool" aria-hidden="true"></i> Herramientas</span>
+          <span class="pill"><i class="ti ti-chart-line" aria-hidden="true"></i> Roadmap público</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="roadmap-card">
+          <div class="roadmap-title">Roadmap ArkOS</div>
+          <div class="rm-item"><div class="rm-dot done"></div><span class="rm-label done">Landing</span><span class="rm-badge live">Live</span></div>
+          <div class="rm-item"><div class="rm-dot done"></div><span class="rm-label done">Academia</span><span class="rm-badge live">Live</span></div>
+          <div class="rm-item"><div class="rm-dot done"></div><span class="rm-label done">Herramientas</span><span class="rm-badge live">Live</span></div>
+          <div class="rm-item"><div class="rm-dot active"></div><span class="rm-label active">Comunidad</span><span class="rm-badge wip">En progreso</span></div>
+          <div class="rm-item"><div class="rm-dot next"></div><span class="rm-label">Sistema de monedas</span></div>
+          <div class="rm-item"><div class="rm-dot next"></div><span class="rm-label">Marketplace</span></div>
+          <div class="rm-item"><div class="rm-dot next"></div><span class="rm-label">SaaS #1</span></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-n">3</div><div class="stat-l">Módulos live</div></div>
+          <div class="stat-box"><div class="stat-n">+12</div><div class="stat-l">Herramientas</div></div>
+          <div class="stat-box"><div class="stat-n">∞</div><div class="stat-l">Contenido</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">El ecosistema</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+        <div>
+          <h2 class="section-title">Todo lo que necesitás, en un solo lugar.</h2>
+          <p class="section-desc">Cada módulo resuelve una parte del proceso: aprender, construir, publicar y crecer.</p>
+        </div>
+      </div>
+      <div class="modules-grid">
+        <div class="module-card teal">
+          <div class="module-icon ic-teal"><i class="ti ti-users" aria-hidden="true"></i></div>
+          <div class="module-name">Comunidad</div>
+          <div class="module-desc">Compartí proyectos, experiencias y aprendizajes. Feed con categorías: IA, datos, logística, recursos, prompts.</div>
+          <div class="module-link"><i class="ti ti-arrow-right" aria-hidden="true"></i> Ver comunidad</div>
+        </div>
+        <div class="module-card amber">
+          <div class="module-icon ic-amber"><i class="ti ti-book" aria-hidden="true"></i></div>
+          <div class="module-name">Academia</div>
+          <div class="module-desc">Cursos, libros y caminos de formación centrados en IA, datos y automatización con certificados.</div>
+          <div class="module-link"><i class="ti ti-arrow-right" aria-hidden="true"></i> Explorar cursos</div>
+        </div>
+        <div class="module-card blue">
+          <div class="module-icon ic-blue"><i class="ti ti-tool" aria-hidden="true"></i></div>
+          <div class="module-name">Herramientas</div>
+          <div class="module-desc">CV Builder, KPI Calculator, OTIF Calculator, Data Tools y AI Tools. Calculá, descargá y compartí.</div>
+          <div class="module-link"><i class="ti ti-arrow-right" aria-hidden="true"></i> Ver herramientas</div>
+        </div>
+        <div class="module-card purple">
+          <div class="module-icon ic-purple"><i class="ti ti-package" aria-hidden="true"></i></div>
+          <div class="module-name">Productos</div>
+          <div class="module-desc">SaaS en construcción pública. Seguí el proceso completo de idea, diseño y lanzamiento en tiempo real.</div>
+          <div class="module-link"><i class="ti ti-arrow-right" aria-hidden="true"></i> Ver roadmap</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="book-section">
+    <div class="book-inner">
+      <div>
+        <span class="new-badge">Nuevo lanzamiento</span>
+        <h2 class="book-title">Los Tres Pilares del Analista</h2>
+        <p class="book-sub">El libro que cierra el gap entre lo que te enseñan y lo que necesitás saber para trabajar con datos de verdad. Reportes, dashboards y decisiones reales.</p>
+        <button class="btn-primary">Ver el libro</button>
+      </div>
+      <div class="book-cover">
+        <div class="book-cover-accent"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+        <div class="book-cover-label">Los Tres Pilares del Analista</div>
+        <div class="book-cover-author">ArkOS · 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section-inner">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px;">
+        <div>
+          <div class="section-label">Comunidad</div>
+          <h2 class="section-title">Lo que está pasando ahora.</h2>
+        </div>
+        <button class="btn-ghost" style="font-size:13px;">Ver todo el feed</button>
+      </div>
+      <div class="feed-preview">
+        <div class="feed-card">
+          <div class="feed-avatar">MR</div>
+          <div>
+            <div class="feed-meta"><strong>Marcos R.</strong> · hace 2h</div>
+            <div class="feed-text">Construí una calculadora OTIF desde cero con Python. Incluye visualización automática y export a PDF. Comparto el código.</div>
+            <span class="feed-cat cat-proyecto">Proyecto</span>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-avatar">AL</div>
+          <div>
+            <div class="feed-meta"><strong>Ana L.</strong> · hace 5h</div>
+            <div class="feed-text">Prompt para análisis de datos en GPT-4o que uso todos los días en mi trabajo. Le ahorré 3hs semanales a mi equipo.</div>
+            <span class="feed-cat cat-ia">IA</span>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-avatar">JF</div>
+          <div>
+            <div class="feed-meta"><strong>Julián F.</strong> · ayer</div>
+            <div class="feed-text">Template de dashboard ejecutivo para Power BI con métricas estándar de supply chain. Descarga gratis.</div>
+            <span class="feed-cat cat-recurso">Recurso</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-wrap">
+    <div class="cta-box">
+      <div class="cta-h">Sumate al ecosistema.</div>
+      <p class="cta-p">Comunidad gratis. Herramientas gratis. Aprendés, construís y crecés con personas que también están en el proceso.</p>
+      <button class="btn-primary">Crear cuenta gratis</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="ark-footer">
+    <div> <img src="assets/logo.png" alt="" width="100"></div>
+    <div class="footer-links">
+      <a>Comunidad</a><a>Academia</a><a>Herramientas</a><a>Roadmap</a><a>Términos</a>
+    </div>
+  </div>
+</div>

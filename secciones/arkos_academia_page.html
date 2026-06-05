@@ -1,0 +1,316 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+  .ark { font-family: 'DM Sans', sans-serif; background: #08090A; color: #E8E6E1; overflow-x: hidden; position: relative; }
+
+  .ark::after {
+    content: "";
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none; z-index: 0;
+  }
+  .glow-tl { position: fixed; width: 600px; height: 600px; background: #2DD4BF; filter: blur(180px); opacity: .045; top: -180px; left: -180px; pointer-events: none; z-index: 0; }
+  .glow-br { position: fixed; width: 500px; height: 500px; background: #EF9F27; filter: blur(180px); opacity: .035; bottom: -150px; right: -100px; pointer-events: none; z-index: 0; }
+
+  /* Nav */
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 0.5px solid rgba(255,255,255,.07); position: sticky; top: 0; background: rgba(8,9,10,.9); backdrop-filter: blur(16px); z-index: 100; }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: #E8E6E1; }
+  .logo span { color: #2DD4BF; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; color: rgba(232,230,225,.45); text-decoration: none; cursor: pointer; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: #E8E6E1; }
+  .nav-links a.active { color: #2DD4BF; }
+  .nav-cta { background: #2DD4BF; color: #08090A !important; padding: 8px 18px; border-radius: 6px; font-weight: 500; }
+
+  /* Hero */
+  .hero { padding: 80px 40px 60px; position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #EF9F27; margin-bottom: 20px; }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #EF9F27; }
+  .hero-h1 { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; line-height: 1.08; letter-spacing: -1px; color: #F0EDE8; margin: 0 0 18px; max-width: 600px; }
+  .hero-h1 em { font-style: normal; color: #EF9F27; }
+  .hero-sub { font-size: 15px; color: rgba(232,230,225,.45); line-height: 1.75; max-width: 500px; margin: 0 0 32px; font-weight: 300; }
+  .hero-actions { display: flex; gap: 12px; align-items: center; }
+  .btn-primary { background: #EF9F27; color: #08090A; padding: 11px 22px; border-radius: 7px; font-weight: 500; font-size: 14px; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; }
+  .btn-ghost { background: transparent; color: rgba(232,230,225,.6); padding: 11px 22px; border-radius: 7px; font-size: 14px; cursor: pointer; border: 0.5px solid rgba(255,255,255,.1); font-family: 'DM Sans', sans-serif; }
+
+  /* Tabs */
+  .tabs-wrap { position: relative; z-index: 1; padding: 0 40px; max-width: 1100px; margin: 0 auto; }
+  .tabs-bar { display: flex; gap: 4px; border-bottom: 0.5px solid rgba(255,255,255,.07); margin-bottom: 40px; }
+  .tab-btn { font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 10px 18px; background: transparent; border: none; cursor: pointer; color: rgba(232,230,225,.4); border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: color .2s, border-color .2s; }
+  .tab-btn:hover { color: rgba(232,230,225,.75); }
+  .tab-btn.active { color: #EF9F27; border-bottom-color: #EF9F27; }
+  .tab-count { font-size: 10px; background: rgba(255,255,255,.06); padding: 2px 6px; border-radius: 10px; margin-left: 6px; color: rgba(232,230,225,.3); }
+  .tab-btn.active .tab-count { background: rgba(239,159,39,.12); color: #EF9F27; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Cursos grid */
+  .cursos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .curso-card { background: #0F1012; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform .2s, border-color .25s, box-shadow .25s; }
+  .curso-card:hover { transform: translateY(-3px); }
+
+  .curso-card.amber { border: 0.5px solid rgba(239,159,39,.2); }
+  .curso-card.amber:hover { border-color: rgba(239,159,39,.5); box-shadow: 0 0 24px rgba(239,159,39,.07); }
+  .curso-card.teal { border: 0.5px solid rgba(45,212,191,.2); }
+  .curso-card.teal:hover { border-color: rgba(45,212,191,.5); box-shadow: 0 0 24px rgba(45,212,191,.07); }
+  .curso-card.blue { border: 0.5px solid rgba(55,138,221,.2); }
+  .curso-card.blue:hover { border-color: rgba(55,138,221,.5); box-shadow: 0 0 24px rgba(55,138,221,.07); }
+  .curso-card.purple { border: 0.5px solid rgba(127,119,221,.2); }
+  .curso-card.purple:hover { border-color: rgba(127,119,221,.5); box-shadow: 0 0 24px rgba(127,119,221,.07); }
+  .curso-card.gray { border: 0.5px solid rgba(255,255,255,.06); opacity: .55; cursor: default; }
+  .curso-card.gray:hover { transform: none; }
+
+  .curso-thumb { height: 6px; }
+  .bg-amber  { background: #EF9F27; }
+  .bg-teal   { background: #2DD4BF; }
+  .bg-blue   { background: #378ADD; }
+  .bg-purple { background: #7F77DD; }
+  .bg-gray   { background: rgba(255,255,255,.08); }
+
+  .curso-body { padding: 18px 20px; }
+  .curso-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .nivel { font-size: 10px; padding: 2px 8px; border-radius: 4px; letter-spacing: .05em; }
+  .nv-principiante { background: rgba(45,212,191,.1); color: #2DD4BF; }
+  .nv-intermedio    { background: rgba(239,159,39,.1); color: #EF9F27; }
+  .nv-avanzado      { background: rgba(127,119,221,.1); color: #7F77DD; }
+  .curso-precio { font-size: 12px; color: rgba(232,230,225,.3); }
+  .curso-precio.free { color: #2DD4BF; }
+  .curso-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #F0EDE8; line-height: 1.35; margin-bottom: 8px; }
+  .curso-desc { font-size: 12px; color: rgba(232,230,225,.38); line-height: 1.6; font-weight: 300; }
+  .curso-footer { padding: 12px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-top: 0.5px solid rgba(255,255,255,.04); }
+  .curso-info { font-size: 11px; color: rgba(232,230,225,.25); display: flex; gap: 12px; }
+  .pronto-badge { font-size: 10px; padding: 3px 10px; border-radius: 4px; background: rgba(255,255,255,.05); color: rgba(232,230,225,.25); }
+
+  /* Libros grid */
+  .libros-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .libro-card { background: #0F1012; border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform .2s, box-shadow .25s; display: flex; flex-direction: column; }
+  .libro-card:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(239,159,39,.08); }
+  .libro-card.destacado { border: 0.5px solid rgba(239,159,39,.3); }
+  .libro-card.pronto { border: 0.5px solid rgba(255,255,255,.05); opacity: .5; cursor: default; }
+  .libro-card.pronto:hover { transform: none; box-shadow: none; }
+  .libro-cover { aspect-ratio: 3/2; position: relative; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .lc-amber  { background: #0D1115; border-bottom: 0.5px solid rgba(239,159,39,.1); }
+  .lc-teal   { background: #0A0F0E; border-bottom: 0.5px solid rgba(45,212,191,.1); }
+  .lc-gray   { background: #0D0E10; border-bottom: 0.5px solid rgba(255,255,255,.05); }
+  .libro-cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .lc-amber::before  { background: #EF9F27; }
+  .lc-teal::before   { background: #2DD4BF; }
+  .lc-gray::before   { background: rgba(255,255,255,.1); }
+  .libro-icon { font-size: 28px; }
+  .ic-a { color: #EF9F27; }
+  .ic-t { color: #2DD4BF; }
+  .ic-g { color: rgba(232,230,225,.2); }
+  .libro-new { position: absolute; top: 12px; right: 12px; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; background: rgba(239,159,39,.12); color: #EF9F27; padding: 3px 8px; border-radius: 4px; }
+  .libro-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; }
+  .libro-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: #F0EDE8; line-height: 1.35; margin-bottom: 6px; }
+  .libro-sub { font-size: 12px; color: rgba(232,230,225,.35); line-height: 1.55; font-weight: 300; flex: 1; }
+  .libro-footer { padding: 10px 18px 14px; border-top: 0.5px solid rgba(255,255,255,.04); display: flex; justify-content: space-between; align-items: center; }
+  .libro-precio { font-size: 14px; font-weight: 500; color: #EF9F27; }
+  .libro-precio.pronto-txt { font-size: 11px; color: rgba(232,230,225,.2); font-weight: 400; }
+
+  /* Caminos */
+  .caminos-list { display: flex; flex-direction: column; gap: 16px; }
+  .camino-card { background: #0F1012; border-radius: 12px; padding: 24px 28px; cursor: pointer; transition: border-color .25s, box-shadow .25s; }
+  .camino-card.teal  { border: 0.5px solid rgba(45,212,191,.18); }
+  .camino-card.amber { border: 0.5px solid rgba(239,159,39,.18); }
+  .camino-card.blue  { border: 0.5px solid rgba(55,138,221,.18); }
+  .camino-card.teal:hover  { border-color: rgba(45,212,191,.45); box-shadow: 0 0 24px rgba(45,212,191,.06); }
+  .camino-card.amber:hover { border-color: rgba(239,159,39,.45); box-shadow: 0 0 24px rgba(239,159,39,.06); }
+  .camino-card.blue:hover  { border-color: rgba(55,138,221,.45); box-shadow: 0 0 24px rgba(55,138,221,.06); }
+  .camino-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .camino-left { display: flex; gap: 14px; align-items: flex-start; }
+  .camino-ic { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .ci-teal   { background: rgba(45,212,191,.1); color: #2DD4BF; }
+  .ci-amber  { background: rgba(239,159,39,.1); color: #EF9F27; }
+  .ci-blue   { background: rgba(55,138,221,.1); color: #378ADD; }
+  .camino-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: #F0EDE8; margin-bottom: 4px; }
+  .camino-sub { font-size: 13px; color: rgba(232,230,225,.4); font-weight: 300; }
+  .camino-dur { font-size: 11px; color: rgba(232,230,225,.25); }
+  .camino-steps { display: flex; gap: 8px; flex-wrap: wrap; }
+  .step-pill { font-size: 11px; padding: 4px 12px; border-radius: 20px; background: rgba(255,255,255,.04); color: rgba(232,230,225,.4); border: 0.5px solid rgba(255,255,255,.06); }
+  .step-pill.done { background: rgba(45,212,191,.07); color: rgba(45,212,191,.6); border-color: rgba(45,212,191,.12); }
+
+  /* Progress bar */
+  .prog-wrap { margin-top: 12px; }
+  .prog-label { display: flex; justify-content: space-between; font-size: 11px; color: rgba(232,230,225,.25); margin-bottom: 6px; }
+  .prog-bar { height: 3px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 2px; }
+  .pf-teal   { background: #2DD4BF; }
+  .pf-amber  { background: #EF9F27; }
+  .pf-blue   { background: #378ADD; }
+
+  .divider { height: 0.5px; background: rgba(255,255,255,.04); position: relative; z-index: 1; }
+  .ark-footer { padding: 32px 40px; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: rgba(232,230,225,.2); }
+  .footer-logo span { color: rgba(45,212,191,.35); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 12px; color: rgba(232,230,225,.2); text-decoration: none; cursor: pointer; }
+
+  .section-pad { padding-bottom: 60px; }
+</style>
+
+<div class="ark">
+  <div class="glow-tl"></div>
+  <div class="glow-br"></div>
+
+  <nav class="nav">
+    <div class="logo">ARK<span>OS</span></div>
+    <div class="nav-links">
+      <a>Comunidad</a>
+      <a class="active">Academia</a>
+      <a>Herramientas</a>
+      <a>Roadmap</a>
+      <a class="nav-cta">Entrar</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-tag">Formación real</div>
+    <h1 class="hero-h1">Aprendé a construir con <em>IA, datos</em> y automatización.</h1>
+    <p class="hero-sub">Cursos, libros y caminos diseñados para que pases del concepto al proyecto real. Sin teoría vacía.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Explorar caminos</button>
+      <button class="btn-ghost">Ver el libro</button>
+    </div>
+  </div>
+
+  <div class="tabs-wrap section-pad">
+    <div class="tabs-bar">
+      <button class="tab-btn active" onclick="switchTab('libros',this)">Libros <span class="tab-count">2</span></button>
+      <button class="tab-btn" onclick="switchTab('caminos',this)">Caminos <span class="tab-count">3</span></button>
+    </div>
+
+    <!-- LIBROS -->
+    <div id="tab-libros" class="tab-panel active">
+      <div class="libros-grid">
+
+        <div class="libro-card destacado">
+          <div class="libro-cover lc-amber">
+            <span class="libro-new">Nuevo</span>
+            <i class="ti ti-chart-bar libro-icon ic-a" aria-hidden="true"></i>
+          </div>
+          <div class="libro-body">
+            <div class="libro-title">Los Tres Pilares del Analista</div>
+            <div class="libro-sub">Reporte ejecutivo, consultoría y dashboard de KPIs. El manual que nadie te enseñó en la universidad.</div>
+          </div>
+          <div class="libro-footer">
+            <span class="libro-precio">$19</span>
+            <button class="btn-primary" style="padding:7px 16px;font-size:12px;">Comprar</button>
+          </div>
+        </div>
+
+        <div class="libro-card pronto">
+          <div class="libro-cover lc-teal">
+            <i class="ti ti-brain libro-icon ic-t" aria-hidden="true"></i>
+          </div>
+          <div class="libro-body">
+            <div class="libro-title">IA Práctica para el Trabajo Real</div>
+            <div class="libro-sub">Cómo integrar herramientas de IA en tu flujo de trabajo diario sin ser desarrollador.</div>
+          </div>
+          <div class="libro-footer">
+            <span class="libro-precio pronto-txt">Próximamente</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CAMINOS -->
+    <div id="tab-caminos" class="tab-panel">
+      <div class="caminos-list">
+
+        <div class="camino-card teal">
+          <div class="camino-head">
+            <div class="camino-left">
+              <div class="camino-ic ci-teal"><i class="ti ti-route" aria-hidden="true"></i></div>
+              <div>
+                <div class="camino-name">Los Tres Pilares del Analista de Datos</div>
+                <div class="camino-sub">El camino completo para salir del loop y hacer click.</div>
+              </div>
+            </div>
+            <div class="camino-dur">~1 mes</div>
+          </div>
+          <div class="camino-steps">
+            <span class="step-pill done">Mentalidad</span>
+            <span class="step-pill done">Soft Skills</span>
+            <span class="step-pill">Contexto de Negocio</span>
+            <span class="step-pill">Resultados</span>
+          </div>
+          <div class="prog-wrap">
+            <div class="prog-label"><span>Progreso</span><span>2 / 4 completados</span></div>
+            <div class="prog-bar"><div class="prog-fill pf-teal" style="width:50%"></div></div>
+          </div>
+        </div>
+
+        <div class="camino-card amber">
+          <div class="camino-head">
+            <div class="camino-left">
+              <div class="camino-ic ci-amber"><i class="ti ti-brain" aria-hidden="true"></i></div>
+              <div>
+                <div class="camino-name">IA Aplicada al Trabajo</div>
+                <div class="camino-sub">Para profesionales que quieren usar IA sin aprender a programar.</div>
+              </div>
+            </div>
+            <div class="camino-dur">~6 semanas</div>
+          </div>
+          <div class="camino-steps">
+            <span class="step-pill">Prompts Profesionales</span>
+            <span class="step-pill">Automatización con IA</span>
+            <span class="step-pill">Libro: IA Práctica</span>
+          </div>
+          <div class="prog-wrap">
+            <div class="prog-label"><span>Progreso</span><span>0 / 3 completados</span></div>
+            <div class="prog-bar"><div class="prog-fill pf-amber" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="camino-card blue">
+          <div class="camino-head">
+            <div class="camino-left">
+              <div class="camino-ic ci-blue"><i class="ti ti-truck" aria-hidden="true"></i></div>
+              <div>
+                <div class="camino-name">Analista de Datos desde Cero</div>
+                <div class="camino-sub">KPIs que Mueven Decisiones</div>
+              </div>
+            </div>
+            <div class="camino-dur">~3 meses</div>
+          </div>
+          <div class="camino-steps">
+            <span class="step-pill">Intro a Datos</span>
+            <span class="step-pill">KPIs que Mueven Decisiones</span>
+            <span class="step-pill">Power BI Ejecutivo</span>
+            <span class="step-pill">Python Automatización</span>
+          </div>
+          <div class="prog-wrap">
+            <div class="prog-label"><span>Progreso</span><span>0 / 4 completados</span></div>
+            <div class="prog-bar"><div class="prog-fill pf-blue" style="width:0%"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+  <div class="ark-footer">
+    <div class="footer-logo">ARK<span>OS</span></div>
+    <div class="footer-links">
+      <a>Comunidad</a><a>Academia</a><a>Herramientas</a><a>Roadmap</a><a>Términos</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>

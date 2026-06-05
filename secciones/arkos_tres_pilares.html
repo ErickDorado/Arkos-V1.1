@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Los Tres Pilares del Analista de Datos — ARKOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #08090A;
+    --surface:   #0F1012;
+    --surface2:  #131416;
+    --border:    rgba(255,255,255,.06);
+    --border-m:  rgba(255,255,255,.1);
+    --text:      #E8E6E1;
+    --text-dim:  rgba(232,230,225,.38);
+    --text-faint:rgba(232,230,225,.2);
+    --teal:      #2DD4BF;
+    --amber:     #EF9F27;
+    --blue:      #378ADD;
+    --purple:    #7F77DD;
+    --teal-bg:   rgba(45,212,191,.08);
+    --amber-bg:  rgba(239,159,39,.08);
+    --sidebar-w: 268px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+
+  /* Grid bg */
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none; z-index: 0;
+  }
+  .glow-tl { position: fixed; width: 600px; height: 600px; background: #2DD4BF; filter: blur(200px); opacity: .04; top: -200px; left: -200px; pointer-events: none; z-index: 0; }
+  .glow-br { position: fixed; width: 500px; height: 500px; background: #EF9F27; filter: blur(200px); opacity: .03; bottom: -150px; right: -100px; pointer-events: none; z-index: 0; }
+
+  /* ─── NAV ─────────────────────────────── */
+  .nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 32px;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(8,9,10,.92); backdrop-filter: blur(20px);
+    position: sticky; top: 0; z-index: 200;
+  }
+  .nav-left { display: flex; align-items: center; gap: 24px; }
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--teal); }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-faint); }
+  .breadcrumb a { color: var(--text-faint); text-decoration: none; transition: color .2s; }
+  .breadcrumb a:hover { color: var(--text); }
+  .breadcrumb .sep { opacity: .3; }
+  .breadcrumb .current { color: var(--teal); }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .progress-mini { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-faint); }
+  .progress-mini-bar { width: 80px; height: 3px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; }
+  .progress-mini-fill { height: 100%; background: var(--teal); border-radius: 2px; width: 50%; transition: width .6s ease; }
+  .user-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(45,212,191,.12); border: 0.5px solid rgba(45,212,191,.25); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: var(--teal); }
+
+  /* ─── LAYOUT ──────────────────────────── */
+  .layout { display: flex; position: relative; z-index: 1; min-height: calc(100vh - 61px); }
+
+  /* ─── SIDEBAR ─────────────────────────── */
+  .sidebar {
+    width: var(--sidebar-w); flex-shrink: 0;
+    background: rgba(15,16,18,.95);
+    border-right: 0.5px solid var(--border);
+    position: sticky; top: 61px; height: calc(100vh - 61px);
+    overflow-y: auto; display: flex; flex-direction: column;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.06) transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.06); border-radius: 4px; }
+
+  .sidebar-header { padding: 20px 20px 14px; border-bottom: 0.5px solid var(--border); }
+  .sidebar-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 10px; }
+  .sidebar-prog { }
+  .sp-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-faint); margin-bottom: 5px; }
+  .sp-bar { height: 3px; background: rgba(255,255,255,.06); border-radius: 2px; overflow: hidden; }
+  .sp-fill { height: 100%; background: var(--teal); border-radius: 2px; width: 50%; }
+
+  /* Sidebar nav sections */
+  .sb-section { padding: 6px 0; }
+  .sb-section-label {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px 6px;
+    font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--text-faint); font-weight: 500; cursor: pointer;
+    transition: color .2s;
+  }
+  .sb-section-label:hover { color: var(--text-dim); }
+  .sb-section-label .sb-ico { font-size: 14px; }
+  .sb-section-label .sb-arrow { margin-left: auto; font-size: 12px; transition: transform .25s; }
+  .sb-section-label.open .sb-arrow { transform: rotate(90deg); }
+  .sb-section-label.active-sec { color: var(--teal); }
+
+  .sb-items { overflow: hidden; }
+
+  .sb-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 20px 9px 36px;
+    font-size: 12.5px; color: var(--text-dim);
+    cursor: pointer; border-left: 2px solid transparent;
+    transition: background .15s, color .15s, border-color .15s;
+    position: relative;
+  }
+  .sb-item:hover { background: rgba(255,255,255,.03); color: var(--text); }
+  .sb-item.active { color: var(--teal); background: rgba(45,212,191,.05); border-left-color: var(--teal); }
+  .sb-item.active .sb-item-ico { color: var(--teal); }
+  .sb-item-ico { font-size: 14px; color: var(--text-faint); flex-shrink: 0; }
+  .sb-item-txt { flex: 1; line-height: 1.35; }
+  .sb-item-badge {
+    font-size: 9px; padding: 2px 6px; border-radius: 10px;
+    background: rgba(45,212,191,.1); color: var(--teal); flex-shrink: 0;
+  }
+  .sb-item-badge.new { background: rgba(239,159,39,.1); color: var(--amber); }
+  .sb-item-badge.pdf { background: rgba(127,119,221,.1); color: var(--purple); }
+  .sb-item-badge.xl { background: rgba(55,138,221,.1); color: var(--blue); }
+  .sb-item-badge.pbi { background: rgba(239,159,39,.12); color: var(--amber); }
+  .sb-done-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+  /* ─── MAIN CONTENT ────────────────────── */
+  .main { flex: 1; overflow-y: auto; }
+
+  /* Course header banner */
+  .course-banner {
+    background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    padding: 32px 48px 28px;
+    position: relative; overflow: hidden;
+  }
+  .course-banner::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--amber));
+  }
+  .course-banner::after {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: var(--teal); filter: blur(120px); opacity: .04;
+    pointer-events: none;
+  }
+  .cb-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+  .cb-tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
+  .cb-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: #F0EDE8; letter-spacing: -.5px; line-height: 1.2; margin-bottom: 8px; }
+  .cb-desc { font-size: 14px; color: var(--text-dim); font-weight: 300; line-height: 1.65; max-width: 600px; margin-bottom: 20px; }
+  .cb-meta { display: flex; gap: 24px; align-items: center; }
+  .cb-stat { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-faint); }
+  .cb-stat i { font-size: 14px; }
+
+  /* Content area */
+  .content-area { padding: 36px 48px; max-width: 860px; }
+
+  /* Section title */
+  .section-heading {
+    font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+    color: #F0EDE8; margin-bottom: 20px;
+    padding-bottom: 12px; border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-heading i { font-size: 18px; color: var(--teal); }
+
+  /* ─── LIBRO SECTION ───────────────────── */
+  .libro-feature {
+    background: var(--surface);
+    border: 0.5px solid rgba(239,159,39,.2);
+    border-radius: 14px; overflow: hidden; margin-bottom: 28px;
+    transition: border-color .25s, box-shadow .25s;
+  }
+  .libro-feature:hover { border-color: rgba(239,159,39,.4); box-shadow: 0 0 40px rgba(239,159,39,.06); }
+  .libro-feature-top { height: 3px; background: linear-gradient(90deg, var(--amber), rgba(239,159,39,.3)); }
+  .libro-feature-body { display: flex; gap: 28px; padding: 28px; align-items: flex-start; }
+  .libro-cover-art {
+    width: 120px; flex-shrink: 0; aspect-ratio: 3/4;
+    background: #0D1115; border-radius: 8px;
+    border: 0.5px solid rgba(239,159,39,.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; color: var(--amber);
+    position: relative; overflow: hidden;
+  }
+  .libro-cover-art::after {
+    content: 'ARKOS';
+    position: absolute; bottom: 8px; left: 0; right: 0;
+    text-align: center; font-family: 'Syne', sans-serif; font-size: 8px;
+    font-weight: 800; color: rgba(239,159,39,.3); letter-spacing: .2em;
+  }
+  .libro-info { flex: 1; }
+  .libro-badge-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .lbadge { font-size: 10px; padding: 3px 8px; border-radius: 4px; }
+  .lbadge-amber { background: rgba(239,159,39,.1); color: var(--amber); }
+  .lbadge-new { background: rgba(45,212,191,.1); color: var(--teal); }
+  .libro-feature-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: #F0EDE8; line-height: 1.3; margin-bottom: 8px; }
+  .libro-feature-sub { font-size: 13px; color: var(--text-dim); line-height: 1.65; font-weight: 300; margin-bottom: 16px; }
+  .libro-chapters { margin-bottom: 18px; }
+  .lc-title { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .lc-list { display: flex; flex-direction: column; gap: 4px; }
+  .lc-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-dim); }
+  .lc-item i { font-size: 13px; color: var(--teal); }
+  .lc-item.locked { color: var(--text-faint); }
+  .lc-item.locked i { color: var(--text-faint); }
+  .libro-actions { display: flex; gap: 10px; }
+  .btn-download {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 20px; border-radius: 7px; font-size: 13px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; border: none;
+    transition: opacity .2s, transform .15s;
+  }
+  .btn-download:hover { opacity: .85; transform: translateY(-1px); }
+  .btn-dl-amber { background: var(--amber); color: #08090A; }
+  .btn-dl-ghost { background: transparent; color: var(--text-dim); border: 0.5px solid var(--border-m); }
+
+  /* ─── RECURSOS SECTION ────────────────── */
+  .recursos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+  .recurso-card {
+    background: var(--surface); border-radius: 10px;
+    border: 0.5px solid var(--border);
+    padding: 16px 18px;
+    display: flex; align-items: flex-start; gap: 12px;
+    cursor: pointer; transition: border-color .2s, transform .15s, box-shadow .2s;
+  }
+  .recurso-card:hover { transform: translateY(-2px); }
+  .recurso-card.type-excel:hover { border-color: rgba(55,138,221,.35); box-shadow: 0 0 20px rgba(55,138,221,.06); }
+  .recurso-card.type-pbi:hover   { border-color: rgba(239,159,39,.35); box-shadow: 0 0 20px rgba(239,159,39,.06); }
+  .recurso-card.type-html:hover  { border-color: rgba(45,212,191,.35); box-shadow: 0 0 20px rgba(45,212,191,.06); }
+  .recurso-card.type-img:hover   { border-color: rgba(127,119,221,.35); box-shadow: 0 0 20px rgba(127,119,221,.06); }
+  .rec-icon {
+    width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 17px;
+  }
+  .ri-excel  { background: rgba(55,138,221,.1);  color: var(--blue); }
+  .ri-pbi    { background: rgba(239,159,39,.1);  color: var(--amber); }
+  .ri-html   { background: rgba(45,212,191,.1);  color: var(--teal); }
+  .ri-img    { background: rgba(127,119,221,.1); color: var(--purple); }
+  .rec-info { flex: 1; }
+  .rec-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; line-height: 1.35; }
+  .rec-desc { font-size: 11.5px; color: var(--text-faint); line-height: 1.5; font-weight: 300; }
+  .rec-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .rec-type-tag { font-size: 9px; padding: 2px 7px; border-radius: 4px; letter-spacing: .05em; text-transform: uppercase; }
+  .rt-excel { background: rgba(55,138,221,.1); color: var(--blue); }
+  .rt-pbi   { background: rgba(239,159,39,.1); color: var(--amber); }
+  .rt-html  { background: rgba(45,212,191,.1); color: var(--teal); }
+  .rt-img   { background: rgba(127,119,221,.1); color: var(--purple); }
+  .rec-dl-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--text-faint); cursor: pointer;
+    background: rgba(255,255,255,.04); border: 0.5px solid var(--border);
+    padding: 4px 10px; border-radius: 5px; font-family: 'DM Sans', sans-serif;
+    transition: color .2s, border-color .2s;
+  }
+  .rec-dl-btn:hover { color: var(--text); border-color: var(--border-m); }
+
+  /* ─── AMPLIACIONES SECTION ────────────── */
+  .amp-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .amp-item {
+    background: var(--surface); border-radius: 10px;
+    border: 0.5px solid var(--border);
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; transition: border-color .2s, background .2s;
+  }
+  .amp-item:hover { background: var(--surface2); border-color: var(--border-m); }
+  .amp-num { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--text-faint); width: 20px; flex-shrink: 0; text-align: right; }
+  .amp-icon { width: 32px; height: 32px; border-radius: 7px; background: rgba(255,255,255,.04); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .amp-info { flex: 1; }
+  .amp-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.35; }
+  .amp-meta { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+  .amp-tag { font-size: 9px; padding: 2px 7px; border-radius: 4px; }
+  .amp-tag-video  { background: rgba(239,159,39,.08); color: var(--amber); }
+  .amp-tag-lect   { background: rgba(45,212,191,.08); color: var(--teal); }
+  .amp-tag-tool   { background: rgba(127,119,221,.08); color: var(--purple); }
+  .amp-tag-bonus  { background: rgba(55,138,221,.08); color: var(--blue); }
+  .amp-arrow { font-size: 14px; color: var(--text-faint); }
+
+  /* Dashboard preview cards */
+  .dashboard-preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+  .dash-card {
+    border-radius: 12px; overflow: hidden; cursor: pointer;
+    border: 0.5px solid var(--border); position: relative;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .dash-card:hover { transform: translateY(-3px); border-color: rgba(239,159,39,.3); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+  .dash-thumb {
+    height: 140px; background: #0A0B0D;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  /* Fake mini dashboard illustration */
+  .dt-inner { width: 90%; height: 80%; position: relative; }
+  .dt-bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 60px; margin-bottom: 6px; }
+  .dt-bar { border-radius: 3px 3px 0 0; transition: height .3s; }
+  .dt-line { height: 2px; background: rgba(255,255,255,.06); border-radius: 1px; margin-bottom: 4px; }
+  .dt-line.s { width: 60%; }
+  .dt-kpi-row { display: flex; gap: 5px; }
+  .dt-kpi { flex: 1; height: 22px; border-radius: 4px; background: rgba(255,255,255,.04); }
+  .dt-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(8,9,10,.8)); }
+  .dash-info { padding: 12px 14px; background: var(--surface); }
+  .dash-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .dash-meta { font-size: 11px; color: var(--text-faint); }
+  .dash-badge { position: absolute; top: 10px; right: 10px; font-size: 9px; padding: 2px 7px; border-radius: 4px; }
+
+  /* Note box */
+  .note-box {
+    background: rgba(45,212,191,.04); border: 0.5px solid rgba(45,212,191,.12);
+    border-radius: 10px; padding: 14px 18px;
+    display: flex; gap: 12px; align-items: flex-start; margin-bottom: 24px;
+  }
+  .note-box i { font-size: 16px; color: var(--teal); margin-top: 1px; flex-shrink: 0; }
+  .note-box p { font-size: 13px; color: var(--text-dim); line-height: 1.6; font-weight: 300; }
+  .note-box strong { color: var(--teal); font-weight: 500; }
+
+  /* ─── COLLAPSED SIDEBAR ITEMS ANIMATION ─ */
+  .sb-items {
+    max-height: 1000px;
+    transition: max-height .3s ease, opacity .3s ease;
+    opacity: 1;
+  }
+  .sb-items.collapsed { max-height: 0; opacity: 0; pointer-events: none; }
+
+  /* Divider */
+  .divider { height: 0.5px; background: var(--border); margin: 28px 0; }
+
+  /* ─── RESPONSIVE ──────────────────────── */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .content-area { padding: 24px 24px; }
+    .course-banner { padding: 24px 24px; }
+    .recursos-grid { grid-template-columns: 1fr; }
+    .dashboard-preview-grid { grid-template-columns: 1fr; }
+    .libro-feature-body { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="glow-tl"></div>
+<div class="glow-br"></div>
+
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="#" class="logo">ARK<span>OS</span></a>
+    <div class="breadcrumb">
+      <i class="ti ti-chevron-right sep"></i>
+      <a href="#">Academia</a>
+      <i class="ti ti-chevron-right sep"></i>
+      <a href="#">Caminos</a>
+      <i class="ti ti-chevron-right sep"></i>
+      <span class="current">Los Tres Pilares</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="progress-mini">
+      <span>50% completado</span>
+      <div class="progress-mini-bar"><div class="progress-mini-fill"></div></div>
+    </div>
+    <div class="user-btn"><i class="ti ti-user"></i></div>
+  </div>
+</nav>
+
+<!-- ─── LAYOUT ─── -->
+<div class="layout">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Los Tres Pilares del Analista de Datos</div>
+      <div class="sidebar-prog">
+        <div class="sp-label"><span>Progreso general</span><span style="color:var(--teal)">50%</span></div>
+        <div class="sp-bar"><div class="sp-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- LIBRO -->
+    <div class="sb-section">
+      <div class="sb-section-label active-sec open" onclick="toggleSection(this,'sec-libro')">
+        <i class="ti ti-book sb-ico"></i>
+        Libro
+        <i class="ti ti-chevron-right sb-arrow"></i>
+      </div>
+      <div class="sb-items" id="sec-libro">
+        <div class="sb-item active" onclick="showSection('libro',this)">
+          <i class="ti ti-file-text sb-item-ico"></i>
+          <span class="sb-item-txt">Los Tres Pilares del Analista</span>
+          <span class="sb-done-dot"></span>
+        </div>
+        <div class="sb-item" onclick="showSection('libro',this)">
+          <i class="ti ti-bookmark sb-item-ico"></i>
+          <span class="sb-item-txt">Capítulo 1 — Mentalidad</span>
+          <span class="sb-done-dot"></span>
+        </div>
+        <div class="sb-item" onclick="showSection('libro',this)">
+          <i class="ti ti-bookmark sb-item-ico"></i>
+          <span class="sb-item-txt">Capítulo 2 — Soft Skills</span>
+          <span class="sb-done-dot"></span>
+        </div>
+        <div class="sb-item" onclick="showSection('libro',this)">
+          <i class="ti ti-bookmark sb-item-ico"></i>
+          <span class="sb-item-txt">Capítulo 3 — Contexto de Negocio</span>
+        </div>
+        <div class="sb-item" onclick="showSection('libro',this)">
+          <i class="ti ti-bookmark sb-item-ico"></i>
+          <span class="sb-item-txt">Capítulo 4 — Resultados</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECURSOS -->
+    <div class="sb-section">
+      <div class="sb-section-label open" onclick="toggleSection(this,'sec-recursos')">
+        <i class="ti ti-folder sb-ico"></i>
+        Recursos
+        <i class="ti ti-chevron-right sb-arrow"></i>
+      </div>
+      <div class="sb-items" id="sec-recursos">
+        <div class="sb-item" onclick="showSection('recursos',this)">
+          <i class="ti ti-table sb-item-ico"></i>
+          <span class="sb-item-txt">Dashboard Excel</span>
+          <span class="sb-item-badge xl">XLS</span>
+        </div>
+        <div class="sb-item" onclick="showSection('recursos',this)">
+          <i class="ti ti-chart-bar sb-item-ico"></i>
+          <span class="sb-item-txt">Dashboard Power BI</span>
+          <span class="sb-item-badge pbi">PBI</span>
+        </div>
+        <div class="sb-item" onclick="showSection('recursos',this)">
+          <i class="ti ti-code sb-item-ico"></i>
+          <span class="sb-item-txt">Template HTML Reporte</span>
+          <span class="sb-item-badge">HTML</span>
+        </div>
+        <div class="sb-item" onclick="showSection('recursos',this)">
+          <i class="ti ti-photo sb-item-ico"></i>
+          <span class="sb-item-txt">Imágenes de Dashboards</span>
+          <span class="sb-item-badge new">PNG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AMPLIACIONES -->
+    <div class="sb-section">
+      <div class="sb-section-label open" onclick="toggleSection(this,'sec-amp')">
+        <i class="ti ti-stack sb-ico"></i>
+        Ampliaciones
+        <i class="ti ti-chevron-right sb-arrow"></i>
+      </div>
+      <div class="sb-items" id="sec-amp">
+        <div class="sb-item" onclick="showSection('ampliaciones',this)">
+          <i class="ti ti-video sb-item-ico"></i>
+          <span class="sb-item-txt">El reporte ejecutivo en 3 pasos</span>
+        </div>
+        <div class="sb-item" onclick="showSection('ampliaciones',this)">
+          <i class="ti ti-file-description sb-item-ico"></i>
+          <span class="sb-item-txt">Guía de KPIs por industria</span>
+        </div>
+        <div class="sb-item" onclick="showSection('ampliaciones',this)">
+          <i class="ti ti-tool sb-item-ico"></i>
+          <span class="sb-item-txt">Stack de herramientas 2025</span>
+        </div>
+        <div class="sb-item" onclick="showSection('ampliaciones',this)">
+          <i class="ti ti-rocket sb-item-ico"></i>
+          <span class="sb-item-txt">Bonus: Pitch de consultoría</span>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main class="main">
+
+    <!-- Banner -->
+    <div class="course-banner">
+      <div class="cb-tag">Camino · Analista de Datos</div>
+      <h1 class="cb-title">Los Tres Pilares del Analista de Datos</h1>
+      <p class="cb-desc">El camino completo para salir del loop y hacer click. Reporte ejecutivo, consultoría y dashboard de KPIs. El manual que nadie te enseñó en la universidad.</p>
+      <div class="cb-meta">
+        <div class="cb-stat"><i class="ti ti-clock"></i> ~1 mes</div>
+        <div class="cb-stat"><i class="ti ti-package"></i> 4 módulos</div>
+        <div class="cb-stat"><i class="ti ti-download"></i> 8 recursos</div>
+        <div class="cb-stat" style="color:var(--teal)"><i class="ti ti-circle-check"></i> 2 completados</div>
+      </div>
+    </div>
+
+    <!-- ═══════════ SECTION: LIBRO ═══════════ -->
+    <div class="content-area" id="content-libro">
+
+      <h2 class="section-heading"><i class="ti ti-book"></i> El Libro</h2>
+
+      <div class="libro-feature">
+        <div class="libro-feature-top"></div>
+        <div class="libro-feature-body">
+          <div class="libro-cover-art">
+            <i class="ti ti-chart-bar"></i>
+          </div>
+          <div class="libro-info">
+            <div class="libro-badge-row">
+              <span class="lbadge lbadge-amber">PDF Completo</span>
+              <span class="lbadge lbadge-new">Nuevo</span>
+            </div>
+            <div class="libro-feature-title">Los Tres Pilares del Analista de Datos</div>
+            <div class="libro-feature-sub">El manual que nadie te enseñó en la universidad. Reporte ejecutivo, consultoría de negocio y dashboard de KPIs, explicado con casos reales y frameworks accionables.</div>
+            <div class="libro-chapters">
+              <div class="lc-title">Contenido</div>
+              <div class="lc-list">
+                <div class="lc-item"><i class="ti ti-circle-check"></i> Introducción — Por qué el 80% de los analistas no genera impacto</div>
+                <div class="lc-item"><i class="ti ti-circle-check"></i> Pilar 1 — Mentalidad del analista efectivo</div>
+                <div class="lc-item"><i class="ti ti-circle-check"></i> Pilar 2 — Soft Skills que nadie te enseñó</div>
+                <div class="lc-item locked"><i class="ti ti-lock"></i> Pilar 3 — Contexto de negocio y métricas que importan</div>
+                <div class="lc-item locked"><i class="ti ti-lock"></i> Cierre — Del análisis a la decisión</div>
+              </div>
+            </div>
+            <div class="libro-actions">
+              <button class="btn-download btn-dl-amber"><i class="ti ti-download"></i> Descargar PDF</button>
+              <button class="btn-download btn-dl-ghost"><i class="ti ti-eye"></i> Vista previa</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <i class="ti ti-info-circle"></i>
+        <p><strong>Acceso completo desbloqueado.</strong> Como parte de este camino tenés acceso al libro completo en PDF. Podés descargarlo, anotarlo e imprimirlo sin restricciones.</p>
+      </div>
+
+    </div>
+
+    <!-- ═══════════ SECTION: RECURSOS ═══════════ -->
+    <div class="content-area" id="content-recursos" style="display:none">
+
+      <h2 class="section-heading"><i class="ti ti-folder-open"></i> Recursos Descargables</h2>
+
+      <div class="note-box">
+        <i class="ti ti-bolt"></i>
+        <p>Todos los archivos son <strong>editables y reutilizables</strong>. Están diseñados para que los adaptes a tu trabajo real desde el primer día.</p>
+      </div>
+
+      <div class="recursos-grid">
+
+        <!-- Excel -->
+        <div class="recurso-card type-excel">
+          <div class="rec-icon ri-excel"><i class="ti ti-table"></i></div>
+          <div class="rec-info">
+            <div class="rec-title">Dashboard de KPIs — Excel</div>
+            <div class="rec-desc">Plantilla lista con tablas dinámicas, gráficos y semáforo de indicadores para reportar a dirección.</div>
+            <div class="rec-foot">
+              <span class="rec-type-tag rt-excel">Excel · .xlsx</span>
+              <button class="rec-dl-btn"><i class="ti ti-download"></i> Descargar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PBI -->
+        <div class="recurso-card type-pbi">
+          <div class="rec-icon ri-pbi"><i class="ti ti-chart-dots"></i></div>
+          <div class="rec-info">
+            <div class="rec-title">Dashboard Ejecutivo — Power BI</div>
+            <div class="rec-desc">Archivo .pbix con modelo de datos de ejemplo, visualizaciones listas y paleta Arkos aplicada.</div>
+            <div class="rec-foot">
+              <span class="rec-type-tag rt-pbi">Power BI · .pbix</span>
+              <button class="rec-dl-btn"><i class="ti ti-download"></i> Descargar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HTML -->
+        <div class="recurso-card type-html">
+          <div class="rec-icon ri-html"><i class="ti ti-code"></i></div>
+          <div class="rec-info">
+            <div class="rec-title">Template de Reporte HTML</div>
+            <div class="rec-desc">Reporte ejecutivo en HTML listo para enviar por mail o presentar en navegador. Responsive y editable.</div>
+            <div class="rec-foot">
+              <span class="rec-type-tag rt-html">HTML · .html</span>
+              <button class="rec-dl-btn"><i class="ti ti-download"></i> Descargar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Imágenes -->
+        <div class="recurso-card type-img">
+          <div class="rec-icon ri-img"><i class="ti ti-photo"></i></div>
+          <div class="rec-info">
+            <div class="rec-title">Galería de Dashboards de Referencia</div>
+            <div class="rec-desc">12 capturas de dashboards reales anotados con sus buenas prácticas de visualización.</div>
+            <div class="rec-foot">
+              <span class="rec-type-tag rt-img">Imágenes · .zip</span>
+              <button class="rec-dl-btn"><i class="ti ti-download"></i> Descargar</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Dashboard previews -->
+      <h2 class="section-heading" style="margin-top:8px"><i class="ti ti-eye"></i> Vista previa — Dashboards incluidos</h2>
+
+      <div class="dashboard-preview-grid">
+
+        <div class="dash-card">
+          <div class="dash-thumb">
+            <!-- Fake chart illustration -->
+            <div class="dt-inner">
+              <div class="dt-bar-chart">
+                <div class="dt-bar" style="height:35%;width:13%;background:rgba(45,212,191,.5)"></div>
+                <div class="dt-bar" style="height:55%;width:13%;background:rgba(45,212,191,.7)"></div>
+                <div class="dt-bar" style="height:45%;width:13%;background:rgba(45,212,191,.5)"></div>
+                <div class="dt-bar" style="height:80%;width:13%;background:var(--teal)"></div>
+                <div class="dt-bar" style="height:60%;width:13%;background:rgba(45,212,191,.7)"></div>
+                <div class="dt-bar" style="height:70%;width:13%;background:rgba(45,212,191,.8)"></div>
+              </div>
+              <div class="dt-line"></div>
+              <div class="dt-line s"></div>
+              <div class="dt-kpi-row">
+                <div class="dt-kpi" style="background:rgba(45,212,191,.08)"></div>
+                <div class="dt-kpi" style="background:rgba(239,159,39,.06)"></div>
+                <div class="dt-kpi" style="background:rgba(255,255,255,.04)"></div>
+              </div>
+            </div>
+            <div class="dt-overlay"></div>
+            <span class="dash-badge" style="background:rgba(45,212,191,.1);color:var(--teal)">Excel</span>
+          </div>
+          <div class="dash-info">
+            <div class="dash-title">KPI Tracker — Ventas &amp; Operaciones</div>
+            <div class="dash-meta">Excel · Tabla dinámica · Semáforo automático</div>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-thumb">
+            <div class="dt-inner">
+              <div class="dt-bar-chart" style="height:50px">
+                <div class="dt-bar" style="height:40%;width:100%;background:transparent;border-bottom:2px solid rgba(239,159,39,.5);position:relative">
+                  <svg style="position:absolute;bottom:0;left:0;width:100%;height:40px" viewBox="0 0 140 40" preserveAspectRatio="none">
+                    <polyline points="0,35 25,20 50,28 75,10 100,18 140,5" fill="none" stroke="#EF9F27" stroke-width="2"/>
+                    <polyline points="0,35 25,20 50,28 75,10 100,18 140,5 140,40 0,40" fill="rgba(239,159,39,.08)"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="dt-line" style="margin-top:8px"></div>
+              <div class="dt-kpi-row">
+                <div class="dt-kpi" style="background:rgba(239,159,39,.1)"></div>
+                <div class="dt-kpi" style="background:rgba(239,159,39,.06)"></div>
+                <div class="dt-kpi" style="background:rgba(255,255,255,.04)"></div>
+              </div>
+            </div>
+            <div class="dt-overlay"></div>
+            <span class="dash-badge" style="background:rgba(239,159,39,.1);color:var(--amber)">Power BI</span>
+          </div>
+          <div class="dash-info">
+            <div class="dash-title">Dashboard Ejecutivo — Power BI</div>
+            <div class="dash-meta">Power BI · Modelo estrella · Drillthrough habilitado</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ═══════════ SECTION: AMPLIACIONES ═══════════ -->
+    <div class="content-area" id="content-ampliaciones" style="display:none">
+
+      <h2 class="section-heading"><i class="ti ti-stack"></i> Ampliaciones</h2>
+
+      <div class="note-box">
+        <i class="ti ti-sparkles"></i>
+        <p>Las ampliaciones son <strong>material complementario curado</strong> para que vayas más fondo en cada concepto del libro. No son obligatorias, pero marcan la diferencia entre entender y dominar.</p>
+      </div>
+
+      <div class="amp-list">
+
+        <div class="amp-item">
+          <span class="amp-num">01</span>
+          <div class="amp-icon" style="color:var(--amber)"><i class="ti ti-video"></i></div>
+          <div class="amp-info">
+            <div class="amp-title">El reporte ejecutivo en 3 pasos</div>
+            <div class="amp-meta">Video explicativo · 18 min · Incluye template</div>
+          </div>
+          <span class="amp-tag amp-tag-video">Video</span>
+          <i class="ti ti-chevron-right amp-arrow"></i>
+        </div>
+
+        <div class="amp-item">
+          <span class="amp-num">02</span>
+          <div class="amp-icon" style="color:var(--teal)"><i class="ti ti-file-description"></i></div>
+          <div class="amp-info">
+            <div class="amp-title">Guía de KPIs por industria</div>
+            <div class="amp-meta">Lectura · 12 páginas PDF · Retail, Finanzas, Logística, SaaS</div>
+          </div>
+          <span class="amp-tag amp-tag-lect">Lectura</span>
+          <i class="ti ti-chevron-right amp-arrow"></i>
+        </div>
+
+        <div class="amp-item">
+          <span class="amp-num">03</span>
+          <div class="amp-icon" style="color:var(--purple)"><i class="ti ti-tool"></i></div>
+          <div class="amp-info">
+            <div class="amp-title">Stack de herramientas 2025 para el analista</div>
+            <div class="amp-meta">Guía curada · Excel, Power BI, SQL, Python básico, Notion</div>
+          </div>
+          <span class="amp-tag amp-tag-tool">Herramientas</span>
+          <i class="ti ti-chevron-right amp-arrow"></i>
+        </div>
+
+        <div class="amp-item">
+          <span class="amp-num">04</span>
+          <div class="amp-icon" style="color:var(--blue)"><i class="ti ti-rocket"></i></div>
+          <div class="amp-info">
+            <div class="amp-title">Bonus — Pitch de consultoría: cómo presentar análisis a un cliente</div>
+            <div class="amp-meta">Lectura + plantilla PowerPoint · Estructura en 5 slides</div>
+          </div>
+          <span class="amp-tag amp-tag-bonus">Bonus</span>
+          <i class="ti ti-chevron-right amp-arrow"></i>
+        </div>
+
+        <div class="amp-item">
+          <span class="amp-num">05</span>
+          <div class="amp-icon" style="color:var(--amber)"><i class="ti ti-messages"></i></div>
+          <div class="amp-info">
+            <div class="amp-title">Prompts de ChatGPT para acelerar tu análisis</div>
+            <div class="amp-meta">Colección de prompts · 20 casos de uso reales con analistas</div>
+          </div>
+          <span class="amp-tag amp-tag-tool">IA</span>
+          <i class="ti ti-chevron-right amp-arrow"></i>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ─── SIDEBAR SECTION TOGGLE ───────────────
+  function toggleSection(btn, sectionId) {
+    const items = document.getElementById(sectionId);
+    const isOpen = !items.classList.contains('collapsed');
+    items.classList.toggle('collapsed', isOpen);
+    btn.classList.toggle('open', !isOpen);
+  }
+
+  // ─── MAIN CONTENT SWITCHING ───────────────
+  function showSection(section, clickedItem) {
+    // Update sidebar active
+    document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+    clickedItem.classList.add('active');
+
+    // Show/hide content panels
+    const sections = ['libro','recursos','ampliaciones'];
+    sections.forEach(s => {
+      const el = document.getElementById('content-' + s);
+      if (el) el.style.display = (s === section) ? 'block' : 'none';
+    });
+
+    // Update sidebar label active state
+    document.querySelectorAll('.sb-section-label').forEach(l => l.classList.remove('active-sec'));
+    const labels = {
+      'libro': 0,
+      'recursos': 1,
+      'ampliaciones': 2
+    };
+    const allLabels = document.querySelectorAll('.sb-section-label');
+    if (allLabels[labels[section]]) allLabels[labels[section]].classList.add('active-sec');
+  }
+
+  // ─── OPEN ALL SECTIONS ON LOAD ───────────────
+  document.querySelectorAll('.sb-section-label').forEach(btn => {
+    if (!btn.classList.contains('open')) {
+      btn.classList.add('open');
+    }
+  });
+</script>
+
+</body>
+</html>
