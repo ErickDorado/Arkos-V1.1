@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email de Recomendación — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f2044;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px;
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; }
+
+  /* EMAIL MOCK */
+  .email-wrapper {
+    background: #1a2540;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+  }
+
+  /* Email header bar */
+  .email-topbar {
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red { background: #ff5f57; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #28c840; }
+  .email-title-bar {
+    margin-left: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+
+  /* Email fields */
+  .email-meta {
+    padding: 0 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .email-field {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 12px;
+  }
+  .email-field:last-child { border-bottom: none; }
+  .email-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+  .email-field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.12);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    padding: 4px 0;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .email-field input:focus { border-bottom-color: var(--orange); }
+  .email-field input::placeholder { color: var(--gray-500); font-style: italic; }
+
+  /* Subject highlight */
+  .subject-field input {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  /* Email body */
+  .email-body {
+    padding: 28px 28px 24px;
+  }
+
+  /* Editable sections */
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    opacity: 0.7;
+    margin-bottom: 6px;
+    margin-top: 20px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  .editable {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    padding: 12px 14px;
+    width: 100%;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    min-height: 50px;
+  }
+  .editable:focus { border-color: rgba(249,115,22,0.35); }
+  .editable::placeholder { color: var(--gray-500); font-style: italic; }
+
+  /* Impact box */
+  .impact-box {
+    background: rgba(249,115,22,0.08);
+    border: 1px solid rgba(249,115,22,0.2);
+    border-left: 3px solid var(--orange);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin: 16px 0;
+  }
+  .impact-box .impact-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange-light);
+    margin-bottom: 8px;
+  }
+  .impact-box textarea {
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 44px;
+  }
+  .impact-box textarea::placeholder { color: rgba(249,115,22,0.4); font-style: italic; }
+
+  /* Links row */
+  .links-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .link-field {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    padding: 10px 14px;
+  }
+  .link-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .link-field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    color: #60a5fa;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    width: 100%;
+    padding: 3px 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .link-field input:focus { border-bottom-color: #60a5fa; }
+  .link-field input::placeholder { color: var(--gray-500); }
+
+  /* Call to action line */
+  .cta-line {
+    background: rgba(16,185,129,0.07);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 16px 0;
+  }
+  .cta-line textarea {
+    background: transparent;
+    border: none;
+    color: #6ee7b7;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 32px;
+  }
+  .cta-line textarea::placeholder { color: rgba(16,185,129,0.35); font-style: italic; }
+
+  /* Signature */
+  .signature-area {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .signature-area textarea {
+    background: transparent;
+    border: none;
+    color: var(--gray-300);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 60px;
+  }
+  .signature-area textarea::placeholder { color: var(--gray-500); font-style: italic; }
+
+  /* GUIDE SECTION */
+  .guide {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .guide-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 16px;
+  }
+  .guide-card .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--orange);
+    opacity: 0.6;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .guide-card h4 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--white);
+  }
+  .guide-card p {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    line-height: 1.5;
+  }
+
+  .footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+  .footer-brand span { color: var(--orange); }
+  .print-btn {
+    background: var(--orange);
+    color: white;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--orange-light); }
+
+  @media (max-width: 600px) {
+    .guide { grid-template-columns: 1fr; }
+    .links-row { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .print-btn { display: none; }
+    .email-wrapper { border-color: #ccc; background: white; box-shadow: none; }
+    .email-topbar { background: #f5f5f5; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Pilar 2 — Soft Skills</div>
+    <h1>Email de <span>Recomendación</span></h1>
+    <p>Plantilla profesional editable · Stakeholders ejecutivos</p>
+  </div>
+
+  <div class="email-wrapper">
+    <!-- Top bar -->
+    <div class="email-topbar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <div class="email-title-bar">Nuevo mensaje — Cliente de correo</div>
+    </div>
+
+    <!-- Email meta -->
+    <div class="email-meta">
+      <div class="email-field">
+        <label>Para</label>
+        <input type="text" placeholder="nombre@empresa.com">
+      </div>
+      <div class="email-field">
+        <label>CC</label>
+        <input type="text" placeholder="Opcional — otros stakeholders relevantes">
+      </div>
+      <div class="email-field subject-field">
+        <label>Asunto</label>
+        <input type="text" placeholder="Recomendación: [acción concreta] — [área/proyecto]">
+      </div>
+    </div>
+
+    <!-- Email body -->
+    <div class="email-body">
+
+      <div class="section-label">Saludo</div>
+      <textarea class="editable" rows="1" placeholder="Hola [Nombre],"></textarea>
+
+      <div class="section-label">Contexto (1–2 oraciones)</div>
+      <textarea class="editable" rows="2" placeholder="Adjunto el análisis de [qué datos] del [período]. El objetivo fue entender [pregunta de negocio clave]."></textarea>
+
+      <div class="impact-box">
+        <div class="impact-label">⚡ Resumen Ejecutivo</div>
+        <textarea placeholder="Recomiendo [acción concreta]: [qué, cómo, cuándo]. Impacto esperado: [resultado medible en negocio]."></textarea>
+      </div>
+
+      <div class="section-label">Evidencia clave (2–3 puntos)</div>
+      <textarea class="editable" rows="3" placeholder="• [Dato 1 concreto — ej: EnvioTotal: 59.7% OTD al costo más alto ($180)]&#10;• [Dato 2 concreto — ej: RapidoExpress: 73.4% OTD a $15 menos por pedido]&#10;• [Implicancia — ej: Pagamos más por el peor servicio → reclamos + baja recompra]"></textarea>
+
+      <div class="links-row">
+        <div class="link-field">
+          <label>Análisis completo</label>
+          <input type="text" placeholder="→ link al dashboard / repo">
+        </div>
+        <div class="link-field">
+          <label>Próximos pasos</label>
+          <input type="text" placeholder="→ link al plan de acción">
+        </div>
+      </div>
+
+      <div class="cta-line">
+        <textarea placeholder="¿Tenés [X] minutos esta semana para alinearnos y definir si avanzamos con la prueba piloto?"></textarea>
+      </div>
+
+      <div class="signature-area">
+        <textarea placeholder="Saludos,&#10;[Tu nombre]&#10;[Rol] · [Empresa]&#10;[LinkedIn o contacto — opcional]"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUIDE -->
+  <div class="guide">
+    <div class="guide-card">
+      <div class="num">01</div>
+      <h4>Asunto accionable</h4>
+      <p>Empezá con "Recomendación:" o "Análisis:" — el stakeholder entiende de qué se trata sin abrir el mail.</p>
+    </div>
+    <div class="guide-card">
+      <div class="num">02</div>
+      <h4>Resumen primero</h4>
+      <p>El ejecutivo lee el resumen ejecutivo antes de todo. Si no está en el primer párrafo, no lo lee.</p>
+    </div>
+    <div class="guide-card">
+      <div class="num">03</div>
+      <h4>Una sola recomendación</h4>
+      <p>No des 3 opciones en el mail. Dá una recomendación clara con evidencia. Las opciones van en la reunión.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Soft Skills</span> · emmanueldorado.gumroad.com</div>
+    <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
+
+</div>
+</body>
+</html>

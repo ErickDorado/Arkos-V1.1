@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa KPI → Pregunta → Decisión — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --green: #10b981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; }
+
+  /* Rule callout */
+  .rule-callout {
+    background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(245,158,11,0.05));
+    border: 1px solid rgba(249,115,22,0.2);
+    border-left: 3px solid var(--orange);
+    border-radius: 6px;
+    padding: 14px 20px;
+    margin-bottom: 32px;
+    font-size: 0.88rem;
+    color: #fed7aa;
+    line-height: 1.6;
+  }
+  .rule-callout strong { color: var(--orange-light); }
+
+  /* Industry meta */
+  .industry-bar {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 12px;
+    margin-bottom: 28px;
+    align-items: center;
+  }
+  .industry-select-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .industry-select-area label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    white-space: nowrap;
+  }
+  .industry-select-area input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .industry-select-area input:focus { border-color: var(--orange); }
+  .industry-select-area input::placeholder { color: var(--gray-500); font-weight: 400; font-style: italic; }
+  .analyst-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .analyst-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+  .analyst-field input {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    color: var(--gray-300);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    padding: 6px 10px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .analyst-field input:focus { border-color: var(--orange); }
+  .analyst-field input::placeholder { color: var(--gray-500); }
+
+  /* Column headers */
+  .table-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr 1fr 120px;
+    gap: 0;
+    margin-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    overflow: hidden;
+  }
+  .th {
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.2);
+    border-right: none;
+    padding: 10px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange-light);
+  }
+  .th:last-child { border-right: 1px solid rgba(249,115,22,0.2); }
+  .th.num-col { text-align: center; }
+
+  /* KPI rows */
+  .kpi-rows { }
+  .kpi-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr 1fr 120px;
+    gap: 0;
+    border-left: 1px solid rgba(255,255,255,0.05);
+    border-right: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.15s;
+  }
+  .kpi-row:hover { background: rgba(255,255,255,0.02); }
+  .kpi-row:last-child { border-radius: 0 0 6px 6px; }
+  .kpi-row:focus-within { background: rgba(249,115,22,0.04); border-left-color: rgba(249,115,22,0.3); }
+
+  .row-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(100,116,139,0.5);
+    border-right: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .cell {
+    padding: 0;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+  }
+  .cell:last-child { border-right: none; }
+  .cell textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 72px;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    padding: 12px 14px;
+    resize: none;
+    outline: none;
+  }
+  .cell textarea::placeholder { color: rgba(100,116,139,0.5); font-style: italic; font-size: 0.8rem; }
+
+  /* Alarm cell has red tint */
+  .cell.alarm textarea { color: #fca5a5; }
+  .cell.alarm textarea::placeholder { color: rgba(239,68,68,0.3); }
+
+  /* Decision cell has green tint */
+  .cell.decision textarea { color: #6ee7b7; }
+  .cell.decision textarea::placeholder { color: rgba(16,185,129,0.3); }
+
+  /* Status toggle */
+  .cell.status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 10px;
+  }
+  .status-select {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 4px 8px;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  .status-select option { background: #1a2540; }
+
+  /* Add row button */
+  .add-row-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.12);
+    border-radius: 4px;
+    color: var(--gray-500);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .add-row-btn:hover {
+    background: rgba(249,115,22,0.06);
+    border-color: rgba(249,115,22,0.25);
+    color: var(--orange-light);
+  }
+
+  /* Summary row */
+  .summary-row {
+    margin-top: 24px;
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.15);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .summary-row h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6ee7b7;
+    margin-bottom: 10px;
+  }
+  .summary-row textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    min-height: 48px;
+  }
+  .summary-row textarea::placeholder { color: rgba(16,185,129,0.35); font-style: italic; }
+
+  .outer-footer {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+  .footer-brand span { color: var(--orange); }
+  .print-btn {
+    background: var(--orange);
+    color: white;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--orange-light); }
+
+  @media (max-width: 700px) {
+    .table-header, .kpi-row { grid-template-columns: 1fr; }
+    .row-num, .th.num-col { display: none; }
+    .industry-bar { grid-template-columns: 1fr; }
+    .table-header { display: none; }
+    .cell { border-right: none; border-top: 1px solid rgba(255,255,255,0.05); }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .print-btn, .add-row-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Pilar 3 — Contexto de Negocio</div>
+    <h1>Mapa <span>KPI → Pregunta → Decisión</span></h1>
+    <p>Un KPI sin decisión asociada es solo decoración</p>
+  </div>
+
+  <div class="rule-callout">
+    <strong>Regla de oro:</strong> Un KPI no es solo un número bonito. Es la respuesta a una pregunta de negocio que habilita una decisión concreta. Siempre preguntate: <em>"¿Qué haría diferente si este número cambia?"</em>
+  </div>
+
+  <!-- Industry selector -->
+  <div class="industry-bar">
+    <div class="industry-select-area">
+      <label>Industria /</label>
+      <input type="text" placeholder="Ej: Logística · E-commerce · Finanzas · Salud · Tech...">
+    </div>
+    <div class="analyst-field">
+      <label>Analista</label>
+      <input type="text" placeholder="Tu nombre · fecha">
+    </div>
+  </div>
+
+  <!-- Table header -->
+  <div class="table-header">
+    <div class="th num-col">#</div>
+    <div class="th">KPI + Fórmula básica</div>
+    <div class="th">Señal de alarma</div>
+    <div class="th">Decisión que habilita</div>
+    <div class="th">Estado</div>
+  </div>
+
+  <!-- KPI rows -->
+  <div class="kpi-rows" id="kpi-rows">
+
+    <div class="kpi-row">
+      <div class="row-num">1</div>
+      <div class="cell"><textarea placeholder="Nombre del KPI + cómo se calcula&#10;Ej: OTD % = pedidos en tiempo / pedidos totales × 100"></textarea></div>
+      <div class="cell alarm"><textarea placeholder="Cuándo este KPI me avisa que hay un problema&#10;Ej: Cae debajo del benchmark del contrato o del trimestre anterior"></textarea></div>
+      <div class="cell decision"><textarea placeholder="Qué acción concreta permite tomar este número&#10;Ej: ¿Renovamos, renegociamos o cambiamos de carrier?"></textarea></div>
+      <div class="cell status">
+        <select class="status-select">
+          <option value="">— estado —</option>
+          <option value="activo">✅ Activo</option>
+          <option value="pendiente">🔶 Pendiente</option>
+          <option value="revisar">🔴 Revisar</option>
+          <option value="ok">✓ OK</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="row-num">2</div>
+      <div class="cell"><textarea placeholder="KPI 2..."></textarea></div>
+      <div class="cell alarm"><textarea placeholder="Señal de alarma..."></textarea></div>
+      <div class="cell decision"><textarea placeholder="Decisión que habilita..."></textarea></div>
+      <div class="cell status">
+        <select class="status-select">
+          <option value="">— estado —</option>
+          <option value="activo">✅ Activo</option>
+          <option value="pendiente">🔶 Pendiente</option>
+          <option value="revisar">🔴 Revisar</option>
+          <option value="ok">✓ OK</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="row-num">3</div>
+      <div class="cell"><textarea placeholder="KPI 3..."></textarea></div>
+      <div class="cell alarm"><textarea placeholder="Señal de alarma..."></textarea></div>
+      <div class="cell decision"><textarea placeholder="Decisión que habilita..."></textarea></div>
+      <div class="cell status">
+        <select class="status-select">
+          <option value="">— estado —</option>
+          <option value="activo">✅ Activo</option>
+          <option value="pendiente">🔶 Pendiente</option>
+          <option value="revisar">🔴 Revisar</option>
+          <option value="ok">✓ OK</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="row-num">4</div>
+      <div class="cell"><textarea placeholder="KPI 4..."></textarea></div>
+      <div class="cell alarm"><textarea placeholder="Señal de alarma..."></textarea></div>
+      <div class="cell decision"><textarea placeholder="Decisión que habilita..."></textarea></div>
+      <div class="cell status">
+        <select class="status-select">
+          <option value="">— estado —</option>
+          <option value="activo">✅ Activo</option>
+          <option value="pendiente">🔶 Pendiente</option>
+          <option value="revisar">🔴 Revisar</option>
+          <option value="ok">✓ OK</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="row-num">5</div>
+      <div class="cell"><textarea placeholder="KPI 5..."></textarea></div>
+      <div class="cell alarm"><textarea placeholder="Señal de alarma..."></textarea></div>
+      <div class="cell decision"><textarea placeholder="Decisión que habilita..."></textarea></div>
+      <div class="cell status">
+        <select class="status-select">
+          <option value="">— estado —</option>
+          <option value="activo">✅ Activo</option>
+          <option value="pendiente">🔶 Pendiente</option>
+          <option value="revisar">🔴 Revisar</option>
+          <option value="ok">✓ OK</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="add-row-btn" onclick="addRow()">+ Agregar KPI</button>
+
+  <!-- Summary -->
+  <div class="summary-row">
+    <h4>Insight / prioridad del mapa</h4>
+    <textarea placeholder="De todos los KPIs anteriores, el que más impacto tiene ahora mismo es [KPI] porque [razón]. La acción más urgente es [acción]."></textarea>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Mapa KPI</span> · emmanueldorado.gumroad.com</div>
+    <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
+
+</div>
+
+<script>
+let rowCount = 5;
+function addRow() {
+  rowCount++;
+  const container = document.getElementById('kpi-rows');
+  const row = document.createElement('div');
+  row.className = 'kpi-row';
+  row.innerHTML = `
+    <div class="row-num">${rowCount}</div>
+    <div class="cell"><textarea placeholder="KPI ${rowCount}..."></textarea></div>
+    <div class="cell alarm"><textarea placeholder="Señal de alarma..."></textarea></div>
+    <div class="cell decision"><textarea placeholder="Decisión que habilita..."></textarea></div>
+    <div class="cell status">
+      <select class="status-select">
+        <option value="">— estado —</option>
+        <option value="activo">✅ Activo</option>
+        <option value="pendiente">🔶 Pendiente</option>
+        <option value="revisar">🔴 Revisar</option>
+        <option value="ok">✓ OK</option>
+      </select>
+    </div>
+  `;
+  container.appendChild(row);
+}
+</script>
+</body>
+</html>

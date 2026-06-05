@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>50 Preguntas Poderosas — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628; --navy-mid: #111e35; --orange: #f97316;
+    --orange-light: #fb923c; --white: #f8fafc; --gray-300: #cbd5e1;
+    --gray-500: #64748b; --green: #10b981; --blue: #3b82f6;
+    --purple: #8b5cf6; --yellow: #f59e0b; --teal: #14b8a6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; padding: 40px 20px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid rgba(249,115,22,0.3); position: relative; }
+  .header::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--orange); }
+  .badge { display: inline-block; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.4); color: var(--orange-light); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 5px 14px; border-radius: 2px; margin-bottom: 12px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; margin-top: 8px; }
+
+  .intro-box { background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2); border-left: 4px solid var(--orange); border-radius: 6px; padding: 16px 20px; margin-bottom: 28px; font-size: 0.88rem; color: var(--gray-300); line-height: 1.8; }
+  .intro-box strong { color: var(--orange-light); }
+
+  /* PROGRESS */
+  .progress-bar-wrap { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+  .pb-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 5px; }
+  .pb-bg { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; flex: 1; }
+  .pb-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--green)); border-radius: 3px; transition: width 0.4s; width: 0%; }
+  .pb-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: var(--gray-500); white-space: nowrap; }
+
+  /* CATEGORY BLOCK */
+  .cat-block { margin-bottom: 28px; }
+  .cat-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-radius: 8px 8px 0 0;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-bottom: none;
+  }
+  .cat-icon { font-size: 1.3rem; }
+  .cat-info {}
+  .cat-title { font-size: 0.95rem; font-weight: 600; }
+  .cat-sub { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--gray-500); letter-spacing: 1px; margin-top: 2px; }
+  .cat-week { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 10px; border-radius: 10px; margin-left: auto; flex-shrink: 0; }
+
+  /* COLOR VARIANTS */
+  .week1 .cat-header { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.2); }
+  .week1 .cat-week   { background: rgba(249,115,22,0.15); color: var(--orange-light); }
+  .week1 .q-num      { color: var(--orange); }
+  .week1 .q-card     { border-color: rgba(249,115,22,0.08); }
+  .week1 .q-card:hover { border-color: rgba(249,115,22,0.25); }
+
+  .week2 .cat-header { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.2); }
+  .week2 .cat-week   { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .week2 .q-num      { color: #60a5fa; }
+  .week2 .q-card     { border-color: rgba(59,130,246,0.08); }
+  .week2 .q-card:hover { border-color: rgba(59,130,246,0.25); }
+
+  .week3 .cat-header { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.2); }
+  .week3 .cat-week   { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .week3 .q-num      { color: var(--green); }
+  .week3 .q-card     { border-color: rgba(16,185,129,0.08); }
+  .week3 .q-card:hover { border-color: rgba(16,185,129,0.25); }
+
+  .week4 .cat-header { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.2); }
+  .week4 .cat-week   { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+  .week4 .q-num      { color: var(--purple); }
+  .week4 .q-card     { border-color: rgba(139,92,246,0.08); }
+  .week4 .q-card:hover { border-color: rgba(139,92,246,0.25); }
+
+  .bonus .cat-header { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); }
+  .bonus .cat-week   { background: rgba(245,158,11,0.15); color: #fcd34d; }
+  .bonus .q-num      { color: var(--yellow); }
+  .bonus .q-card     { border-color: rgba(245,158,11,0.08); }
+  .bonus .q-card:hover { border-color: rgba(245,158,11,0.25); }
+
+  /* QUESTION LIST */
+  .q-list { border: 1px solid rgba(255,255,255,0.07); border-top: 3px solid; border-radius: 0 0 8px 8px; overflow: hidden; }
+  .week1 .q-list { border-top-color: var(--orange); }
+  .week2 .q-list { border-top-color: var(--blue); }
+  .week3 .q-list { border-top-color: var(--green); }
+  .week4 .q-list { border-top-color: var(--purple); }
+  .bonus .q-list { border-top-color: var(--yellow); }
+
+  .q-card { display: flex; align-items: flex-start; gap: 14px; padding: 13px 16px; background: var(--navy-mid); border-bottom: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: background 0.15s, border-color 0.15s; border-left: 3px solid transparent; }
+  .q-card:last-child { border-bottom: none; }
+  .q-card:hover { background: rgba(255,255,255,0.02); }
+  .q-card.done { opacity: 0.45; }
+
+  .q-check { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.15); border-radius: 3px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .q-card.done .q-check { background: var(--green); border-color: var(--green); }
+  .q-check svg { display: none; }
+  .q-card.done .q-check svg { display: block; }
+
+  .q-num { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; opacity: 0.4; min-width: 22px; flex-shrink: 0; line-height: 1.5; }
+  .q-card.done .q-num { opacity: 0.3; }
+
+  .q-content {}
+  .q-text { font-size: 0.88rem; line-height: 1.6; color: var(--gray-300); }
+  .q-card.done .q-text { text-decoration: line-through; color: var(--gray-500); }
+  .q-tip { font-size: 0.75rem; color: var(--gray-500); font-style: italic; margin-top: 3px; line-height: 1.5; }
+
+  .q-target { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: rgba(255,255,255,0.05); color: var(--gray-500); margin-left: 8px; vertical-align: middle; }
+
+  /* NOTES AREA */
+  .notes-area { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; margin-bottom: 28px; }
+  .notes-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+  .notes-area textarea { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; color: var(--gray-300); font-family: 'IBM Plex Sans', sans-serif; font-size: 0.85rem; padding: 10px 12px; outline: none; resize: vertical; min-height: 80px; line-height: 1.6; }
+  .notes-area textarea::placeholder { color: var(--gray-500); font-style: italic; }
+  .notes-area textarea:focus { border-color: var(--orange); }
+
+  /* FOOTER */
+  .outer-footer { margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+  .footer-brand span { color: var(--orange); }
+  .btn-group { display: flex; gap: 10px; }
+  .btn { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--gray-300); }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+  @media (max-width: 600px) { .header h1 { font-size: 1.7rem; } .q-card { padding: 11px 12px; } }
+  @media print { body { background: white; color: #0a1628; } .outer-footer .btn { display: none; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Pilar 3 — Contexto de Negocio</div>
+    <h1>50 Preguntas <span>Poderosas</span></h1>
+    <p>Para hacer en tu primer mes en una empresa nueva · Marcá las que ya hiciste</p>
+  </div>
+
+  <div class="intro-box">
+    <strong>La mayoría de los analistas junior pierden los primeros 3 meses observando en silencio.</strong>
+    Este listado te da las preguntas exactas que deberías hacerle a las personas correctas en cada semana.
+    No hagas todas de una: distribuílas, escuchá más de lo que hablás, y tomá notas.
+    Al final del mes vas a tener un mapa del negocio que la mayoría no construye en un año.
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div style="flex:1">
+      <div class="pb-label">Preguntas hechas</div>
+      <div class="pb-bg"><div class="pb-fill" id="pbFill"></div></div>
+    </div>
+    <div class="pb-count" id="pbCount">0 / 50</div>
+  </div>
+
+  <!-- SEMANA 1 -->
+  <div class="cat-block week1">
+    <div class="cat-header">
+      <div class="cat-icon">🧭</div>
+      <div class="cat-info">
+        <div class="cat-title">Entrevistas internas — Entender los dolores reales</div>
+        <div class="cat-sub">Hacelas a 3 personas de distintas áreas · Operaciones, Ventas, Atención al Cliente</div>
+      </div>
+      <span class="cat-week">Semana 1</span>
+    </div>
+    <div class="q-list">
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">01</div><div class="q-content"><div class="q-text">¿Cuáles son los 3 problemas que más te preocupan hoy en tu área?<span class="q-target">todos</span></div><div class="q-tip">Esta es la pregunta más importante de la semana. Buscá cuáles se repiten en más de una persona.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">02</div><div class="q-content"><div class="q-text">¿Qué informes o datos pedís regularmente y nunca llegan a tiempo?<span class="q-target">operativo</span></div><div class="q-tip">Ese dolor es tu primera oportunidad de generar valor.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">03</div><div class="q-content"><div class="q-text">¿Hay algo que hoy hacés a mano o en Excel que debería ser automático?<span class="q-target">operativo</span></div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">04</div><div class="q-content"><div class="q-text">¿Qué decisión importante tuvieron que postergar por falta de datos?<span class="q-target">gerente</span></div><div class="q-tip">Cada respuesta es un análisis que podés proponer.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">05</div><div class="q-content"><div class="q-text">¿Cómo definen si un mes fue "bueno" o "malo" en tu área?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">06</div><div class="q-content"><div class="q-text">¿Qué métricas miran todos los días sin falta?<span class="q-target">operativo</span></div><div class="q-tip">Esas son las que más importan. Todo lo demás es ruido.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">07</div><div class="q-content"><div class="q-text">¿Qué reportes mandan a gerencia todos los meses? ¿Puedo verlos?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">08</div><div class="q-content"><div class="q-text">Si pudieras mejorar UNA sola cosa del área esta semana, ¿cuál sería?<span class="q-target">todos</span></div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">09</div><div class="q-content"><div class="q-text">¿Qué análisis se hizo antes en el área que generó un cambio real?</div><div class="q-tip">Aprendé de los éxitos internos. Replicá el patrón.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">10</div><div class="q-content"><div class="q-text">¿Cuál es el mayor dolor de los clientes o usuarios de esta empresa que te mencionan constantemente?</div></div></div>
+    </div>
+  </div>
+
+  <!-- SEMANA 2 -->
+  <div class="cat-block week2">
+    <div class="cat-header">
+      <div class="cat-icon">👁️</div>
+      <div class="cat-info">
+        <div class="cat-title">Observación en reuniones — Entender las decisiones</div>
+        <div class="cat-sub">Pedí asistir como oyente · Escuchá más de lo que hablás</div>
+      </div>
+      <span class="cat-week">Semana 2</span>
+    </div>
+    <div class="q-list">
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">11</div><div class="q-content"><div class="q-text">¿Qué número están mirando en pantalla para tomar esta decisión?</div><div class="q-tip">Anotalo. Es el KPI que de verdad importa en esa reunión.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">12</div><div class="q-content"><div class="q-text">¿Qué información les falta para decidir más rápido?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">13</div><div class="q-content"><div class="q-text">¿Qué están postergando por falta de datos concretos?</div><div class="q-tip">Eso es tu próximo análisis proactivo.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">14</div><div class="q-content"><div class="q-text">¿Qué supuestos se repiten en la reunión que nadie valida con datos?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">15</div><div class="q-content"><div class="q-text">¿Qué decisiones se toman regularmente en esta empresa: contratos, presupuestos, campañas, contrataciones?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">16</div><div class="q-content"><div class="q-text">¿Quién tiene la decisión final en esta reunión y qué información necesita para decir que sí?<span class="q-target">gerente</span></div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">17</div><div class="q-content"><div class="q-text">¿Qué benchmarks externos o de industria usa el equipo como referencia?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">18</div><div class="q-content"><div class="q-text">¿Cuándo fue la última vez que un análisis de datos generó un cambio de decisión en esta empresa?</div><div class="q-tip">Si nadie recuerda, el área de datos tiene un problema de comunicación.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">19</div><div class="q-content"><div class="q-text">¿Qué informes se generan pero nadie lee realmente?</div><div class="q-tip">Ese es el reporte que hay que reemplazar o eliminar.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">20</div><div class="q-content"><div class="q-text">¿Cómo saben si un análisis fue útil? ¿Qué tendría que pasar para que lo consideren un éxito?</div></div></div>
+    </div>
+  </div>
+
+  <!-- SEMANA 3 -->
+  <div class="cat-block week3">
+    <div class="cat-header">
+      <div class="cat-icon">📄</div>
+      <div class="cat-info">
+        <div class="cat-title">Documentos internos — Aprender el vocabulario del negocio</div>
+        <div class="cat-sub">Pedí acceso a reportes, OKRs y presentaciones internas</div>
+      </div>
+      <span class="cat-week">Semana 3</span>
+    </div>
+    <div class="q-list">
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">21</div><div class="q-content"><div class="q-text">¿Puedo acceder al reporte mensual que mandan a gerencia? ¿Qué KPIs aparecen siempre?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">22</div><div class="q-content"><div class="q-text">¿Cuáles son los objetivos anuales o trimestrales del área? (OKRs, metas, presupuesto)</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">23</div><div class="q-content"><div class="q-text">¿Dónde están los datos históricos? ¿Hay un diccionario de datos o definiciones de KPIs?</div><div class="q-tip">Sin esto vas a perder semanas calculando KPIs de formas distintas al resto del equipo.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">24</div><div class="q-content"><div class="q-text">¿Cómo se define "cliente activo" en esta empresa? ¿Y "venta confirmada"?</div><div class="q-tip">Las definiciones básicas varían mucho entre empresas. Asegúrate de usar las mismas que todos.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">25</div><div class="q-content"><div class="q-text">¿Hay análisis anteriores que hayan generado una decisión importante? ¿Puedo verlos?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">26</div><div class="q-content"><div class="q-text">¿Qué sistemas o herramientas generan los datos? ¿ERP, CRM, plataformas de ads?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">27</div><div class="q-content"><div class="q-text">¿Cuáles son las temporadas altas y bajas del negocio? ¿Cómo afectan los KPIs?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">28</div><div class="q-content"><div class="q-text">¿Qué proyectos fallaron antes y por qué? ¿Qué no volvería a hacer el equipo?</div><div class="q-tip">Aprender lo que NO funciona ahorra meses de errores propios.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">29</div><div class="q-content"><div class="q-text">¿Hay un competidor al que la empresa mira especialmente? ¿Por qué?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">30</div><div class="q-content"><div class="q-text">¿Cuál es el canal, producto o cliente más rentable del negocio hoy?</div></div></div>
+    </div>
+  </div>
+
+  <!-- SEMANA 4 -->
+  <div class="cat-block week4">
+    <div class="cat-header">
+      <div class="cat-icon">🚀</div>
+      <div class="cat-info">
+        <div class="cat-title">Primera propuesta — El analista que propone se diferencia</div>
+        <div class="cat-sub">Sin que te lo pidan · Usá todo lo que aprendiste</div>
+      </div>
+      <span class="cat-week">Semana 4</span>
+    </div>
+    <div class="q-list">
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">31</div><div class="q-content"><div class="q-text">¿Qué decisión tomarías si tuvieras este análisis? (hacela antes de armar el análisis)</div><div class="q-tip">Si la respuesta es "no sé", el análisis no vale la pena todavía. Si hay una acción concreta, adelante.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">32</div><div class="q-content"><div class="q-text">¿Qué problema de negocio encontré en las semanas 1-3 que nadie está midiendo todavía?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">33</div><div class="q-content"><div class="q-text">¿A quién le voy a presentar esta propuesta y en qué formato (email, reunión, one-pager)?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">34</div><div class="q-content"><div class="q-text">¿Puedo conectar este análisis con dinero, tiempo o riesgo para el negocio?</div><div class="q-tip">Si no podés conectarlo con ninguno de los tres, revisá si el análisis importa realmente.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">35</div><div class="q-content"><div class="q-text">¿Cuál es la recomendación accionable que surge de este análisis? ¿Es específica (qué, cuánto, cuándo)?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">36</div><div class="q-content"><div class="q-text">¿Cómo mediría el impacto de esta recomendación a los 30 días?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">37</div><div class="q-content"><div class="q-text">¿Qué objeciones puede tener el stakeholder y cómo las respondo?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">38</div><div class="q-content"><div class="q-text">¿Adapté el mensaje al perfil de quien lo va a recibir (Operativo / Gerente / Técnico)?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">39</div><div class="q-content"><div class="q-text">¿El análisis es lo suficientemente pequeño como para terminarlo esta semana?</div><div class="q-tip">El primer mes no es para el análisis perfecto. Es para el primer análisis terminado y presentado.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">40</div><div class="q-content"><div class="q-text">¿Pedí feedback después de presentar? ¿Qué funcionó y qué cambiaría para la próxima vez?</div></div></div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="cat-block bonus">
+    <div class="cat-header">
+      <div class="cat-icon">⚡</div>
+      <div class="cat-info">
+        <div class="cat-title">Preguntas comodín — Para cualquier momento del mes</div>
+        <div class="cat-sub">Usalas cuando sientas que no estás encontrando el ángulo correcto</div>
+      </div>
+      <span class="cat-week">Bonus</span>
+    </div>
+    <div class="q-list">
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">41</div><div class="q-content"><div class="q-text">¿Qué canal o producto genera más margen hoy, más allá del volumen?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">42</div><div class="q-content"><div class="q-text">¿Hay algo que la empresa cree que funciona bien pero nadie lo ha medido con datos reales?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">43</div><div class="q-content"><div class="q-text">¿Cuál es el proceso que más tiempo consume al equipo y que podría mejorarse con datos?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">44</div><div class="q-content"><div class="q-text">¿Qué pregunta se hace la dirección todos los trimestres que todavía no tiene respuesta clara?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">45</div><div class="q-content"><div class="q-text">¿Qué datos tiene la empresa que no está usando pero que podrían ser valiosos?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">46</div><div class="q-content"><div class="q-text">¿Qué pasaría si el principal KPI del negocio cae un 20%? ¿Qué se haría?</div><div class="q-tip">Esta pregunta revela los planes de contingencia y los verdaderos umbrales de alarma.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">47</div><div class="q-content"><div class="q-text">¿Qué problema recurrente resuelve el negocio para sus clientes? ¿Y cuál sigue sin resolver?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">48</div><div class="q-content"><div class="q-text">¿Qué información necesitaría gerencia para aprobar una inversión importante hoy?</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">49</div><div class="q-content"><div class="q-text">¿Qué es lo que más sorprendió al equipo este año, positiva o negativamente?</div><div class="q-tip">Las sorpresas revelan los puntos ciegos del negocio — oportunidades para el analista.</div></div></div>
+      <div class="q-card" onclick="toggleQ(this)"><div class="q-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="q-num">50</div><div class="q-content"><div class="q-text">¿Cómo sabré en 3 meses si estoy generando valor real para el área?</div><div class="q-tip">Hacela a tu jefe directo en la primera semana. Define el éxito desde el principio.</div></div></div>
+    </div>
+  </div>
+
+  <!-- NOTAS -->
+  <div class="notes-area">
+    <div class="notes-label">📝 Mis notas del primer mes</div>
+    <textarea placeholder="Anotá acá los patrones que encontrás: qué problemas se repiten, qué KPIs son clave, qué análisis querés proponer..."></textarea>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>50 Preguntas</span> · emmanueldorado.gumroad.com</div>
+    <div class="btn-group">
+      <button class="btn btn-ghost" onclick="resetAll()">Reiniciar</button>
+      <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+    </div>
+  </div>
+
+</div>
+<script>
+  const TOTAL = 50;
+  function toggleQ(el) { el.classList.toggle('done'); updateProgress(); }
+  function updateProgress() {
+    const done = document.querySelectorAll('.q-card.done').length;
+    document.getElementById('pbFill').style.width = (done / TOTAL * 100) + '%';
+    document.getElementById('pbCount').textContent = done + ' / ' + TOTAL;
+  }
+  function resetAll() {
+    document.querySelectorAll('.q-card.done').forEach(el => el.classList.remove('done'));
+    updateProgress();
+  }
+</script>
+</body>
+</html>

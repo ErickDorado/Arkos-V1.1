@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Portfolio 2026 — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628; --navy-mid: #111e35; --navy-light: #1a3060;
+    --orange: #f97316; --orange-light: #fb923c;
+    --white: #f8fafc; --gray-300: #cbd5e1; --gray-500: #64748b;
+    --green: #10b981; --blue: #3b82f6; --purple: #8b5cf6; --yellow: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; padding: 40px 20px; }
+  .container { max-width: 880px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid rgba(249,115,22,0.3); position: relative; }
+  .header::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--orange); }
+  .badge { display: inline-block; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.4); color: var(--orange-light); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 5px 14px; border-radius: 2px; margin-bottom: 12px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; margin-top: 8px; }
+
+  /* INTRO */
+  .intro-box { background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2); border-left: 4px solid var(--orange); border-radius: 6px; padding: 16px 20px; margin-bottom: 32px; font-size: 0.9rem; color: var(--gray-300); line-height: 1.8; }
+  .intro-box strong { color: var(--orange-light); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title span { color: var(--orange); }
+  .section-sub { color: var(--gray-500); font-size: 0.82rem; font-family: 'IBM Plex Mono', monospace; letter-spacing: 1px; margin-bottom: 18px; }
+  .section-block { margin-bottom: 36px; }
+
+  /* STAT ROW */
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px 16px; text-align: center; }
+  .stat-val { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--orange); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-500); line-height: 1.4; }
+
+  /* PROJECT CARDS */
+  .projects-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+  .project-card { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+  .project-header { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 14px; }
+  .proj-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; opacity: 0.15; line-height: 1; flex-shrink: 0; }
+  .proj-meta { flex: 1; }
+  .proj-title { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+  .proj-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ptag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 2px 8px; border-radius: 10px; }
+  .ptag-ops  { background: rgba(249,115,22,0.15); color: var(--orange-light); }
+  .ptag-mkt  { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .ptag-auto { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+
+  .project-body { padding: 18px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .proj-col-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+  .proj-col ul { list-style: none; padding: 0; }
+  .proj-col ul li { font-size: 0.84rem; color: var(--gray-300); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04); line-height: 1.5; display: flex; gap: 8px; align-items: flex-start; }
+  .proj-col ul li::before { content: '→'; color: var(--orange); flex-shrink: 0; font-size: 0.75rem; margin-top: 2px; }
+  .proj-col ul li:last-child { border-bottom: none; }
+
+  .proj-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tool-chip { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--gray-500); padding: 3px 8px; }
+
+  /* GITHUB STRUCTURE */
+  .github-box { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px 20px; margin-bottom: 24px; }
+  .github-box .gh-title { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--green); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .file-tree { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; line-height: 2; }
+  .file-tree .dir { color: #93c5fd; }
+  .file-tree .file { color: var(--gray-300); }
+  .file-tree .comment { color: var(--gray-500); font-style: italic; }
+  .file-tree .highlight { color: var(--orange-light); }
+
+  /* README TEMPLATE */
+  .readme-box { background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
+  .readme-bar { background: rgba(255,255,255,0.05); padding: 10px 16px; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--gray-500); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 8px; }
+  .readme-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .d-red { background: #ef4444; } .d-yellow { background: var(--yellow); } .d-green { background: var(--green); }
+  .readme-content { padding: 16px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; line-height: 1.9; color: var(--gray-300); }
+  .readme-content .md-h1 { color: var(--white); font-size: 0.92rem; font-weight: 700; }
+  .readme-content .md-h2 { color: var(--orange-light); }
+  .readme-content .md-bold { color: var(--white); }
+  .readme-content .md-code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 3px; color: #93c5fd; }
+  .readme-content .md-comment { color: var(--gray-500); }
+
+  /* DOS AND DONTS */
+  .dd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+  .dd-card { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 16px; }
+  .dd-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .dd-card.dos .dd-label { color: #6ee7b7; }
+  .dd-card.donts .dd-label { color: #fca5a5; }
+  .dd-item { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.83rem; color: var(--gray-300); line-height: 1.5; align-items: flex-start; }
+  .dd-item:last-child { border-bottom: none; }
+  .dd-item .ico { flex-shrink: 0; font-size: 0.8rem; margin-top: 1px; }
+
+  /* TIMELINE STEPS */
+  .timeline { position: relative; padding-left: 28px; margin-bottom: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 2px; background: rgba(249,115,22,0.2); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot { position: absolute; left: -24px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--orange); border: 2px solid var(--navy); }
+  .tl-week { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+  .tl-title { font-size: 0.92rem; font-weight: 600; margin-bottom: 4px; }
+  .tl-desc { font-size: 0.83rem; color: var(--gray-300); line-height: 1.6; }
+
+  /* CHECKLIST */
+  .checklist { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.87rem; color: var(--gray-300); line-height: 1.5; cursor: pointer; transition: color 0.15s; }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { color: var(--white); }
+  .check-item.checked { opacity: 0.5; text-decoration: line-through; }
+  .check-box { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-radius: 3px; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); }
+  .check-box svg { display: none; }
+  .check-item.checked .check-box svg { display: block; }
+
+  /* FOOTER */
+  .outer-footer { margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; }
+  .footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+  .footer-brand span { color: var(--orange); }
+  .btn { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+
+  @media (max-width: 640px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .project-body { grid-template-columns: 1fr; }
+    .dd-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.7rem; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .outer-footer .btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Carrera · Portfolio · 2026</div>
+    <h1>Guía de <span>Portfolio</span> 2026</h1>
+    <p>Cómo estructurar 3 proyectos que consiguen entrevistas en Data Analytics en Latam</p>
+  </div>
+
+  <div class="intro-box">
+    En 2026, los recruiters <strong>miran proyectos antes que certificados</strong>. Un portfolio de 3 proyectos bien documentados,
+    con problema de negocio claro y recomendación accionable, vale más que 10 cursos en el CV.
+    Esta guía te muestra exactamente cómo armar cada proyecto para que se destaque.
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-val">3</div><div class="stat-label">Proyectos mínimos para conseguir entrevistas</div></div>
+    <div class="stat-card"><div class="stat-val">30"</div><div class="stat-label">Tiempo que un recruiter pasa en tu README</div></div>
+    <div class="stat-card"><div class="stat-val">×3</div><div class="stat-label">Más respuestas con portfolio vs. CV solo</div></div>
+  </div>
+
+  <!-- LOS 3 PROYECTOS -->
+  <div class="section-block">
+    <div class="section-title">Los <span>3 proyectos</span> que necesitás</div>
+    <div class="section-sub">ESTRUCTURA RECOMENDADA · MÁXIMO IMPACTO</div>
+
+    <div class="projects-stack">
+
+      <!-- PROYECTO 1 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="proj-num">01</div>
+          <div class="proj-meta">
+            <div class="proj-title">Proyecto Logístico / Operativo</div>
+            <div class="proj-tags">
+              <span class="ptag ptag-ops">Contexto de negocio</span>
+              <span class="ptag ptag-ops">Supply Chain</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="proj-col">
+            <div class="proj-col-label">¿Qué demuestra?</div>
+            <ul>
+              <li>Capacidad de entender KPIs operativos reales</li>
+              <li>Framework de las 5 Preguntas aplicado</li>
+              <li>Recomendación accionable con impacto en costos</li>
+              <li>Storytelling adaptado a stakeholders</li>
+            </ul>
+          </div>
+          <div class="proj-col">
+            <div class="proj-col-label">Ejemplo concreto (EcomShop)</div>
+            <ul>
+              <li>Análisis de OTD por carrier y zona</li>
+              <li>Hallazgo: EnvioTotal 59.7% OTD, el más caro</li>
+              <li>Rec: reasignar 40% del volumen, piloto 30 días</li>
+              <li>Impacto: +8 pts OTD, -42% reclamos</li>
+            </ul>
+            <div class="proj-col-label" style="margin-top:12px">Herramientas sugeridas</div>
+            <div class="proj-tools">
+              <span class="tool-chip">SQL / DuckDB</span>
+              <span class="tool-chip">Power BI</span>
+              <span class="tool-chip">Excel</span>
+              <span class="tool-chip">Python pandas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROYECTO 2 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="proj-num">02</div>
+          <div class="proj-meta">
+            <div class="proj-title">Proyecto de Marketing / E-commerce</div>
+            <div class="proj-tags">
+              <span class="ptag ptag-mkt">Storytelling</span>
+              <span class="ptag ptag-mkt">CAC · ROAS · Recompra</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="proj-col">
+            <div class="proj-col-label">¿Qué demuestra?</div>
+            <ul>
+              <li>Dominio de KPIs de marketing digital (ROAS, CAC, LTV)</li>
+              <li>Capacidad de ir más allá del número superficial</li>
+              <li>Comunicación ejecutiva orientada a decisión</li>
+              <li>Visión de calidad del cliente, no solo volumen</li>
+            </ul>
+          </div>
+          <div class="proj-col">
+            <div class="proj-col-label">Ejemplo concreto</div>
+            <ul>
+              <li>Análisis de performance Meta Ads vs Google Ads</li>
+              <li>Hallazgo: ROAS 1.8 vs 4.2, devolución 11.4% vs 6.8%</li>
+              <li>Rec: reducir Meta al 30%, Google al 70%</li>
+              <li>Impacto: mejor ROI sin aumentar inversión total</li>
+            </ul>
+            <div class="proj-col-label" style="margin-top:12px">Herramientas sugeridas</div>
+            <div class="proj-tools">
+              <span class="tool-chip">SQL</span>
+              <span class="tool-chip">Python</span>
+              <span class="tool-chip">Tableau / Looker</span>
+              <span class="tool-chip">Google Sheets</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROYECTO 3 -->
+      <div class="project-card">
+        <div class="project-header">
+          <div class="proj-num">03</div>
+          <div class="proj-meta">
+            <div class="proj-title">Proyecto Personal / Automatización (tu ventaja de dominio)</div>
+            <div class="proj-tags">
+              <span class="ptag ptag-auto">Iniciativa propia</span>
+              <span class="ptag ptag-auto">Tu industria</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="proj-col">
+            <div class="proj-col-label">¿Qué demuestra?</div>
+            <ul>
+              <li>Iniciativa: lo hiciste sin que nadie te lo pidiera</li>
+              <li>Ventaja de dominio en tu industria de origen</li>
+              <li>Creatividad para encontrar problemas reales</li>
+              <li>Capacidad end-to-end: datos → insight → acción</li>
+            </ul>
+          </div>
+          <div class="proj-col">
+            <div class="proj-col-label">Ideas según tu rubro</div>
+            <ul>
+              <li>Logística: análisis de rutas de reparto propio</li>
+              <li>Gastronomía: rotación de insumos y desperdicio</li>
+              <li>Retail: comportamiento de ventas por temporada</li>
+              <li>RRHH: análisis de rotación y costo por área</li>
+            </ul>
+            <div class="proj-col-label" style="margin-top:12px">Herramientas sugeridas</div>
+            <div class="proj-tools">
+              <span class="tool-chip">Python</span>
+              <span class="tool-chip">Streamlit</span>
+              <span class="tool-chip">Power BI</span>
+              <span class="tool-chip">GitHub Actions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ESTRUCTURA GITHUB -->
+  <div class="section-block">
+    <div class="section-title">Estructura de <span>GitHub</span> que impresiona</div>
+    <div class="section-sub">ORGANIZACIÓN DE ARCHIVOS · LO QUE VE EL RECRUITER PRIMERO</div>
+
+    <div class="github-box">
+      <div class="gh-title">📁 mi-proyecto-ecomshop/</div>
+      <div class="file-tree">
+        <div><span class="dir">📁 data/</span> <span class="comment">— datasets limpios (nunca credenciales)</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📄 pedidos_q3.csv</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📄 carriers_reference.csv</span></div>
+        <div><span class="dir">📁 notebooks/</span> <span class="comment">— análisis exploratorio y desarrollo</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📓 01_eda.ipynb</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📓 02_analisis_otd.ipynb</span></div>
+        <div><span class="dir">📁 queries/</span> <span class="comment">— SQL documentado</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📄 otd_by_carrier_zone.sql</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📄 costo_por_pedido.sql</span></div>
+        <div><span class="dir">📁 dashboard/</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📊 ecomshop_carriers.pbix</span></div>
+        <div><span class="dir">📁 outputs/</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">📄 one_pager_recomendacion.pdf</span></div>
+        <div>&nbsp;&nbsp;&nbsp;<span class="file">🖼️ dashboard_preview.png</span> <span class="comment">← captura visible en README</span></div>
+        <div class="highlight">📄 README.md &nbsp; ← <span class="comment">LO MÁS IMPORTANTE</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- README TEMPLATE -->
+  <div class="section-block">
+    <div class="section-title">Plantilla de <span>README</span> que genera entrevistas</div>
+    <div class="section-sub">COPIÁ Y ADAPTÁ · LENGUAJE DE NEGOCIO, NO TÉCNICO</div>
+
+    <div class="readme-box">
+      <div class="readme-bar">
+        <div class="readme-dot d-red"></div>
+        <div class="readme-dot d-yellow"></div>
+        <div class="readme-dot d-green"></div>
+        &nbsp; README.md
+      </div>
+      <div class="readme-content">
+        <div class="md-h1"># 🚚 Análisis de Performance de Carriers — EcomShop</div>
+        <br>
+        <div class="md-h2">## 🎯 Problema de negocio</div>
+        <div>EcomShop recibe reclamos crecientes por demoras en sus envíos, especialmente en zona Norte. Con <span class="md-bold">4.000 pedidos mensuales</span> y calificación en riesgo en Mercado Libre, el equipo de operaciones necesitaba datos para decidir con qué carriers seguir trabajando.</div>
+        <br>
+        <div class="md-h2">## 🔍 Hallazgo principal</div>
+        <div>EnvioTotal, el carrier <span class="md-bold">más caro ($180/pedido)</span>, tiene el <span class="md-bold">peor OTD del análisis: 59.7%</span> en zona Norte. RapidoExpress logra 73.4% de OTD a $15 menos por pedido.</div>
+        <br>
+        <div class="md-h2">## ✅ Recomendación</div>
+        <div>Reasignar el <span class="md-bold">40% del volumen de EnvioTotal a RapidoExpress</span> en zona Norte — prueba piloto de 30 días. Impacto proyectado: <span class="md-bold">+8 puntos de OTD y reducción del 42% de reclamos.</span></div>
+        <br>
+        <div class="md-h2">## 🛠️ Herramientas</div>
+        <div><span class="md-code">SQL (DuckDB)</span> · <span class="md-code">Python (pandas)</span> · <span class="md-code">Power BI</span></div>
+        <br>
+        <div class="md-h2">## 📁 Estructura del proyecto</div>
+        <div><span class="md-code">data/</span> → datasets · <span class="md-code">queries/</span> → SQL comentado · <span class="md-code">dashboard/</span> → .pbix</div>
+        <br>
+        <div class="md-h2">## 📸 Preview del dashboard</div>
+        <div class="md-comment">[imagen aquí — arrastrá dashboard_preview.png]</div>
+        <br>
+        <div class="md-h2">## 💡 Aprendizajes</div>
+        <div>Aprendí que el carrier más caro no es siempre el mejor. Aplicar el Framework de las 5 Preguntas antes de correr queries me ayudó a encontrar el problema correcto antes de buscar la solución.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOs y DON'Ts -->
+  <div class="section-block">
+    <div class="section-title">Qué <span>hacer y evitar</span> en tu portfolio</div>
+    <div class="section-sub">LO QUE SEPARA UN PORTFOLIO QUE CONSIGUE ENTREVISTAS DEL QUE NO</div>
+    <div class="dd-grid">
+      <div class="dd-card dos">
+        <div class="dd-label">✓ &nbsp; Hacé esto</div>
+        <div class="dd-item"><span class="ico">✅</span> Empezá el README con el problema de negocio, no con las herramientas</div>
+        <div class="dd-item"><span class="ico">✅</span> Incluí una imagen del dashboard directamente en el README</div>
+        <div class="dd-item"><span class="ico">✅</span> Documentá qué aprendiste de cada proyecto</div>
+        <div class="dd-item"><span class="ico">✅</span> Usá datos reales (anonimizados) o datasets públicos reconocibles</div>
+        <div class="dd-item"><span class="ico">✅</span> Agregá la narrativa de 5 pasos como parte del README</div>
+        <div class="dd-item"><span class="ico">✅</span> Terminá el proyecto aunque quede imperfecto: publicalo</div>
+        <div class="dd-item"><span class="ico">✅</span> Actualizá el portfolio cada 3 meses con un proyecto nuevo</div>
+      </div>
+      <div class="dd-card donts">
+        <div class="dd-label">✗ &nbsp; Evitá esto</div>
+        <div class="dd-item"><span class="ico">❌</span> README que empieza con "Este es un análisis de SQL..."</div>
+        <div class="dd-item"><span class="ico">❌</span> Proyectos sin conclusión ni recomendación final</div>
+        <div class="dd-item"><span class="ico">❌</span> Repositorios sin README o con README de 2 líneas</div>
+        <div class="dd-item"><span class="ico">❌</span> Datasets de Kaggle genéricos sin contexto de negocio propio</div>
+        <div class="dd-item"><span class="ico">❌</span> Código sin comentarios ni explicación de la lógica</div>
+        <div class="dd-item"><span class="ico">❌</span> Esperar a que el proyecto sea perfecto para publicarlo</div>
+        <div class="dd-item"><span class="ico">❌</span> Tener 10 proyectos empezados y 0 terminados</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN DE ACCIÓN -->
+  <div class="section-block">
+    <div class="section-title">Plan de <span>acción</span> en 8 semanas</div>
+    <div class="section-sub">DESDE CERO HASTA PORTFOLIO PUBLICADO · RITMO REALISTA</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-week">Semana 1–2</div><div class="tl-title">Proyecto 1 — Operativo</div><div class="tl-desc">Elegí el caso EcomShop o un problema real de tu trabajo. Aplicá el Framework de las 5 Preguntas. Hacé el EDA y las queries principales. No esperés tener todo: empezá.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-week">Semana 3</div><div class="tl-title">Publicá el Proyecto 1</div><div class="tl-desc">Dashboard listo, README completo con narrativa de 5 pasos, captura de pantalla incluida. Subilo a GitHub aunque sea básico. La visibilidad genera feedback.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-week">Semana 4–5</div><div class="tl-title">Proyecto 2 — Marketing / E-commerce</div><div class="tl-desc">Tomá el caso de Ads del libro o usá Google Analytics de un negocio propio o freelance. Enfocate en CAC, ROAS y calidad del cliente, no solo en volumen.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-week">Semana 6</div><div class="tl-title">Publicá el Proyecto 2 + actualizá LinkedIn</div><div class="tl-desc">Subí el proyecto. Actualizá tu sección "Sobre mí" en LinkedIn mencionando los 3 Pilares. Comenzá a conectar con recruiters de data en Latam.</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-week">Semana 7–8</div><div class="tl-title">Proyecto 3 — Tu ventaja de dominio</div><div class="tl-desc">El más importante para diferenciarte. Elegí un problema de tu industria anterior. Este proyecto es el que más conversación genera en entrevistas.</div></div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section-block">
+    <div class="section-title">Checklist de <span>portfolio listo</span></div>
+    <div class="section-sub">ANTES DE EMPEZAR A APLICAR A TRABAJOS</div>
+    <div class="checklist">
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Tengo 3 proyectos terminados y publicados en GitHub</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Cada README empieza con el problema de negocio (no con las herramientas)</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Cada proyecto tiene hallazgo con número + recomendación accionable</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Hay captura del dashboard en el README (visible sin hacer clic)</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Mi perfil de LinkedIn enlaza los 3 proyectos del portfolio</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Puedo explicar cada proyecto en 60 segundos usando la narrativa de 5 pasos</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Al menos 1 proyecto usa mi ventaja de dominio (industria que conozco bien)</div>
+      <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>El código SQL tiene comentarios que explican la lógica de negocio</div>
+    </div>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Portfolio 2026</span> · emmanueldorado.gumroad.com</div>
+    <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+
+</div>
+<script>
+  function toggleCheck(el) { el.classList.toggle('checked'); }
+</script>
+</body>
+</html>

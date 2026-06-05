@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de Mentalidad del Analista — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #111e35;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --green: #10b981;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: ''; position: absolute;
+    bottom: -1px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 3px; background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px; margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900; margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; margin-top: 8px; }
+
+  /* INSTRUCTIONS */
+  .instructions {
+    background: rgba(249,115,22,0.08);
+    border: 1px solid rgba(249,115,22,0.2);
+    border-left: 4px solid var(--orange);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 0.88rem;
+    color: var(--gray-300);
+    line-height: 1.7;
+  }
+  .instructions strong { color: var(--orange-light); }
+
+  /* SCALE LEGEND */
+  .scale-legend {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .scale-legend-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray-500); margin-right: 4px;
+  }
+  .scale-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    color: var(--gray-300);
+  }
+  .scale-chip .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--orange);
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .question-card.answered { border-color: rgba(249,115,22,0.25); }
+
+  .q-header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--orange);
+    opacity: 0.5;
+    min-width: 28px;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .question-card.answered .q-num { opacity: 1; }
+  .q-text { font-size: 0.92rem; line-height: 1.6; color: var(--gray-300); }
+
+  /* RATING BUTTONS */
+  .rating-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-btn {
+    flex: 1;
+    min-width: 44px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: var(--gray-300);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    padding: 10px 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .rating-btn:hover { border-color: var(--orange); color: var(--orange-light); background: rgba(249,115,22,0.08); }
+  .rating-btn.selected { background: rgba(249,115,22,0.2); border-color: var(--orange); color: var(--orange-light); }
+  .rating-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--gray-500);
+    letter-spacing: 0.5px;
+  }
+
+  /* PROGRESS */
+  .progress-row {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .prog-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray-500); margin-bottom: 6px;
+  }
+  .prog-bar-bg { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; flex: 1; }
+  .prog-bar-fill { height: 100%; background: var(--orange); border-radius: 3px; transition: width 0.3s; width: 0%; }
+  .prog-count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem; color: var(--gray-500); white-space: nowrap;
+  }
+
+  /* RESULT PANEL */
+  .result-panel {
+    display: none;
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 28px;
+  }
+  .result-panel.show { display: block; }
+
+  .result-header {
+    padding: 24px 28px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .result-score-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gray-500); margin-bottom: 10px;
+  }
+  .result-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .result-score.green { color: var(--green); }
+  .result-score.yellow { color: var(--yellow); }
+  .result-score.orange { color: var(--orange); }
+  .result-score.red { color: var(--red); }
+
+  .result-max {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem; color: var(--gray-500);
+  }
+  .result-title {
+    font-size: 1.1rem; font-weight: 600;
+    margin-top: 10px;
+  }
+
+  .result-body { padding: 24px 28px; }
+  .result-desc {
+    font-size: 0.9rem; line-height: 1.8;
+    color: var(--gray-300);
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 6px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--orange);
+  }
+
+  .action-box {
+    background: rgba(16,185,129,0.07);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+  .action-box-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: #6ee7b7; margin-bottom: 8px;
+  }
+  .action-box p { font-size: 0.88rem; line-height: 1.7; color: var(--gray-300); }
+
+  /* HISTORY */
+  .history-section {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+  .history-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray-500); margin-bottom: 12px;
+  }
+  .history-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .history-cell {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+  }
+  .history-cell .hc-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gray-500); margin-bottom: 6px;
+  }
+  .history-cell .hc-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--orange);
+  }
+  .history-cell .hc-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; color: var(--gray-500); margin-top: 4px;
+  }
+
+  /* CONTROLS */
+  .controls {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+  .footer-brand span { color: var(--orange); }
+  .btn-group { display: flex; gap: 10px; }
+  .btn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 500;
+    padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--gray-300); }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.7rem; }
+    .history-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Pilar 1 — Mentalidad</div>
+    <h1>Test de <span>Mentalidad</span> del Analista</h1>
+    <p>Autodiagnóstico · Repetir cada 30 días para medir tu progreso</p>
+  </div>
+
+  <div class="instructions">
+    Respondé cada afirmación <strong>honestamente</strong> del 1 al 5.
+    No hay respuestas correctas: esto es un espejo, no un examen.
+    El valor está en hacerlo de forma regular y ver cómo cambia tu puntaje con el tiempo.
+  </div>
+
+  <div class="scale-legend">
+    <span class="scale-legend-label">Escala:</span>
+    <div class="scale-chip"><span class="num">1</span> Nunca</div>
+    <div class="scale-chip"><span class="num">2</span> Casi nunca</div>
+    <div class="scale-chip"><span class="num">3</span> A veces</div>
+    <div class="scale-chip"><span class="num">4</span> Casi siempre</div>
+    <div class="scale-chip"><span class="num">5</span> Siempre</div>
+  </div>
+
+  <div class="progress-row">
+    <div style="flex:1">
+      <div class="prog-label">Progreso del test</div>
+      <div class="prog-bar-bg"><div class="prog-bar-fill" id="progFill"></div></div>
+    </div>
+    <div class="prog-count" id="progCount">0 / 10</div>
+  </div>
+
+  <!-- PREGUNTAS -->
+  <div id="questionsContainer">
+
+    <div class="question-card" data-q="1">
+      <div class="q-header">
+        <div class="q-num">01</div>
+        <div class="q-text">Creo que soy "malo para los datos" o que "no tengo cabeza analítica" de forma natural.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 1, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 1, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 1, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 1, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 1, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="2">
+      <div class="q-header">
+        <div class="q-num">02</div>
+        <div class="q-text">Evito empezar proyectos porque "todavía no sé lo suficiente" o "no estoy listo".</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 2, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 2, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 2, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 2, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 2, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="3">
+      <div class="q-header">
+        <div class="q-num">03</div>
+        <div class="q-text">Me frustro cuando no entiendo algo nuevo rápidamente y siento que "no es para mí".</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 3, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 3, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 3, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 3, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 3, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="4">
+      <div class="q-header">
+        <div class="q-num">04</div>
+        <div class="q-text">Comparo mi progreso con analistas seniors o con perfiles de LinkedIn que parecen saber todo.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 4, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 4, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 4, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 4, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 4, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="5">
+      <div class="q-header">
+        <div class="q-num">05</div>
+        <div class="q-text">Prefiero ver otro curso o tutorial antes de terminar el proyecto que ya empecé.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 5, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 5, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 5, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 5, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 5, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="6">
+      <div class="q-header">
+        <div class="q-num">06</div>
+        <div class="q-text">Cuando me trabo en un problema, abandono en vez de buscar formas alternativas de resolverlo.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 6, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 6, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 6, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 6, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 6, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="7">
+      <div class="q-header">
+        <div class="q-num">07</div>
+        <div class="q-text">Siento que el progreso que logré hasta ahora es insuficiente y no lo reconozco como avance real.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 7, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 7, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 7, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 7, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 7, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="8">
+      <div class="q-header">
+        <div class="q-num">08</div>
+        <div class="q-text">Tengo miedo de mostrar mi trabajo por si cometo errores o alguien lo critica.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 8, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 8, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 8, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 8, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 8, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="9">
+      <div class="q-header">
+        <div class="q-num">09</div>
+        <div class="q-text">Cuando algo sale mal en un análisis, lo vivo como un fracaso personal en lugar de como aprendizaje.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 9, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 9, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 9, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 9, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 9, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+    <div class="question-card" data-q="10">
+      <div class="q-header">
+        <div class="q-num">10</div>
+        <div class="q-text">Siento que necesito dominar perfectamente una herramienta antes de pasar a la siguiente fase.</div>
+      </div>
+      <div class="rating-row">
+        <button class="rating-btn" onclick="rate(this, 10, 1)">1</button>
+        <button class="rating-btn" onclick="rate(this, 10, 2)">2</button>
+        <button class="rating-btn" onclick="rate(this, 10, 3)">3</button>
+        <button class="rating-btn" onclick="rate(this, 10, 4)">4</button>
+        <button class="rating-btn" onclick="rate(this, 10, 5)">5</button>
+      </div>
+      <div class="rating-labels"><span>Nunca</span><span>Siempre</span></div>
+    </div>
+
+  </div>
+
+  <!-- RESULT PANEL -->
+  <div class="result-panel" id="resultPanel">
+    <div class="result-header">
+      <div class="result-score-label">Tu puntaje total</div>
+      <div class="result-score" id="resultScore">—</div>
+      <div class="result-max">/ 50 puntos</div>
+      <div class="result-title" id="resultTitle">—</div>
+    </div>
+    <div class="result-body">
+      <div class="result-desc" id="resultDesc">—</div>
+      <div class="action-box">
+        <div class="action-box-label">Acción recomendada ahora</div>
+        <p id="resultAction">—</p>
+      </div>
+      <div class="history-section">
+        <div class="history-label">Historial de resultados (últimas 3 mediciones)</div>
+        <div class="history-row" id="historyRow">
+          <div class="history-cell"><div class="hc-label">Medición 1</div><div class="hc-score" id="h1s">—</div><div class="hc-date" id="h1d">—</div></div>
+          <div class="history-cell"><div class="hc-label">Medición 2</div><div class="hc-score" id="h2s">—</div><div class="hc-date" id="h2d">—</div></div>
+          <div class="history-cell"><div class="hc-label">Medición 3</div><div class="hc-score" id="h3s">—</div><div class="hc-date" id="h3d">—</div></div>
+        </div>
+      </div>
+      <p style="font-size:0.8rem; color:var(--gray-500); text-align:center;">
+        Agenda tu próxima medición en 30 días. Tu mentalidad cambia con acción, no con lectura.
+      </p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="footer-brand">LOS TRES PILARES · <span>Mentalidad</span> · emmanueldorado.gumroad.com</div>
+    <div class="btn-group">
+      <button class="btn btn-ghost" onclick="resetTest()">Reiniciar</button>
+      <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+    </div>
+  </div>
+
+</div>
+<script>
+  const scores = {};
+  const TOTAL = 10;
+
+  const results = [
+    { max: 20, title: "Excelente mentalidad de crecimiento", color: "green",
+      desc: "Tu mentalidad está bien alineada con la de un analista que avanza rápido. Tenés baja autocrítica destructiva y alta tolerancia a la imperfección. El riesgo es la complacencia: seguí con proyectos que te desafíen fuera de tu zona de confort.",
+      action: "Avanzá a proyectos de nivel intermedio o avanzado. Comparte tu trabajo en LinkedIn o GitHub esta semana. La mentalidad se mantiene con acción constante." },
+    { max: 30, title: "Buena mentalidad de crecimiento", color: "yellow",
+      desc: "Estás en buena forma pero hay patrones de mentalidad fija que aparecen en situaciones de estrés o cuando te comparás. Lo bueno: ya reconocés el problema, y eso es la mitad de la solución.",
+      action: "Revisá tus respuestas con puntaje 4 o 5. Elegí una y trabajala conscientemente esta semana. Usá la técnica de los 5 minutos cuando la parálisis aparezca." },
+    { max: 40, title: "Mentalidad mixta — en transición", color: "orange",
+      desc: "Convivís entre la mentalidad de crecimiento y la mentalidad fija según el contexto. Esto es normal en la etapa de transición. El peligro es quedarte en el 'loop del eterno principiante' sin terminar proyectos.",
+      action: "Comprometete a terminar UN proyecto esta semana, aunque quede imperfecto. Aplicá la Regla 80/20: aprendé solo lo que tu proyecto actual necesita. La acción rompe la parálisis." },
+    { max: 50, title: "Mentalidad fija fuerte — necesita atención", color: "red",
+      desc: "Tus patrones de pensamiento están limitando tu avance más que tu conocimiento técnico. Esto no significa que 'no sirves para esto': significa que necesitás trabajar este pilar con la misma seriedad que el SQL o el Power BI.",
+      action: "Antes de abrir un curso nuevo: elegí un problema pequeño de los casos EcomShop y resuélvelo en 3 días, aunque quede básico. Registrá lo que aprendiste. Repetí. La mentalidad se construye con pequeñas victorias, no con teoría." }
+  ];
+
+  function rate(btn, q, val) {
+    const card = document.querySelector(`[data-q="${q}"]`);
+    card.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    scores[q] = val;
+    card.classList.add('answered');
+    updateProgress();
+    if (Object.keys(scores).length === TOTAL) showResult();
+  }
+
+  function updateProgress() {
+    const count = Object.keys(scores).length;
+    document.getElementById('progFill').style.width = (count / TOTAL * 100) + '%';
+    document.getElementById('progCount').textContent = count + ' / ' + TOTAL;
+  }
+
+  function showResult() {
+    const total = Object.values(scores).reduce((a, b) => a + b, 0);
+    const r = results.find(x => total <= x.max);
+    document.getElementById('resultScore').textContent = total;
+    document.getElementById('resultScore').className = 'result-score ' + r.color;
+    document.getElementById('resultTitle').textContent = r.title;
+    document.getElementById('resultDesc').textContent = r.desc;
+    document.getElementById('resultAction').textContent = r.action;
+    document.getElementById('resultPanel').classList.add('show');
+
+    // History
+    const today = new Date().toLocaleDateString('es-AR');
+    let history = JSON.parse(localStorage.getItem('mentality_history') || '[]');
+    history.push({ score: total, date: today });
+    if (history.length > 3) history = history.slice(-3);
+    localStorage.setItem('mentality_history', JSON.stringify(history));
+    renderHistory(history);
+
+    document.getElementById('resultPanel').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function renderHistory(history) {
+    ['1','2','3'].forEach((n, i) => {
+      const entry = history[i];
+      document.getElementById('h' + n + 's').textContent = entry ? entry.score + '/50' : '—';
+      document.getElementById('h' + n + 'd').textContent = entry ? entry.date : '—';
+    });
+  }
+
+  function resetTest() {
+    Object.keys(scores).forEach(k => delete scores[k]);
+    document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.question-card').forEach(c => c.classList.remove('answered'));
+    document.getElementById('resultPanel').classList.remove('show');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Load history on init
+  const existing = JSON.parse(localStorage.getItem('mentality_history') || '[]');
+  if (existing.length) renderHistory(existing);
+</script>
+</body>
+</html>

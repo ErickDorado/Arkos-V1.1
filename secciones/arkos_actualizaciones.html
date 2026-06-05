@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actualizaciones — Los Tres Pilares · ARKOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#08090A;
+  --surf:#0F1012;
+  --surf2:#131416;
+  --surf3:#171819;
+  --border:rgba(255,255,255,.06);
+  --border-m:rgba(255,255,255,.1);
+  --text:#E8E6E1;
+  --dim:rgba(232,230,225,.45);
+  --faint:rgba(232,230,225,.22);
+  --teal:#2DD4BF;
+  --amber:#EF9F27;
+  --teal-glow:rgba(45,212,191,.18);
+  --amber-glow:rgba(239,159,39,.12);
+  --paper:#F5F0E8;
+  --paper-line:#E8E2D4;
+  --ink:#1A1612;
+  --ink-dim:#6B6358;
+  --ink-faint:#B0A99E;
+}
+
+html{scroll-behavior:smooth;}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+/* grid */
+body::after{content:"";position:fixed;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:80px 80px;pointer-events:none;z-index:0;}
+
+.glow-tl{position:fixed;width:600px;height:600px;background:#2DD4BF;filter:blur(220px);opacity:.04;top:-200px;left:-200px;pointer-events:none;z-index:0;}
+.glow-br{position:fixed;width:500px;height:500px;background:#EF9F27;filter:blur(220px);opacity:.03;bottom:-150px;right:-100px;pointer-events:none;z-index:0;}
+
+/* ─── NAV ─── */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 40px;border-bottom:.5px solid var(--border);position:sticky;top:0;background:rgba(8,9,10,.92);backdrop-filter:blur(20px);z-index:200;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--text);}
+.logo span{color:var(--teal);}
+.nav-tag{font-size:11px;color:var(--faint);letter-spacing:.08em;}
+
+/* ─── PREMIUM BANNER ─── */
+.premium-banner{
+  position:relative;z-index:1;
+  margin:28px 40px 0;
+  background:linear-gradient(135deg,rgba(45,212,191,.06) 0%,rgba(239,159,39,.04) 100%);
+  border:.5px solid rgba(45,212,191,.2);
+  border-radius:14px;
+  padding:20px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  overflow:hidden;
+}
+.premium-banner::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,var(--teal),rgba(239,159,39,.6),transparent);
+}
+.pb-left{display:flex;align-items:center;gap:14px;}
+.pb-icon{width:38px;height:38px;background:rgba(45,212,191,.1);border:.5px solid rgba(45,212,191,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.pb-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px;}
+.pb-sub{font-size:12px;color:var(--dim);font-weight:300;}
+.pb-sub strong{color:var(--teal);font-weight:500;}
+.btn-premium{
+  background:linear-gradient(135deg,var(--teal),#22B5A3);
+  color:#08090A;padding:10px 22px;border-radius:8px;
+  font-family:"Syne",sans-serif;font-weight:700;font-size:13px;
+  cursor:pointer;border:none;white-space:nowrap;
+  transition:opacity .2s,transform .15s;
+  display:flex;align-items:center;gap:7px;
+}
+.btn-premium:hover{opacity:.88;transform:translateY(-1px);}
+
+/* ─── PAGE HEADER ─── */
+.page-header{position:relative;z-index:1;padding:44px 40px 36px;}
+.ph-tag{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.ph-tag::before{content:"";width:20px;height:1px;background:var(--amber);}
+.ph-h1{font-family:"Syne",sans-serif;font-size:32px;font-weight:800;letter-spacing:-.6px;color:#F0EDE8;line-height:1.15;margin-bottom:8px;}
+.ph-sub{font-size:14px;color:var(--dim);font-weight:300;max-width:480px;line-height:1.6;}
+
+/* ─── MAIN LAYOUT ─── */
+.main-layout{
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-columns:340px 1fr;
+  gap:32px;
+  padding:0 40px 60px;
+  align-items:start;
+}
+
+/* ─── TIMELINE (LEFT) ─── */
+.timeline-panel{
+  position:sticky;top:90px;
+  display:flex;flex-direction:column;
+  gap:0;
+}
+.tl-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:20px;padding-left:28px;}
+
+.tl-track{display:flex;flex-direction:column;position:relative;}
+
+/* vertical line */
+.tl-track::before{
+  content:"";position:absolute;left:11px;top:12px;
+  width:1px;bottom:12px;
+  background:linear-gradient(to bottom,var(--teal) 0%,rgba(45,212,191,.3) 30%,rgba(255,255,255,.06) 60%,transparent 100%);
+}
+
+.tl-item{display:flex;gap:16px;align-items:flex-start;padding:10px 0;position:relative;}
+
+/* dot */
+.tl-dot{
+  width:23px;height:23px;border-radius:50%;flex-shrink:0;
+  position:relative;margin-top:1px;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* active dot */
+.tl-dot.active{
+  background:var(--teal);
+  box-shadow:0 0 0 4px rgba(45,212,191,.15),0 0 16px rgba(45,212,191,.5);
+}
+.tl-dot.active::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:var(--teal);animation:dotPulse 2.2s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(45,212,191,.5);}
+  50%{box-shadow:0 0 0 8px rgba(45,212,191,.0);}
+}
+.tl-dot.active .dot-inner{width:8px;height:8px;background:#08090A;border-radius:50%;position:relative;z-index:1;}
+
+/* soon dot */
+.tl-dot.soon{
+  background:var(--surf2);
+  border:1.5px solid rgba(255,255,255,.1);
+}
+.tl-dot.soon .dot-inner{width:6px;height:6px;background:rgba(255,255,255,.12);border-radius:50%;}
+
+/* locked dot */
+.tl-dot.locked{
+  background:var(--surf2);
+  border:1.5px solid rgba(255,255,255,.06);
+}
+.tl-dot.locked .dot-inner{width:6px;height:6px;background:rgba(255,255,255,.06);border-radius:50%;}
+
+.tl-content{}
+.tl-title{font-family:"Syne",sans-serif;font-weight:700;font-size:13.5px;line-height:1.3;margin-bottom:3px;}
+.tl-item.active .tl-title{color:#F0EDE8;}
+.tl-item.soon .tl-title{color:var(--dim);}
+.tl-item.locked .tl-title{color:var(--faint);}
+.tl-meta{font-size:11px;font-weight:300;}
+.tl-item.active .tl-meta{color:var(--teal);}
+.tl-item.soon .tl-meta{color:var(--faint);}
+.tl-item.locked .tl-meta{color:rgba(232,230,225,.15);}
+.tl-badge{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:10px;margin-top:4px;}
+.badge-live{background:rgba(45,212,191,.1);color:var(--teal);border:.5px solid rgba(45,212,191,.2);}
+.badge-live::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--teal);animation:dotPulse 2.2s infinite;}
+.badge-soon{background:rgba(239,159,39,.08);color:var(--amber);border:.5px solid rgba(239,159,39,.15);}
+.badge-locked{background:rgba(255,255,255,.03);color:var(--faint);border:.5px solid var(--border);}
+
+/* ─── NOTEBOOK (RIGHT) ─── */
+.notebook{
+  background:var(--paper);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,.55),inset 0 0 0 .5px rgba(0,0,0,.08);
+  position:relative;
+}
+
+/* binding strip */
+.nb-binding{
+  position:absolute;left:0;top:0;bottom:0;width:44px;
+  background:linear-gradient(180deg,#D4CFC7 0%,#C9C3BA 100%);
+  border-right:1px solid rgba(0,0,0,.1);
+  display:flex;flex-direction:column;align-items:center;
+  padding:20px 0;gap:14px;
+  z-index:2;
+}
+.nb-hole{width:14px;height:14px;border-radius:50%;background:#08090A;box-shadow:inset 0 2px 4px rgba(0,0,0,.6);}
+
+/* notebook header */
+.nb-header{
+  background:linear-gradient(135deg,#EEEAE0 0%,#E8E3D8 100%);
+  padding:22px 28px 20px 58px;
+  border-bottom:1.5px solid var(--paper-line);
+  position:relative;
+}
+.nb-header::after{
+  content:"";position:absolute;bottom:0;left:58px;right:0;height:.5px;
+  background:rgba(45,212,191,.4);
+}
+.nb-title{font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:var(--ink);margin-bottom:2px;}
+.nb-subtitle{font-size:11px;color:var(--ink-dim);font-family:"DM Mono",monospace;}
+
+/* notebook body = lines area */
+.nb-body{
+  padding:0 0 32px 0;
+  position:relative;
+}
+
+/* horizontal lines */
+.nb-line{
+  display:flex;align-items:stretch;min-height:46px;
+  border-bottom:1px solid var(--paper-line);
+  position:relative;
+}
+.nb-line:first-child{border-top:none;}
+
+/* left margin red line */
+.nb-line::before{
+  content:"";position:absolute;left:58px;top:0;bottom:0;width:1.5px;
+  background:rgba(220,60,60,.2);
+  pointer-events:none;
+}
+
+.nb-line-num{
+  width:44px;flex-shrink:0;
+  font-family:"DM Mono",monospace;font-size:10px;color:rgba(107,99,88,.4);
+  display:flex;align-items:center;justify-content:center;
+  padding-top:2px;
+  background:inherit;
+  z-index:1;
+}
+
+.nb-line-content{
+  flex:1;padding:10px 16px 10px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  min-height:46px;
+}
+
+/* entry styles */
+.entry-text{
+  font-family:"DM Mono",monospace;
+  font-size:13px;
+  line-height:1.45;
+  color:var(--ink);
+}
+.entry-text.handwriting{
+  font-family:"DM Sans",sans-serif;
+  font-size:14px;
+  font-weight:300;
+  font-style:italic;
+  color:var(--ink-dim);
+  letter-spacing:.02em;
+}
+.entry-text strong{font-weight:600;color:var(--ink);}
+.entry-text .book-title{color:#1A5C7A;font-style:italic;}
+.entry-date{
+  font-family:"DM Mono",monospace;
+  font-size:11px;color:var(--ink-faint);
+  white-space:nowrap;flex-shrink:0;
+}
+.entry-date.soon{
+  font-family:"DM Sans",sans-serif;
+  font-size:11px;font-weight:500;
+  color:var(--amber);
+  background:rgba(239,159,39,.1);
+  padding:2px 8px;border-radius:4px;
+  font-style:normal;
+}
+.entry-date.future{
+  font-family:"DM Sans",sans-serif;
+  font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(107,99,88,.35);
+  font-style:normal;
+}
+
+/* section separator line */
+.nb-line.separator{
+  background:rgba(45,212,191,.03);
+  border-bottom:1px dashed rgba(45,212,191,.2);
+}
+.nb-line.separator .entry-text{
+  font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(45,212,191,.5);font-style:normal;font-weight:500;
+  font-family:"DM Mono",monospace;
+}
+
+/* highlight line */
+.nb-line.highlight{background:rgba(45,212,191,.04);}
+.nb-line.highlight .entry-text{color:#1A5C7A;}
+
+/* empty lines */
+.nb-line.empty .nb-line-content{min-height:36px;}
+
+/* status dot inline */
+.inline-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+.dot-teal{background:var(--teal);box-shadow:0 0 6px rgba(45,212,191,.6);}
+.dot-amber{background:var(--amber);}
+.dot-gray{background:rgba(107,99,88,.3);}
+
+/* tag chips inside notebook */
+.nb-chip{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:"DM Mono",monospace;font-size:10px;
+  padding:2px 8px;border-radius:4px;
+  white-space:nowrap;
+}
+.chip-teal{background:rgba(45,212,191,.1);color:#1A7A6A;border:.5px solid rgba(45,212,191,.2);}
+.chip-amber{background:rgba(239,159,39,.1);color:#8C5A0A;border:.5px solid rgba(239,159,39,.2);}
+.chip-gray{background:rgba(0,0,0,.05);color:var(--ink-faint);border:.5px solid rgba(0,0,0,.08);}
+
+/* pencil annotation */
+.nb-annotation{
+  position:absolute;right:20px;top:50%;transform:translateY(-50%);
+  font-family:"DM Sans",sans-serif;font-size:11px;font-style:italic;
+  color:rgba(100,80,40,.35);letter-spacing:.01em;
+  pointer-events:none;
+}
+
+/* fade future lines */
+.nb-line.fade-1{opacity:.7;}
+.nb-line.fade-2{opacity:.45;}
+.nb-line.fade-3{opacity:.25;}
+.nb-line.fade-4{opacity:.12;}
+
+/* ─── FOOTER NOTE ─── */
+.footer-note{
+  position:relative;z-index:1;
+  text-align:center;padding:32px 40px 48px;
+  font-size:12px;color:var(--faint);
+  display:flex;flex-direction:column;gap:6px;align-items:center;
+}
+.footer-note a{color:var(--teal);text-decoration:none;}
+
+/* responsive */
+@media(max-width:860px){
+  .main-layout{grid-template-columns:1fr;padding:0 20px 48px;}
+  .timeline-panel{position:static;margin-bottom:32px;}
+  .premium-banner{margin:20px 20px 0;flex-direction:column;align-items:flex-start;}
+  .page-header{padding:32px 20px 24px;}
+  .nav{padding:14px 20px;}
+}
+</style>
+</head>
+<body>
+<div class="glow-tl"></div>
+<div class="glow-br"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo">ARK<span>OS</span> Press</div>
+  <div class="nav-tag">Actualizaciones &amp; Roadmap</div>
+</nav>
+
+<!-- PREMIUM BANNER -->
+<div class="premium-banner">
+  <div class="pb-left">
+    <div class="pb-icon">⚡</div>
+    <div>
+      <div class="pb-title">¿Ya tenés el tier Premium del libro?</div>
+      <div class="pb-sub">Accedé a los recursos exclusivos: dataset, dashboard Power BI, queries SQL y plantillas.<br><strong>Solo para compradores verificados.</strong></div>
+    </div>
+  </div>
+  <button class="btn-premium">
+    Acceder a mis recursos →
+  </button>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="ph-tag">Roadmap · Los Tres Pilares</div>
+  <h1 class="ph-h1">Historial de actualizaciones</h1>
+  <p class="ph-sub">El libro crece. Este es el registro de todo lo que fue, lo que viene y lo que estamos construyendo para vos.</p>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- ─── TIMELINE ─── -->
+  <div class="timeline-panel">
+    <div class="tl-label">Roadmap del proyecto</div>
+    <div class="tl-track">
+
+      <!-- 1 - ACTIVE -->
+      <div class="tl-item active">
+        <div class="tl-dot active"><div class="dot-inner"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Los Tres Pilares del Analista de Datos</div>
+          <div class="tl-meta">Vol. 01 · Edición 2026</div>
+          <div class="tl-badge badge-live">● Disponible ahora</div>
+        </div>
+      </div>
+
+      <!-- 2 - SOON -->
+      <div class="tl-item soon">
+        <div class="tl-dot soon"><div class="dot-inner"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">+ Recursos Premium</div>
+          <div class="tl-meta">Casos visuales · Dashboards completos</div>
+          <div class="tl-badge badge-soon">Próximamente</div>
+        </div>
+      </div>
+
+      <!-- 3 - LOCKED -->
+      <div class="tl-item locked">
+        <div class="tl-dot locked"><div class="dot-inner"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Casos de Estudio Extra</div>
+          <div class="tl-meta">SaaS · Salud · Fintech</div>
+          <div class="tl-badge badge-locked">🔒 En desarrollo</div>
+        </div>
+      </div>
+
+      <!-- 4 - LOCKED -->
+      <div class="tl-item locked">
+        <div class="tl-dot locked"><div class="dot-inner"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Material Complementario</div>
+          <div class="tl-meta">Guías · Videos explicativos · Prompts</div>
+          <div class="tl-badge badge-locked">🔒 Planificado</div>
+        </div>
+      </div>
+
+      <!-- 5 - LOCKED -->
+      <div class="tl-item locked">
+        <div class="tl-dot locked"><div class="dot-inner"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Actualización del Libro</div>
+          <div class="tl-meta">Revisión · Ejercicios nuevos · Correcciones</div>
+          <div class="tl-badge badge-locked">🔒 Planificado</div>
+        </div>
+      </div>
+
+      <!-- 6 - LOCKED -->
+      <div class="tl-item locked">
+        <div class="tl-dot locked"><div class="dot-inner"></div></div>
+        <div class="tl-content">
+          <div class="tl-title">Vol. 02 — De Analista a Consultor</div>
+          <div class="tl-meta">El siguiente nivel del framework</div>
+          <div class="tl-badge badge-locked">🔒 Visión futura</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── NOTEBOOK ─── -->
+  <div class="notebook">
+
+    <!-- Binding holes -->
+    <div class="nb-binding">
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+      <div class="nb-hole"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="nb-header">
+      <div class="nb-title">Diario del Proyecto — ARKOS Press</div>
+      <div class="nb-subtitle">log.md · Los Tres Pilares del Analista de Datos</div>
+    </div>
+
+    <!-- Lines -->
+    <div class="nb-body">
+
+      <!-- SEPARATOR -->
+      <div class="nb-line separator">
+        <div class="nb-line-num"></div>
+        <div class="nb-line-content">
+          <span class="entry-text">// Origen del proyecto</span>
+        </div>
+      </div>
+
+      <!-- Line 1 -->
+      <div class="nb-line highlight">
+        <div class="nb-line-num">01</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            <span class="inline-dot dot-teal"></span>
+            Prototipo del libro — primeras 20 páginas
+          </span>
+          <span class="entry-date">15-05-2026</span>
+        </div>
+      </div>
+
+      <!-- Line 2 -->
+      <div class="nb-line">
+        <div class="nb-line-num">02</div>
+        <div class="nb-line-content">
+          <span class="entry-text handwriting">
+            "¿Qué le falta al analista técnico para generar impacto? Voy a escribir ese manual."
+          </span>
+          <span class="entry-date">18-05-2026</span>
+        </div>
+      </div>
+
+      <!-- Line 3 -->
+      <div class="nb-line">
+        <div class="nb-line-num">03</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            Estructura de 3 pilares definida: Mentalidad · Soft Skills · Contexto de Negocio
+          </span>
+          <span class="entry-date">22-05-2026</span>
+        </div>
+      </div>
+
+      <!-- Line 4 -->
+      <div class="nb-line">
+        <div class="nb-line-num">04</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            Caso EcomShop finalizado — 1.000 pedidos · 3 carriers · OTD completo
+            <span class="nb-chip chip-teal" style="margin-left:8px;">Caso 01</span>
+          </span>
+          <span class="entry-date">26-05-2026</span>
+        </div>
+      </div>
+
+      <!-- Line 5 -->
+      <div class="nb-line">
+        <div class="nb-line-num">05</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            Casos 02 y 03 integrados — Marketing Ads + Rotación RRHH
+            <span class="nb-chip chip-teal" style="margin-left:8px;">Caso 02</span>
+            <span class="nb-chip chip-teal" style="margin-left:4px;">Caso 03</span>
+          </span>
+          <span class="entry-date">29-05-2026</span>
+        </div>
+      </div>
+
+      <!-- SEPARATOR -->
+      <div class="nb-line separator">
+        <div class="nb-line-num"></div>
+        <div class="nb-line-content">
+          <span class="entry-text">// Lanzamiento</span>
+        </div>
+      </div>
+
+      <!-- Line 6 - MAIN LAUNCH -->
+      <div class="nb-line highlight">
+        <div class="nb-line-num">06</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            <span class="inline-dot dot-teal"></span>
+            Lanzamiento de <span class="book-title">"Los Tres Pilares del Analista de Datos"</span> — Vol. 01
+            <span class="nb-chip chip-teal" style="margin-left:8px;">v1.0</span>
+          </span>
+          <span class="entry-date">02-06-2026</span>
+        </div>
+      </div>
+
+      <!-- Line 7 -->
+      <div class="nb-line">
+        <div class="nb-line-num">07</div>
+        <div class="nb-line-content">
+          <span class="entry-text handwriting">
+            "Ya está. El libro que me hubiese gustado tener cuando empecé." — E.E.D.
+          </span>
+          <span class="entry-date">02-06-2026</span>
+        </div>
+      </div>
+
+      <!-- SEPARATOR -->
+      <div class="nb-line separator">
+        <div class="nb-line-num"></div>
+        <div class="nb-line-content">
+          <span class="entry-text">// Lo que viene</span>
+        </div>
+      </div>
+
+      <!-- Line 8 - SOON -->
+      <div class="nb-line fade-1">
+        <div class="nb-line-num">08</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            <span class="inline-dot dot-amber"></span>
+            Recursos visuales Premium — Dashboards Power BI completos + screenshots anotados
+            <span class="nb-chip chip-amber" style="margin-left:8px;">+Recursos</span>
+          </span>
+          <span class="entry-date soon">Próximamente</span>
+        </div>
+      </div>
+
+      <!-- Line 9 -->
+      <div class="nb-line fade-2">
+        <div class="nb-line-num">09</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            <span class="inline-dot dot-gray"></span>
+            Casos de estudio extra — industrias SaaS, Salud y Fintech
+            <span class="nb-chip chip-gray" style="margin-left:8px;">Casos Extra</span>
+          </span>
+          <span class="entry-date future">Planificado</span>
+        </div>
+      </div>
+
+      <!-- Line 10 -->
+      <div class="nb-line fade-2">
+        <div class="nb-line-num">10</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            <span class="inline-dot dot-gray"></span>
+            Material complementario — guías en video · prompts actualizados · correcciones
+          </span>
+          <span class="entry-date future">Planificado</span>
+        </div>
+      </div>
+
+      <!-- Line 11 -->
+      <div class="nb-line fade-3">
+        <div class="nb-line-num">11</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            <span class="inline-dot dot-gray"></span>
+            Revisión del libro v1.1 — nuevos ejercicios + sección de entrevistas ampliada
+            <span class="nb-chip chip-gray" style="margin-left:8px;">v1.1</span>
+          </span>
+          <span class="entry-date future">Planificado</span>
+        </div>
+      </div>
+
+      <!-- Line 12 -->
+      <div class="nb-line fade-4">
+        <div class="nb-line-num">12</div>
+        <div class="nb-line-content">
+          <span class="entry-text">
+            <span class="inline-dot dot-gray"></span>
+            <span class="book-title">Vol. 02 — "De Analista a Consultor"</span> — El siguiente framework
+            <span class="nb-chip chip-gray" style="margin-left:8px;">Vol. 02</span>
+          </span>
+          <span class="entry-date future">Visión futura</span>
+        </div>
+      </div>
+
+      <!-- Empty lines for texture -->
+      <div class="nb-line empty fade-4">
+        <div class="nb-line-num">13</div>
+        <div class="nb-line-content"></div>
+      </div>
+      <div class="nb-line empty fade-4" style="opacity:.06;">
+        <div class="nb-line-num">14</div>
+        <div class="nb-line-content"></div>
+      </div>
+      <div class="nb-line empty" style="opacity:.03;border-bottom:none;">
+        <div class="nb-line-num">15</div>
+        <div class="nb-line-content"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER NOTE -->
+<div class="footer-note">
+  <div>Los compradores Premium reciben todas las actualizaciones automáticamente.</div>
+  <div>Contacto: <a href="https://erickemmanueldorado.vercel.app">erickemmanueldorado.vercel.app</a> · ARKOS Press · Vol.01 · 2026</div>
+</div>
+
+<script>
+// Animate timeline items on load
+document.querySelectorAll('.tl-item').forEach((item, i) => {
+  item.style.opacity = '0';
+  item.style.transform = 'translateX(-12px)';
+  item.style.transition = 'opacity .5s ease, transform .5s ease';
+  setTimeout(() => {
+    item.style.opacity = '1';
+    item.style.transform = 'translateX(0)';
+  }, 120 + i * 100);
+});
+
+// Animate notebook lines
+document.querySelectorAll('.nb-line').forEach((line, i) => {
+  line.style.opacity = '0';
+  line.style.transition = 'opacity .4s ease';
+  setTimeout(() => {
+    line.style.opacity = '';
+  }, 300 + i * 60);
+});
+</script>
+
+</body>
+</html>

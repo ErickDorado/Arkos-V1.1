@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantilla Elevator Pitch — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628; --navy-mid: #111e35; --orange: #f97316;
+    --orange-light: #fb923c; --white: #f8fafc; --gray-300: #cbd5e1;
+    --gray-500: #64748b; --green: #10b981; --blue: #3b82f6; --purple: #8b5cf6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; padding: 40px 20px; }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid rgba(249,115,22,0.3); position: relative; }
+  .header::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--orange); }
+  .badge { display: inline-block; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.4); color: var(--orange-light); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 5px 14px; border-radius: 2px; margin-bottom: 12px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; margin-top: 8px; }
+
+  .intro-box { background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2); border-left: 4px solid var(--orange); border-radius: 6px; padding: 16px 20px; margin-bottom: 28px; font-size: 0.88rem; color: var(--gray-300); line-height: 1.8; }
+  .intro-box strong { color: var(--orange-light); }
+
+  /* CONTEXT SELECTOR */
+  .context-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+  .ctx-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: var(--gray-300); font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; padding: 8px 18px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .ctx-btn:hover { border-color: var(--orange); color: var(--orange-light); }
+  .ctx-btn.active { background: rgba(249,115,22,0.15); border-color: var(--orange); color: var(--orange-light); }
+
+  /* STRUCTURE BUILDER */
+  .builder { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+  .builder-header { background: linear-gradient(135deg, #0f2044, #1a3060); border-bottom: 3px solid var(--orange); padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; }
+  .builder-title { font-size: 1rem; font-weight: 600; }
+  .builder-timer { display: flex; align-items: center; gap: 8px; }
+  .timer-display { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--orange); min-width: 56px; }
+  .timer-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500); }
+  .timer-btn { background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.3); border-radius: 4px; color: var(--orange-light); font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; padding: 4px 10px; cursor: pointer; transition: all 0.2s; }
+  .timer-btn:hover { background: rgba(249,115,22,0.3); }
+
+  /* BLOCKS */
+  .blocks { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .block { border-radius: 8px; overflow: hidden; }
+  .block-header { padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .block-step { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 9px; border-radius: 10px; flex-shrink: 0; }
+  .block-title { font-size: 0.88rem; font-weight: 600; }
+  .block-time { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--gray-500); margin-left: auto; }
+
+  .b1 .block-header { background: rgba(249,115,22,0.1); }
+  .b1 .block-step   { background: rgba(249,115,22,0.2); color: var(--orange-light); }
+  .b2 .block-header { background: rgba(59,130,246,0.1); }
+  .b2 .block-step   { background: rgba(59,130,246,0.2); color: #93c5fd; }
+  .b3 .block-header { background: rgba(139,92,246,0.1); }
+  .b3 .block-step   { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+  .b4 .block-header { background: rgba(16,185,129,0.1); }
+  .b4 .block-step   { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+  .b5 .block-header { background: rgba(245,158,11,0.1); }
+  .b5 .block-step   { background: rgba(245,158,11,0.2); color: #fcd34d; }
+
+  .block-body { padding: 12px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-top: none; }
+  .block-hint { font-size: 0.78rem; color: var(--gray-500); font-style: italic; margin-bottom: 8px; line-height: 1.5; }
+  .block-hint strong { color: var(--gray-300); font-style: normal; }
+  .block textarea { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; color: var(--white); font-family: 'IBM Plex Sans', sans-serif; font-size: 0.87rem; padding: 10px 12px; outline: none; resize: vertical; line-height: 1.7; transition: border-color 0.2s; }
+  .block textarea::placeholder { color: var(--gray-500); font-style: italic; }
+  .block textarea:focus { border-color: var(--orange); }
+  .b1 textarea:focus { border-color: var(--orange); }
+  .b2 textarea:focus { border-color: var(--blue); }
+  .b3 textarea:focus { border-color: var(--purple); }
+  .b4 textarea:focus { border-color: var(--green); }
+  .b5 textarea:focus { border-color: #f59e0b; }
+
+  /* PREVIEW */
+  .preview-section { margin-bottom: 24px; }
+  .preview-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .preview-box { background: linear-gradient(135deg, rgba(249,115,22,0.06), rgba(249,115,22,0.02)); border: 1px solid rgba(249,115,22,0.2); border-radius: 8px; padding: 20px 22px; min-height: 100px; font-size: 0.92rem; line-height: 1.9; color: var(--gray-300); font-style: italic; }
+  .preview-box .preview-placeholder { color: rgba(100,116,139,0.5); font-size: 0.85rem; }
+  .preview-box strong { color: var(--orange-light); font-style: normal; }
+  .word-count { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--gray-500); margin-top: 8px; text-align: right; }
+  .word-count.ok { color: var(--green); }
+  .word-count.warn { color: var(--orange); }
+
+  /* EXAMPLES */
+  .examples-section { margin-bottom: 24px; }
+  .ex-tab-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .ex-tab { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; color: var(--gray-500); font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; padding: 5px 12px; cursor: pointer; transition: all 0.2s; }
+  .ex-tab:hover { border-color: var(--orange); color: var(--orange-light); }
+  .ex-tab.active { background: rgba(249,115,22,0.12); border-color: var(--orange); color: var(--orange-light); }
+
+  .ex-card { display: none; background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; overflow: hidden; }
+  .ex-card.active { display: block; }
+  .ex-card-header { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; }
+  .ex-profile { font-size: 0.85rem; font-weight: 600; }
+  .ex-duration { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--orange); }
+  .ex-text { padding: 16px; font-size: 0.88rem; line-height: 1.9; color: var(--gray-300); }
+  .ex-text .block-label { font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); opacity: 0.7; display: block; margin-bottom: 2px; margin-top: 10px; }
+  .ex-text .block-label:first-child { margin-top: 0; }
+
+  /* TIPS GRID */
+  .tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .tip-card { background: var(--navy-mid); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 16px; }
+  .tip-title { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+  .tip-item { display: flex; gap: 8px; font-size: 0.82rem; color: var(--gray-300); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); line-height: 1.5; align-items: flex-start; }
+  .tip-item:last-child { border-bottom: none; }
+  .tip-item::before { content: '→'; color: var(--orange); flex-shrink: 0; font-size: 0.75rem; margin-top: 2px; }
+
+  /* FOOTER */
+  .outer-footer { margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+  .footer-brand span { color: var(--orange); }
+  .btn-group { display: flex; gap: 10px; }
+  .btn { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--gray-300); }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.7rem; }
+    .tips-grid { grid-template-columns: 1fr; }
+    .builder-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .outer-footer .btn { display: none; }
+    .context-row, .ex-tab-row { display: none; }
+    .ex-card { display: block !important; page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Carrera · Entrevistas · LinkedIn</div>
+    <h1>Plantilla <span>Elevator Pitch</span></h1>
+    <p>Para entrevistas, LinkedIn y cualquier situación donde tenés 60–90 segundos para impactar</p>
+  </div>
+
+  <div class="intro-box">
+    El elevator pitch no es un resumen de tu CV. Es <strong>la historia de por qué sos la persona correcta para ese rol</strong>.
+    Tiene que conectar tu experiencia pasada con el valor que vas a generar, usando los 3 Pilares como hilo conductor.
+    <strong>60–90 segundos. No más.</strong> Si tardás más, perdiste la atención.
+  </div>
+
+  <!-- CONTEXT SELECTOR -->
+  <div style="margin-bottom: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-500);">Contexto de uso</div>
+  <div class="context-row">
+    <button class="ctx-btn active" onclick="setContext(this, 'entrevista')">🎯 Entrevista laboral</button>
+    <button class="ctx-btn" onclick="setContext(this, 'linkedin')">💼 LinkedIn / About me</button>
+    <button class="ctx-btn" onclick="setContext(this, 'networking')">🤝 Networking / Evento</button>
+    <button class="ctx-btn" onclick="setContext(this, 'freelance')">💡 Presentación freelance</button>
+  </div>
+
+  <!-- BUILDER -->
+  <div class="builder">
+    <div class="builder-header">
+      <div class="builder-title">Construí tu pitch · Completá cada bloque</div>
+      <div class="builder-timer">
+        <div>
+          <div class="timer-label">Cronómetro</div>
+          <div class="timer-display" id="timerDisplay">1:30</div>
+        </div>
+        <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">▶ Iniciar</button>
+      </div>
+    </div>
+
+    <div class="blocks">
+
+      <div class="block b1">
+        <div class="block-header">
+          <span class="block-step">Bloque 01</span>
+          <span class="block-title">Quién sos + tu background</span>
+          <span class="block-time">~15 seg</span>
+        </div>
+        <div class="block-body">
+          <div class="block-hint"><strong>Qué decir:</strong> Tu nombre, de dónde venís (rubro anterior o formación) y el pivote hacia datos. Una oración simple y directa.</div>
+          <textarea id="b1" rows="2" placeholder="Ej: Soy [nombre], vengo del mundo de la logística donde trabajé 4 años en operaciones. Hace 2 años decidí especializarme en análisis de datos para poder medir y mejorar los procesos que conocía desde adentro." oninput="updatePreview()"></textarea>
+        </div>
+      </div>
+
+      <div class="block b2">
+        <div class="block-header">
+          <span class="block-step">Bloque 02</span>
+          <span class="block-title">Tu ventaja de dominio</span>
+          <span class="block-time">~15 seg</span>
+        </div>
+        <div class="block-body">
+          <div class="block-hint"><strong>Qué decir:</strong> La experiencia previa que te diferencia de otros analistas técnicos. No es una debilidad: es tu mayor activo.</div>
+          <textarea id="b2" rows="2" placeholder="Ej: Esa experiencia previa me da una ventaja que pocos analistas tienen: entiendo los KPIs operativos desde adentro, sé qué duele en el negocio antes de ver los datos." oninput="updatePreview()"></textarea>
+        </div>
+      </div>
+
+      <div class="block b3">
+        <div class="block-header">
+          <span class="block-step">Bloque 03</span>
+          <span class="block-title">Lo que hiciste (proyecto concreto)</span>
+          <span class="block-time">~20 seg</span>
+        </div>
+        <div class="block-body">
+          <div class="block-hint"><strong>Qué decir:</strong> Un proyecto real o del libro con hallazgo + número + resultado. Este es el bloque más poderoso: concretá con datos.</div>
+          <textarea id="b3" rows="3" placeholder="Ej: En mi último proyecto analicé el rendimiento de carriers logísticos para un e-commerce con 4.000 pedidos mensuales. Identifiqué que el carrier más caro tenía el peor OTD (59.7%) y recomendé reasignar el 40% del volumen, con un impacto proyectado de +8 puntos de OTD." oninput="updatePreview()"></textarea>
+        </div>
+      </div>
+
+      <div class="block b4">
+        <div class="block-header">
+          <span class="block-step">Bloque 04</span>
+          <span class="block-title">Lo que sabés hacer (los 3 Pilares)</span>
+          <span class="block-time">~15 seg</span>
+        </div>
+        <div class="block-body">
+          <div class="block-hint"><strong>Qué decir:</strong> No listés herramientas. Mostrá que sabés pensar, comunicar y entender el negocio. Las herramientas son el medio, no el fin.</div>
+          <textarea id="b4" rows="2" placeholder="Ej: Trabajo con SQL, Python y Power BI, pero lo que más me diferencia es que puedo traducir un análisis técnico en una recomendación clara para gerencia y adaptar el mensaje según la audiencia." oninput="updatePreview()"></textarea>
+        </div>
+      </div>
+
+      <div class="block b5">
+        <div class="block-header">
+          <span class="block-step">Bloque 05</span>
+          <span class="block-title">Por qué este rol / empresa</span>
+          <span class="block-time">~15 seg</span>
+        </div>
+        <div class="block-body">
+          <div class="block-hint"><strong>Qué decir:</strong> Conectá tu perfil con el problema específico que resuelve este puesto. Investigá la empresa antes. Sé específico, no genérico.</div>
+          <textarea id="b5" rows="2" placeholder="Ej: Me interesa particularmente este rol porque [empresa] está en una etapa de crecimiento donde los datos de operaciones pueden hacer una diferencia enorme. Quiero ser el analista que propone antes de que le pidan." oninput="updatePreview()"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-section">
+    <div class="preview-label">Vista previa de tu pitch</div>
+    <div class="preview-box" id="previewBox">
+      <span class="preview-placeholder">Tu pitch aparecerá aquí a medida que completás los bloques de arriba…</span>
+    </div>
+    <div class="word-count" id="wordCount">0 palabras · Objetivo: 130–200 palabras</div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="examples-section">
+    <div class="preview-label">Ejemplos completos por perfil</div>
+    <div class="ex-tab-row">
+      <button class="ex-tab active" onclick="showEx(this, 'junior')">Junior / Transición</button>
+      <button class="ex-tab" onclick="showEx(this, 'mid')">Mid-level con experiencia</button>
+      <button class="ex-tab" onclick="showEx(this, 'linkedin')">Versión LinkedIn (About me)</button>
+    </div>
+
+    <div class="ex-card active" id="ex-junior">
+      <div class="ex-card-header">
+        <span class="ex-profile">🎯 Junior / En transición desde otro rubro</span>
+        <span class="ex-duration">~75 segundos · ~170 palabras</span>
+      </div>
+      <div class="ex-text">
+        <span class="block-label">Quién soy</span>
+        Soy Erick, vengo del mundo de la logística donde trabajé 5 años en operaciones y atención al cliente. Hace un año empecé a formarme en análisis de datos porque me di cuenta de que los problemas que veía todos los días podían resolverse con datos.
+        <span class="block-label">Mi ventaja</span>
+        Esa experiencia previa me da algo que muchos analistas técnicos no tienen: entiendo qué duele en el negocio antes de abrir una query. Sé qué significa un OTD malo para las personas que lo viven.
+        <span class="block-label">Qué hice</span>
+        En mi proyecto más reciente analicé el rendimiento de carriers logísticos para una tienda online con 4.000 pedidos mensuales. Identifiqué que el carrier más caro tenía el peor OTD y recomendé reasignar el volumen, con un impacto proyectado de +8 puntos de OTD en 30 días.
+        <span class="block-label">Cómo trabajo</span>
+        Uso SQL y Power BI, pero lo que más me importa es comunicar análisis que generen decisiones, no solo números.
+        <span class="block-label">Por qué este rol</span>
+        Me interesa este puesto porque quiero ser el analista que propone antes de que le pidan.
+      </div>
+    </div>
+
+    <div class="ex-card" id="ex-mid">
+      <div class="ex-card-header">
+        <span class="ex-profile">💼 Mid-level con experiencia en datos</span>
+        <span class="ex-duration">~80 segundos · ~185 palabras</span>
+      </div>
+      <div class="ex-text">
+        <span class="block-label">Quién soy</span>
+        Soy María, analista de datos con 3 años de experiencia trabajando con equipos de e-commerce y operaciones. Empecé en atención al cliente y desde ahí migré a datos para responder con números las preguntas que escuchaba todos los días.
+        <span class="block-label">Mi ventaja</span>
+        Eso me da una perspectiva que muy pocos analistas tienen: pienso en el cliente final antes de pensar en el dataset. Cuando analizo churn, sé cómo se siente ese número desde adentro.
+        <span class="block-label">Qué hice</span>
+        En mi último proyecto identifiqué que el canal de Meta Ads tenía un ROAS de 1.8 contra 4.2 de Google, y además los clientes de Meta devolvían el 68% más de productos. Recomendé redistribuir el presupuesto, lo que mejoró el ROI sin aumentar la inversión total.
+        <span class="block-label">Cómo trabajo</span>
+        Trabajo con Python, SQL y Looker, y siempre preparo la narrativa de 5 pasos antes de presentar a stakeholders. No presento dashboards: presento recomendaciones.
+        <span class="block-label">Por qué aquí</span>
+        Me interesa este rol porque [empresa] está en una etapa donde los datos pueden hacer la diferencia entre crecer ordenado o crecer con ruido.
+      </div>
+    </div>
+
+    <div class="ex-card" id="ex-linkedin">
+      <div class="ex-card-header">
+        <span class="ex-profile">🔗 Sección "Sobre mí" de LinkedIn</span>
+        <span class="ex-duration">~220 palabras · Para lectura, no para hablar</span>
+      </div>
+      <div class="ex-text">
+        <span class="block-label">Apertura</span>
+        Soy analista de datos con foco en logística y operaciones. Antes de trabajar con datos, trabajé con las personas y los procesos que los datos intentan mejorar.
+        <span class="block-label">Historia</span>
+        Esa experiencia de campo me dio algo que no se aprende en un curso: contexto de negocio real. Cuando veo un OTD del 60%, no solo veo un número. Veo reclamos, clientes frustrados y calificaciones en riesgo.
+        <span class="block-label">Qué hago</span>
+        Hoy convierto datos en decisiones. No en dashboards que nadie abre: en recomendaciones accionables que se implementan. Lo hago usando SQL, Python y Power BI, pero sobre todo usando el Framework de las 5 Preguntas antes de abrir cualquier herramienta.
+        <span class="block-label">Proyectos recientes</span>
+        📦 Análisis de carriers logísticos — identifiqué que el carrier más caro tenía el peor OTD. Recomendación implementada: reasignación de volumen con +8 pts de OTD.
+        📊 Análisis de rentabilidad de canales de Ads — detecté un ROAS 2.3x mayor en Google vs Meta. Redistribución de presupuesto sin aumentar inversión.
+        <span class="block-label">Cierre</span>
+        Si estás buscando un analista que propone antes de que le pidan y que habla tanto el idioma de los datos como el del negocio, hablemos.
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-title">✅ Hacé esto</div>
+      <div class="tip-item">Empezá con quién sos, no con tus herramientas</div>
+      <div class="tip-item">Incluí un número concreto de un proyecto real</div>
+      <div class="tip-item">Conectá tu experiencia pasada como ventaja, no como disculpa</div>
+      <div class="tip-item">Terminá con por qué ESA empresa, no con un genérico</div>
+      <div class="tip-item">Practicalo en voz alta hasta que suene natural, no memorizado</div>
+      <div class="tip-item">Adaptalo según el rol: operativo, tech o marketing</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-title">❌ Evitá esto</div>
+      <div class="tip-item">Listar herramientas como si fuera un CV (SQL, Python, Power BI...)</div>
+      <div class="tip-item">Disculparte por no tener experiencia formal en datos</div>
+      <div class="tip-item">Hablar más de 90 segundos sin que te pregunten nada</div>
+      <div class="tip-item">Ser genérico: "me apasionan los datos" sin contexto</div>
+      <div class="tip-item">Olvidarte de mencionar qué resultado generaste</div>
+      <div class="tip-item">Leer el pitch: tiene que sonar a conversación</div>
+    </div>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Elevator Pitch</span> · emmanueldorado.gumroad.com</div>
+    <div class="btn-group">
+      <button class="btn btn-ghost" onclick="clearAll()">Limpiar</button>
+      <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+    </div>
+  </div>
+
+</div>
+<script>
+  // PREVIEW
+  function updatePreview() {
+    const parts = ['b1','b2','b3','b4','b5'].map(id => document.getElementById(id).value.trim()).filter(Boolean);
+    const preview = document.getElementById('previewBox');
+    if (parts.length === 0) {
+      preview.innerHTML = '<span class="preview-placeholder">Tu pitch aparecerá aquí a medida que completás los bloques de arriba…</span>';
+      document.getElementById('wordCount').textContent = '0 palabras · Objetivo: 130–200 palabras';
+      document.getElementById('wordCount').className = 'word-count';
+      return;
+    }
+    const full = parts.join(' ');
+    preview.innerHTML = full;
+    const words = full.split(/\s+/).filter(Boolean).length;
+    const wc = document.getElementById('wordCount');
+    wc.textContent = words + ' palabras · Objetivo: 130–200 palabras';
+    if (words >= 130 && words <= 220) { wc.className = 'word-count ok'; }
+    else if (words > 220) { wc.className = 'word-count warn'; wc.textContent += ' ⚠ Muy largo'; }
+    else { wc.className = 'word-count'; }
+  }
+
+  // TIMER
+  let timerSeconds = 90;
+  let timerMax = 90;
+  let timerRunning = false;
+  let timerInterval = null;
+
+  function toggleTimer() {
+    if (timerRunning) {
+      clearInterval(timerInterval); timerRunning = false;
+      document.getElementById('timerBtn').textContent = '▶ Continuar';
+    } else {
+      if (timerSeconds <= 0) { timerSeconds = timerMax; updateTimerDisplay(); }
+      timerRunning = true;
+      document.getElementById('timerBtn').textContent = '⏸ Pausar';
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        updateTimerDisplay();
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval); timerRunning = false;
+          document.getElementById('timerBtn').textContent = '↺ Reiniciar';
+        }
+      }, 1000);
+    }
+  }
+
+  function updateTimerDisplay() {
+    const m = Math.floor(timerSeconds / 60);
+    const s = timerSeconds % 60;
+    const display = document.getElementById('timerDisplay');
+    display.textContent = m + ':' + String(s).padStart(2, '0');
+    display.style.color = timerSeconds <= 15 ? '#ef4444' : timerSeconds <= 30 ? '#f59e0b' : 'var(--orange)';
+  }
+
+  // CONTEXT
+  function setContext(btn, ctx) {
+    document.querySelectorAll('.ctx-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const hints = {
+      entrevista: ['60–90 segundos al inicio de la entrevista', 'Incluí el proyecto más relevante para ese rol', 'Terminá con por qué esa empresa específica'],
+      linkedin: ['200–250 palabras para la sección About', 'Podés incluir 2 proyectos con bullets', 'Terminá con un call-to-action'],
+      networking: ['45–60 segundos, muy conversacional', 'Enfocate en el problema que resolvés', 'Terminá con una pregunta para generar diálogo'],
+      freelance: ['90 segundos máximo', 'Incluí el impacto económico del proyecto', 'Terminá con la propuesta de valor específica'],
+    };
+  }
+
+  // EXAMPLES
+  function showEx(btn, id) {
+    document.querySelectorAll('.ex-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.ex-card').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('ex-' + id).classList.add('active');
+  }
+
+  function clearAll() {
+    ['b1','b2','b3','b4','b5'].forEach(id => { document.getElementById(id).value = ''; });
+    updatePreview();
+    timerSeconds = timerMax;
+    updateTimerDisplay();
+    if (timerRunning) { clearInterval(timerInterval); timerRunning = false; }
+    document.getElementById('timerBtn').textContent = '▶ Iniciar';
+  }
+</script>
+</body>
+</html>

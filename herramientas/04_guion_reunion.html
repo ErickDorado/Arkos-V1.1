@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guión de Reunión 10 min — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --green: #10b981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; }
+
+  /* Meeting meta */
+  .meeting-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .meta-field {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .meta-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    display: block;
+    margin-bottom: 5px;
+  }
+  .meta-field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.12);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    width: 100%;
+    padding: 3px 0;
+    outline: none;
+  }
+  .meta-field input:focus { border-bottom-color: var(--orange); }
+  .meta-field input::placeholder { color: var(--gray-500); font-style: italic; }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 0;
+  }
+
+  /* Progress bar visual */
+  .progress-header {
+    display: flex;
+    margin-bottom: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+  }
+  .prog-seg { height: 100%; }
+  .prog-1 { width: 10%; background: #3b82f6; }
+  .prog-2 { width: 20%; background: #8b5cf6; }
+  .prog-3 { width: 30%; background: #f97316; }
+  .prog-4 { width: 30%; background: #10b981; }
+  .prog-5 { width: 10%; background: #f59e0b; }
+
+  .segment {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .seg-time {
+    padding-top: 20px;
+    text-align: right;
+  }
+  .time-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .time-unit {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  .seg-1 .time-badge { color: #93c5fd; }
+  .seg-2 .time-badge { color: #c4b5fd; }
+  .seg-3 .time-badge { color: var(--orange-light); }
+  .seg-4 .time-badge { color: #6ee7b7; }
+  .seg-5 .time-badge { color: #fcd34d; }
+
+  .seg-body {
+    border-radius: 8px;
+    padding: 18px 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.2s;
+  }
+  .seg-body:focus-within { background: rgba(255,255,255,0.05); }
+
+  .seg-1 .seg-body:focus-within { border-color: rgba(59,130,246,0.4); }
+  .seg-2 .seg-body:focus-within { border-color: rgba(139,92,246,0.4); }
+  .seg-3 .seg-body:focus-within { border-color: rgba(249,115,22,0.4); }
+  .seg-4 .seg-body:focus-within { border-color: rgba(16,185,129,0.4); }
+  .seg-5 .seg-body:focus-within { border-color: rgba(245,158,11,0.4); }
+
+  .seg-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .seg-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .seg-1 .seg-tag { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .seg-2 .seg-tag { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+  .seg-3 .seg-tag { background: rgba(249,115,22,0.15); color: #fdba74; }
+  .seg-4 .seg-tag { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .seg-5 .seg-tag { background: rgba(245,158,11,0.15); color: #fcd34d; }
+
+  .seg-objective {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    font-style: italic;
+  }
+
+  .seg-body textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    padding: 10px 12px;
+    resize: vertical;
+    min-height: 72px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .seg-body textarea:focus { border-color: rgba(255,255,255,0.15); }
+  .seg-body textarea::placeholder { color: var(--gray-500); font-style: italic; }
+
+  /* Tips */
+  .seg-tips {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tip-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 3px 10px;
+    color: var(--gray-500);
+  }
+
+  /* Objections */
+  .objections-box {
+    margin-top: 28px;
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .objections-box h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fca5a5;
+    margin-bottom: 14px;
+  }
+  .obj-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .obj-half label {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .obj-half textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(239,68,68,0.15);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    padding: 8px 10px;
+    resize: vertical;
+    min-height: 56px;
+    outline: none;
+  }
+  .obj-half textarea:focus { border-color: rgba(239,68,68,0.4); }
+  .obj-half textarea::placeholder { color: var(--gray-500); font-style: italic; }
+
+  .outer-footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+  .footer-brand span { color: var(--orange); }
+  .print-btn {
+    background: var(--orange);
+    color: white;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--orange-light); }
+
+  @media (max-width: 600px) {
+    .meeting-meta { grid-template-columns: 1fr; }
+    .segment { grid-template-columns: 72px 1fr; gap: 10px; }
+    .obj-row { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .print-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Pilar 2 — Soft Skills</div>
+    <h1>Guión de Reunión <span>10 min</span></h1>
+    <p>Estructura lista para presentar análisis a stakeholders</p>
+  </div>
+
+  <!-- Meeting meta -->
+  <div class="meeting-meta">
+    <div class="meta-field">
+      <label>Reunión / Tema</label>
+      <input type="text" placeholder="Análisis de carriers Q3">
+    </div>
+    <div class="meta-field">
+      <label>Stakeholder</label>
+      <input type="text" placeholder="Gerente de Operaciones">
+    </div>
+    <div class="meta-field">
+      <label>Fecha y hora</label>
+      <input type="text" placeholder="DD/MM — 10:00 hs">
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-header">
+    <div class="prog-seg prog-1"></div>
+    <div class="prog-seg prog-2"></div>
+    <div class="prog-seg prog-3"></div>
+    <div class="prog-seg prog-4"></div>
+    <div class="prog-seg prog-5"></div>
+  </div>
+
+  <!-- Timeline segments -->
+  <div class="timeline">
+
+    <div class="segment seg-1">
+      <div class="seg-time">
+        <span class="time-badge">1'</span>
+        <span class="time-unit">min</span>
+      </div>
+      <div class="seg-body">
+        <div class="seg-title">
+          <span class="seg-tag">Contexto</span>
+          <span class="seg-objective">Situá a la audiencia rápido</span>
+        </div>
+        <textarea placeholder="'Analicé [qué datos] del [período]. El objetivo era entender [pregunta de negocio]. Voy a compartirles los hallazgos principales y una recomendación concreta.'"></textarea>
+        <div class="seg-tips">
+          <span class="tip-chip">No más de 2 oraciones</span>
+          <span class="tip-chip">Siempre aclará el alcance</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="segment seg-2">
+      <div class="seg-time">
+        <span class="time-badge">2'</span>
+        <span class="time-unit">min</span>
+      </div>
+      <div class="seg-body">
+        <div class="seg-title">
+          <span class="seg-tag">Problema + Evidencia</span>
+          <span class="seg-objective">El hallazgo con datos que lo respaldan</span>
+        </div>
+        <textarea placeholder="'El problema principal es [hallazgo con número]. Los datos que lo respaldan son: [dato 1], [dato 2] y [dato 3].'"></textarea>
+        <div class="seg-tips">
+          <span class="tip-chip">Máximo 3 datos</span>
+          <span class="tip-chip">Siempre comparativos</span>
+          <span class="tip-chip">Evitá jerga técnica</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="segment seg-3">
+      <div class="seg-time">
+        <span class="time-badge">3'</span>
+        <span class="time-unit">min</span>
+      </div>
+      <div class="seg-body">
+        <div class="seg-title">
+          <span class="seg-tag">Implicancia</span>
+          <span class="seg-objective">Qué significa para el negocio en dinero, tiempo o riesgo</span>
+        </div>
+        <textarea placeholder="'Esto significa que el negocio está [perdiendo / arriesgando / dejando de ganar] aproximadamente [$ / % / días] por [causa concreta].'"></textarea>
+        <div class="seg-tips">
+          <span class="tip-chip">Conectá con dinero, tiempo o riesgo</span>
+          <span class="tip-chip">Sé específico con los números</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="segment seg-4">
+      <div class="seg-time">
+        <span class="time-badge">3'</span>
+        <span class="time-unit">min</span>
+      </div>
+      <div class="seg-body">
+        <div class="seg-title">
+          <span class="seg-tag">Recomendación + Próximos pasos</span>
+          <span class="seg-objective">Una acción concreta con owner y timeframe</span>
+        </div>
+        <textarea placeholder="'La recomendación es [acción concreta]. Propongo [cómo/cuánto] durante [timeframe] como prueba piloto. Al final del período medimos [KPI] para validar el impacto.'"></textarea>
+        <div class="seg-tips">
+          <span class="tip-chip">Una sola recomendación</span>
+          <span class="tip-chip">Siempre con timeframe</span>
+          <span class="tip-chip">Definir quién es responsable</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="segment seg-5">
+      <div class="seg-time">
+        <span class="time-badge">1'</span>
+        <span class="time-unit">min</span>
+      </div>
+      <div class="seg-body">
+        <div class="seg-title">
+          <span class="seg-tag">Cierre + Preguntas</span>
+          <span class="seg-objective">Una sola pregunta que mueve la decisión</span>
+        </div>
+        <textarea placeholder="'Eso es todo de mi parte. ¿Querés que avancemos con la prueba piloto o preferís revisar algún detalle antes?'"></textarea>
+        <div class="seg-tips">
+          <span class="tip-chip">Termina con pregunta de decisión</span>
+          <span class="tip-chip">No "¿Hay preguntas?" genérico</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Objections prep -->
+  <div class="objections-box">
+    <h3>⚠ Objeciones anticipadas — Prepará tus respuestas</h3>
+    <div class="obj-row">
+      <div class="obj-half">
+        <label>Objeción 1</label>
+        <textarea placeholder="Ej: 'Esto es muy caro'"></textarea>
+      </div>
+      <div class="obj-half">
+        <label>Tu respuesta</label>
+        <textarea placeholder="Ej: 'Entiendo. Hoy perdemos $X/mes en reclamos. El ROI de la reasignación se recupera en 18 días.'"></textarea>
+      </div>
+    </div>
+    <div class="obj-row">
+      <div class="obj-half">
+        <label>Objeción 2</label>
+        <textarea placeholder="Ej: 'No tenemos datos suficientes'"></textarea>
+      </div>
+      <div class="obj-half">
+        <label>Tu respuesta</label>
+        <textarea placeholder="Ej: 'Es una prueba piloto del 40% del volumen. Si no funciona, revertimos sin riesgo.'"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Guión Reunión</span> · emmanueldorado.gumroad.com</div>
+    <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
+
+</div>
+</body>
+</html>

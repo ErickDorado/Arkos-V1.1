@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantilla Proyecto PMVI — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #111e35;
+    --navy-light: #1a3060;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --green: #10b981;
+    --green-dim: rgba(16,185,129,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 3px; background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px; margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900; margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; }
+
+  /* DEFINITION BOX */
+  .def-box {
+    background: rgba(249,115,22,0.08);
+    border: 1px solid rgba(249,115,22,0.2);
+    border-left: 4px solid var(--orange);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .def-icon {
+    font-size: 2rem;
+    opacity: 0.8;
+  }
+  .def-text { font-size: 0.88rem; line-height: 1.7; color: var(--gray-300); }
+  .def-text strong { color: var(--orange-light); }
+
+  /* CARD */
+  .card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .card-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card-header.orange { background: rgba(249,115,22,0.09); border-bottom-color: rgba(249,115,22,0.2); }
+  .card-header.green  { background: var(--green-dim); border-bottom-color: rgba(16,185,129,0.2); }
+  .card-header.blue   { background: rgba(59,130,246,0.07); border-bottom-color: rgba(59,130,246,0.2); }
+
+  .step-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 12px;
+  }
+  .orange .step-badge { background: rgba(249,115,22,0.2); color: var(--orange-light); }
+  .green  .step-badge { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+  .blue   .step-badge { background: rgba(59,130,246,0.2); color: #93c5fd; }
+
+  .card-title { font-size: 1rem; font-weight: 600; }
+
+  .card-body { padding: 20px; }
+
+  /* FIELD */
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 6px;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    border-color: var(--orange);
+  }
+  .field input::placeholder, .field textarea::placeholder { color: var(--gray-500); font-style: italic; }
+  .field select option { background: var(--navy-mid); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  /* MINI HINT */
+  .hint {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* PILAR CHECKLIST */
+  .pilar-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .pilar-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 14px;
+  }
+  .pilar-box-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .p1 .pilar-box-label { color: #93c5fd; }
+  .p2 .pilar-box-label { color: var(--orange-light); }
+  .p3 .pilar-box-label { color: #6ee7b7; }
+  .pilar-box textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    border-radius: 0;
+    padding: 6px 0;
+    font-size: 0.82rem;
+    min-height: 50px;
+  }
+  .pilar-box textarea:focus { border-bottom-color: var(--orange); }
+
+  /* TIMELINE */
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .tl-cell {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 12px;
+  }
+  .tl-week {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .tl-cell textarea {
+    background: transparent;
+    border: none;
+    width: 100%;
+    color: var(--gray-300);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.8rem;
+    resize: none;
+    outline: none;
+    min-height: 60px;
+    line-height: 1.5;
+  }
+  .tl-cell textarea::placeholder { color: rgba(100,116,139,0.5); font-style: italic; }
+
+  /* LEVEL SELECTOR */
+  .level-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .level-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    color: var(--gray-300);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .level-btn:hover { border-color: var(--orange); color: var(--orange-light); }
+  .level-btn.active {
+    background: rgba(249,115,22,0.15);
+    border-color: var(--orange);
+    color: var(--orange-light);
+  }
+
+  /* IMPACT PREVIEW */
+  .impact-banner {
+    background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.03));
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .impact-half {}
+  .impact-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: #6ee7b7; opacity: 0.8; margin-bottom: 6px;
+  }
+  .impact-half textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(16,185,129,0.2);
+    border-radius: 0;
+    width: 100%;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.86rem;
+    resize: none;
+    outline: none;
+    min-height: 48px;
+    line-height: 1.6;
+  }
+  .impact-half textarea::placeholder { color: rgba(16,185,129,0.3); font-style: italic; }
+
+  /* EXAMPLES ACCORDION */
+  .examples-toggle {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    transition: background 0.15s;
+  }
+  .examples-toggle:hover { background: rgba(255,255,255,0.05); }
+  .examples-toggle span {
+    font-size: 0.85rem; color: var(--gray-300);
+  }
+  .examples-toggle .arrow { font-size: 0.7rem; color: var(--orange); transition: transform 0.2s; }
+  .examples-toggle.open .arrow { transform: rotate(180deg); }
+  .examples-body {
+    display: none;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: var(--gray-300);
+  }
+  .examples-body.open { display: block; }
+  .examples-body .ex-item {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .examples-body .ex-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .ex-level {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 3px;
+  }
+
+  /* OUTER FOOTER */
+  .outer-footer {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+  .footer-brand span { color: var(--orange); }
+  .btn-group { display: flex; gap: 10px; }
+  .btn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 500;
+    padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--gray-300); }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+  @media (max-width: 640px) {
+    .field-row, .field-row-3 { grid-template-columns: 1fr; }
+    .pilar-row { grid-template-columns: 1fr; }
+    .timeline-grid { grid-template-columns: 1fr 1fr; }
+    .impact-banner { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .outer-footer .btn { display: none; }
+    .examples-body { display: block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Implementación · Portfolio</div>
+    <h1>Plantilla Proyecto <span>PMVI</span></h1>
+    <p>Proyecto Mínimo Viable de Impacto · El primero que terminás vale más que diez que dejaste a medias</p>
+  </div>
+
+  <div class="def-box">
+    <div class="def-icon">🎯</div>
+    <div class="def-text">
+      Un <strong>PMVI</strong> es el proyecto más pequeño que podés terminar y mostrar para demostrar valor real como analista.
+      No tiene que ser perfecto. Tiene que estar <strong>terminado, documentado y presentable</strong>. Completá esta plantilla
+      antes de empezar y usala como guía durante todo el proceso.
+    </div>
+  </div>
+
+  <!-- BLOQUE 1: IDENTIDAD -->
+  <div class="card">
+    <div class="card-header orange">
+      <span class="step-badge">Paso 01</span>
+      <div class="card-title">Identidad del proyecto</div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Nombre del proyecto</label>
+        <input type="text" placeholder="Ej: Análisis de Performance de Carriers — EcomShop Q3 2026">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Industria / Área</label>
+          <input type="text" placeholder="Logística · E-commerce · RRHH · Marketing...">
+        </div>
+        <div class="field">
+          <label>Nivel de dificultad</label>
+          <div class="level-btns" id="levelBtns">
+            <button class="level-btn" onclick="selectLevel(this)">Principiante</button>
+            <button class="level-btn" onclick="selectLevel(this)">Intermedio</button>
+            <button class="level-btn" onclick="selectLevel(this)">Avanzado</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Ver ejemplos por nivel</label>
+        <div class="examples-toggle" onclick="toggleExamples(this)">
+          <span>📋 &nbsp;Ver proyectos de referencia según nivel</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="examples-body" id="examplesBody">
+          <div class="ex-item">
+            <div class="ex-level">Principiante</div>
+            Análisis de OTD por carrier y zona (EcomShop) · Comparativa de ventas por período · Dashboard de KPIs básicos de una tienda
+          </div>
+          <div class="ex-item">
+            <div class="ex-level">Intermedio</div>
+            Análisis de rentabilidad por canal de adquisición (CAC vs LTV) · Segmentación de clientes por comportamiento de compra · Análisis de rotación de personal con impacto financiero
+          </div>
+          <div class="ex-item">
+            <div class="ex-level">Avanzado</div>
+            Dashboard de Control Operativo con recomendaciones automáticas · Modelo predictivo de churn · Pipeline ETL + análisis end-to-end con storytelling completo
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2: PROBLEMA -->
+  <div class="card">
+    <div class="card-header orange">
+      <span class="step-badge">Paso 02</span>
+      <div class="card-title">Problema de negocio (Framework 5 Preguntas)</div>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>¿Qué? — Describe el hallazgo en 1 oración</label>
+        <textarea rows="2" placeholder="Ej: Las entregas fuera de tiempo afectan la calificación de la tienda en Mercado Libre."></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>¿Cuánto? — Número concreto</label>
+          <input type="text" placeholder="Ej: OTD global 67.7%, EnvioTotal Norte 59.7%">
+        </div>
+        <div class="field">
+          <label>¿Cuándo? — Período de análisis</label>
+          <input type="text" placeholder="Ej: Últimos 45 días, Q3 2026">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>¿Dónde? — Dónde se concentra el problema</label>
+          <input type="text" placeholder="Ej: Zona Norte, Carrier EnvioTotal">
+        </div>
+        <div class="field">
+          <label>¿Por qué? — Hipótesis causal</label>
+          <input type="text" placeholder="Ej: Carrier más caro con peor desempeño">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3: DATOS Y HERRAMIENTAS -->
+  <div class="card">
+    <div class="card-header blue">
+      <span class="step-badge">Paso 03</span>
+      <div class="card-title">Datos y herramientas</div>
+    </div>
+    <div class="card-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Fuente de datos</label>
+          <input type="text" placeholder="Ej: CSV del ERP, Dataset EcomShop, Google Analytics...">
+        </div>
+        <div class="field">
+          <label>Período de los datos</label>
+          <input type="text" placeholder="Ej: Q3 2026 · Julio a Septiembre 2026">
+        </div>
+      </div>
+      <div class="field">
+        <label>Herramientas que vas a usar</label>
+        <input type="text" placeholder="Ej: SQL (DuckDB), Python (pandas), Power BI, Excel...">
+      </div>
+      <div class="field">
+        <label>Entregable final</label>
+        <input type="text" placeholder="Ej: Dashboard en Power BI + One-Pager ejecutivo + README en GitHub">
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4: TIMELINE -->
+  <div class="card">
+    <div class="card-header orange">
+      <span class="step-badge">Paso 04</span>
+      <div class="card-title">Plan de trabajo por semana</div>
+    </div>
+    <div class="card-body">
+      <div class="timeline-grid">
+        <div class="tl-cell">
+          <div class="tl-week">Semana 1</div>
+          <textarea placeholder="Exploración de datos&#10;EDA inicial&#10;Limpiar y entender el dataset"></textarea>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-week">Semana 2</div>
+          <textarea placeholder="Análisis principal&#10;Queries / cálculos&#10;Primeros hallazgos"></textarea>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-week">Semana 3</div>
+          <textarea placeholder="Dashboard / visualización&#10;Narrativa 5 pasos&#10;One-Pager"></textarea>
+        </div>
+        <div class="tl-cell">
+          <div class="tl-week">Semana 4</div>
+          <textarea placeholder="README en GitHub&#10;Revisión final&#10;Publicación del proyecto"></textarea>
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Fecha de entrega comprometida</label>
+        <input type="date">
+        <div class="hint">Ponela en tu calendario. Un proyecto sin fecha no tiene urgencia.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 5: LOS 3 PILARES EN ACCIÓN -->
+  <div class="card">
+    <div class="card-header green">
+      <span class="step-badge">Paso 05</span>
+      <div class="card-title">Los 3 Pilares aplicados a este proyecto</div>
+    </div>
+    <div class="card-body">
+      <div class="pilar-row">
+        <div class="pilar-box p1">
+          <div class="pilar-box-label">Pilar 1 · Mentalidad</div>
+          <textarea placeholder="¿Qué Framework usé para estructurar el análisis?&#10;&#10;¿Qué hago si me trabo o no entiendo algo?"></textarea>
+        </div>
+        <div class="pilar-box p2">
+          <div class="pilar-box-label">Pilar 2 · Soft Skills</div>
+          <textarea placeholder="¿A quién presentaré esto?&#10;&#10;¿Qué versión preparo (Operativo / Gerente / Técnico)?"></textarea>
+        </div>
+        <div class="pilar-box p3">
+          <div class="pilar-box-label">Pilar 3 · Contexto</div>
+          <textarea placeholder="¿Qué decisión de negocio habilita este análisis?&#10;&#10;¿Qué KPI mueve el negocio?"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 6: IMPACTO Y PORTFOLIO -->
+  <div class="card">
+    <div class="card-header green">
+      <span class="step-badge">Paso 06</span>
+      <div class="card-title">Impacto esperado y presentación en portfolio</div>
+    </div>
+    <div class="card-body">
+      <div class="impact-banner">
+        <div class="impact-half">
+          <div class="impact-label">Recomendación final que harás</div>
+          <textarea placeholder="Ej: Reasignar el 40% del volumen de EnvioTotal a RapidoExpress en zona Norte durante 30 días piloto."></textarea>
+        </div>
+        <div class="impact-half">
+          <div class="impact-label">Impacto medible esperado</div>
+          <textarea placeholder="Ej: +8 puntos de OTD, reducción del 42% de reclamos, timeframe de 30 días."></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <label>Título y descripción para GitHub / Portfolio (2-3 oraciones)</label>
+        <textarea rows="3" placeholder="Ej: 'Análisis de Performance de Carriers — EcomShop' · Analicé 1.000 pedidos de 3 carriers en 4 zonas para identificar el origen de los reclamos. El hallazgo reveló que EnvioTotal concentra el 42% de los reclamos siendo el carrier más caro. La recomendación generó una mejora proyectada de +8 puntos de OTD."></textarea>
+        <div class="hint">Esta descripción va directo en tu README. Escribila en lenguaje de negocio, no técnico.</div>
+      </div>
+      <div class="field">
+        <label>Aprendizajes clave de este proyecto</label>
+        <textarea rows="2" placeholder="Qué funcionó, qué falló y qué aprendiste. Esto va en tu registro de aprendizajes (hábito antifrágil)."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>PMVI</span> · emmanueldorado.gumroad.com</div>
+    <div class="btn-group">
+      <button class="btn btn-ghost" onclick="window.location.reload()">Limpiar</button>
+      <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+    </div>
+  </div>
+
+</div>
+<script>
+  function selectLevel(btn) {
+    document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  function toggleExamples(el) {
+    el.classList.toggle('open');
+    document.getElementById('examplesBody').classList.toggle('open');
+  }
+</script>
+</body>
+</html>

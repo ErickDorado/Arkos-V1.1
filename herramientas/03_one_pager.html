@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One-Pager Ejecutivo — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --green: #10b981;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem; font-weight: 900;
+    margin-bottom: 6px;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; }
+
+  /* THE ONE-PAGER DOCUMENT */
+  .doc {
+    background: #111e35;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  }
+
+  /* Doc header stripe */
+  .doc-header {
+    background: linear-gradient(135deg, #0f2044 0%, #1a3060 100%);
+    border-bottom: 3px solid var(--orange);
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: start;
+  }
+  .doc-title-area {}
+  .doc-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    opacity: 0.8;
+    margin-bottom: 8px;
+  }
+  .doc-main-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gray-300);
+    margin-bottom: 6px;
+  }
+  .doc-main-title input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.2);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    width: 100%;
+    padding: 4px 0;
+    outline: none;
+  }
+  .doc-main-title input:focus { border-bottom-color: var(--orange); }
+  .doc-main-title input::placeholder { color: rgba(255,255,255,0.3); }
+
+  .doc-meta-right {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+    min-width: 160px;
+  }
+  .doc-meta-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .doc-meta-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+  .doc-meta-field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.12);
+    color: var(--gray-300);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    text-align: right;
+    width: 140px;
+    padding: 2px 0;
+    outline: none;
+  }
+  .doc-meta-field input::placeholder { color: var(--gray-500); }
+
+  /* Doc body */
+  .doc-body {
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .doc-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .doc-section.full { grid-column: 1 / -1; }
+  .doc-section.highlight {
+    background: rgba(249,115,22,0.07);
+    border-color: rgba(249,115,22,0.2);
+    border-left: 3px solid var(--orange);
+  }
+  .doc-section.action {
+    background: rgba(16,185,129,0.07);
+    border-color: rgba(16,185,129,0.2);
+    border-left: 3px solid var(--green);
+  }
+
+  .doc-section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .doc-section-label .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  .doc-section .doc-section-label .dot { background: var(--gray-500); }
+  .doc-section.highlight .doc-section-label { color: var(--orange-light); }
+  .doc-section.highlight .doc-section-label .dot { background: var(--orange); }
+  .doc-section.action .doc-section-label { color: #6ee7b7; }
+  .doc-section.action .doc-section-label .dot { background: var(--green); }
+  .doc-section:not(.highlight):not(.action) .doc-section-label { color: var(--gray-500); }
+
+  .doc-section textarea {
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    width: 100%;
+    resize: vertical;
+    outline: none;
+    min-height: 60px;
+  }
+  .doc-section textarea::placeholder { color: var(--gray-500); font-style: italic; }
+  .doc-section.highlight textarea { color: #fed7aa; }
+  .doc-section.highlight textarea::placeholder { color: rgba(249,115,22,0.35); }
+  .doc-section.action textarea { color: #d1fae5; }
+  .doc-section.action textarea::placeholder { color: rgba(16,185,129,0.35); }
+
+  /* KPI metrics row */
+  .kpi-row {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .kpi-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .kpi-card .kpi-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .kpi-card input.kpi-value {
+    background: transparent;
+    border: none;
+    color: var(--orange);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
+    outline: none;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-card input.kpi-value::placeholder { color: rgba(249,115,22,0.3); font-size: 1.2rem; }
+  .kpi-card input.kpi-name {
+    background: transparent;
+    border: none;
+    border-top: 1px dashed rgba(255,255,255,0.08);
+    color: var(--gray-300);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    text-align: center;
+    width: 100%;
+    padding-top: 6px;
+    outline: none;
+  }
+  .kpi-card input.kpi-name::placeholder { color: var(--gray-500); }
+
+  /* Impact expected */
+  .impact-strip {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(249,115,22,0.1) 0%, rgba(245,158,11,0.06) 100%);
+    border: 1px solid rgba(249,115,22,0.25);
+    border-radius: 6px;
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .impact-half {}
+  .impact-half .ilabel {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+  .impact-half textarea {
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.86rem;
+    line-height: 1.6;
+    width: 100%;
+    resize: none;
+    outline: none;
+    min-height: 40px;
+  }
+  .impact-half textarea::placeholder { color: rgba(249,115,22,0.3); font-style: italic; }
+
+  /* Footer of doc */
+  .doc-footer {
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 12px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .doc-footer input {
+    background: transparent;
+    border: none;
+    color: var(--gray-500);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    outline: none;
+    width: 200px;
+  }
+  .doc-footer input::placeholder { color: rgba(100,116,139,0.5); }
+  .doc-footer-right {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: rgba(100,116,139,0.5);
+  }
+
+  /* OUTER FOOTER */
+  .outer-footer {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+  .footer-brand span { color: var(--orange); }
+  .print-btn {
+    background: var(--orange);
+    color: white;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--orange-light); }
+
+  @media (max-width: 600px) {
+    .doc-body { grid-template-columns: 1fr; }
+    .kpi-row { grid-template-columns: 1fr; }
+    .impact-strip { grid-template-columns: 1fr; }
+    .doc-header { grid-template-columns: 1fr; }
+    .doc-meta-right { align-items: flex-start; }
+    .doc-meta-field input { text-align: left; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; padding: 10px; }
+    .print-btn { display: none; }
+    .doc { background: white; box-shadow: none; border-color: #ddd; }
+    .doc-header { background: #0a1628; }
+    .doc-body, .doc-section, .kpi-card { border-color: #e2e8f0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Pilar 2 — Soft Skills</div>
+    <h1>One-<span>Pager</span> Ejecutivo</h1>
+    <p>Todo el análisis en una página · Listo para reunión o email</p>
+  </div>
+
+  <div class="doc">
+    <!-- Doc header -->
+    <div class="doc-header">
+      <div class="doc-title-area">
+        <div class="doc-eyebrow">Recomendación ejecutiva</div>
+        <div class="doc-main-title">
+          <input type="text" placeholder="Título del análisis / recomendación principal">
+        </div>
+      </div>
+      <div class="doc-meta-right">
+        <div class="doc-meta-field">
+          <label>Analista</label>
+          <input type="text" placeholder="Tu nombre">
+        </div>
+        <div class="doc-meta-field">
+          <label>Fecha</label>
+          <input type="text" placeholder="DD/MM/AAAA">
+        </div>
+        <div class="doc-meta-field">
+          <label>Área</label>
+          <input type="text" placeholder="Logística / Marketing...">
+        </div>
+      </div>
+    </div>
+
+    <!-- Doc body -->
+    <div class="doc-body">
+
+      <!-- Context -->
+      <div class="doc-section">
+        <div class="doc-section-label"><span class="dot"></span>Contexto</div>
+        <textarea placeholder="Qué datos analicé, período, fuente y alcance del análisis."></textarea>
+      </div>
+
+      <!-- Problem -->
+      <div class="doc-section highlight">
+        <div class="doc-section-label"><span class="dot"></span>Problema identificado</div>
+        <textarea placeholder="El hallazgo principal en 1–2 oraciones con número concreto."></textarea>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <span class="kpi-label">Métrica 1</span>
+          <input class="kpi-value" type="text" placeholder="67.7%">
+          <input class="kpi-name" type="text" placeholder="OTD Global">
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Métrica 2</span>
+          <input class="kpi-value" type="text" placeholder="59.7%">
+          <input class="kpi-name" type="text" placeholder="OTD EnvioTotal Norte">
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Métrica 3</span>
+          <input class="kpi-value" type="text" placeholder="$180">
+          <input class="kpi-name" type="text" placeholder="Costo por pedido">
+        </div>
+      </div>
+
+      <!-- Evidence -->
+      <div class="doc-section">
+        <div class="doc-section-label"><span class="dot"></span>Evidencia clave</div>
+        <textarea placeholder="• Dato comparativo 1&#10;• Dato comparativo 2&#10;• Dato comparativo 3"></textarea>
+      </div>
+
+      <!-- Implication -->
+      <div class="doc-section">
+        <div class="doc-section-label"><span class="dot"></span>Implicancia de negocio</div>
+        <textarea placeholder="Qué significa esto en términos de dinero, riesgo o tiempo para la empresa."></textarea>
+      </div>
+
+      <!-- Impact -->
+      <div class="impact-strip">
+        <div class="impact-half">
+          <div class="ilabel">Recomendación</div>
+          <textarea placeholder="Acción concreta: qué hacer, cuánto, cuándo."></textarea>
+        </div>
+        <div class="impact-half">
+          <div class="ilabel">Impacto esperado</div>
+          <textarea placeholder="Resultado medible: KPI objetivo, timeframe y cómo medir."></textarea>
+        </div>
+      </div>
+
+      <!-- Action -->
+      <div class="doc-section action full">
+        <div class="doc-section-label"><span class="dot"></span>Próximos pasos</div>
+        <textarea placeholder="1. [Acción inmediata — quién / cuándo]&#10;2. [Seguimiento — cómo medir el impacto]&#10;3. [Decisión que necesitás del stakeholder]"></textarea>
+      </div>
+
+    </div>
+
+    <!-- Doc footer -->
+    <div class="doc-footer">
+      <input type="text" placeholder="Confidencial — Uso interno">
+      <div class="doc-footer-right">Los Tres Pilares · emmanueldorado.gumroad.com</div>
+    </div>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>One-Pager</span> · emmanueldorado.gumroad.com</div>
+    <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
+
+</div>
+</body>
+</html>

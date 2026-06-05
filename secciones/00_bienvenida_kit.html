@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit de Recursos — Los Tres Pilares del Analista de Datos</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0a1628;
+  --navy-mid: #0f2044;
+  --orange: #f97316;
+  --orange-light: #fb923c;
+  --white: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-500: #64748b;
+  --gray-700: #334155;
+  --green: #10b981;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --teal: #0f766e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+.container { max-width: 900px; margin: 0 auto; }
+
+/* HERO */
+.hero {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 36px 40px;
+  margin-bottom: 40px;
+}
+.hero-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 12px;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.hero-title span { color: var(--orange); }
+.hero-sub {
+  font-size: 0.95rem;
+  color: var(--gray-300);
+  line-height: 1.7;
+  max-width: 620px;
+  margin-bottom: 28px;
+}
+.stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--orange);
+  display: block;
+}
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+/* SECTION */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 36px 0 14px;
+}
+.section-title h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  white-space: nowrap;
+}
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+.section-icon {
+  font-size: 18px;
+  opacity: 0.6;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+/* CARD */
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 18px 20px;
+  position: relative;
+  transition: background 0.2s, border-color 0.2s;
+}
+.card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+}
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.card-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.ic-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+.ic-green  { background: rgba(16,185,129,0.12); color: var(--green); }
+.ic-blue   { background: rgba(59,130,246,0.12); color: var(--blue); }
+.ic-purple { background: rgba(139,92,246,0.12); color: var(--purple); }
+.ic-teal   { background: rgba(15,118,110,0.2);  color: #5eead4; }
+
+.card-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--gray-500);
+}
+.card-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+.card-desc {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.card-file {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--gray-500);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 8px;
+  margin-top: auto;
+}
+.badge-extra {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 20px;
+  background: rgba(59,130,246,0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(59,130,246,0.25);
+}
+
+/* TIP */
+.tip {
+  background: rgba(249,115,22,0.06);
+  border: 1px solid rgba(249,115,22,0.2);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-size: 0.82rem;
+  color: var(--gray-300);
+  line-height: 1.7;
+  margin-top: 36px;
+}
+.tip strong { color: var(--orange-light); }
+
+/* FOOTER */
+.footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: gap;
+  gap: 12px;
+}
+.footer-brand {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--gray-500);
+}
+.footer-brand span { color: var(--orange); }
+
+@media (max-width: 600px) {
+  .hero { padding: 24px 20px; }
+  .hero-title { font-size: 1.7rem; }
+  .stats { gap: 20px; }
+  .grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Kit de recursos · Los Tres Pilares del Analista de Datos · Edición 2026</div>
+    <h1 class="hero-title">Bienvenido a tu <span>kit completo</span></h1>
+    <p class="hero-sub">Todos los recursos están listos para usar desde el día 1. Abrí cada archivo en el navegador, completá los campos y guardá como PDF con el botón de impresión. Los archivos marcados como <strong style="color:var(--orange-light)">Extra</strong> son valor adicional no prometido en el libro.</p>
+    <div class="stats">
+      <div><span class="stat-num">14</span><span class="stat-label">recursos incluidos</span></div>
+      <div><span class="stat-num">5</span><span class="stat-label">categorías</span></div>
+      <div><span class="stat-num">9</span><span class="stat-label">plantillas interactivas</span></div>
+      <div><span class="stat-num">2</span><span class="stat-label">casos de estudio PDF</span></div>
+    </div>
+  </div>
+
+  <!-- PLANTILLAS -->
+  <div class="section-title">
+    <span class="section-icon">📋</span>
+    <h2>Plantillas profesionales</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-orange">💬</div>
+        <span class="card-num">01</span>
+      </div>
+      <div class="card-name">Narrativa de 5 pasos</div>
+      <div class="card-desc">Estructura tu análisis en los 5 pasos del libro más la versión oral de 90 segundos lista para presentar.</div>
+      <div class="card-file">📄 01_narrativa_5_pasos.html</div>
+    </div>
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-orange">✉️</div>
+        <span class="card-num">02</span>
+      </div>
+      <div class="card-name">Email de recomendación</div>
+      <div class="card-desc">Plantilla para comunicar hallazgos y recomendaciones a stakeholders de forma profesional.</div>
+      <div class="card-file">📄 02_email_recomendacion.html</div>
+    </div>
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-orange">📃</div>
+        <span class="card-num">03</span>
+      </div>
+      <div class="card-name">One-Pager ejecutivo</div>
+      <div class="card-desc">Resumen de una página con problema, evidencia y recomendación. Ideal para presentar a gerencia.</div>
+      <div class="card-file">📄 03_one_pager.html</div>
+    </div>
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-orange">🗣️</div>
+        <span class="card-num">04</span>
+      </div>
+      <div class="card-name">Guión de reunión 10 min</div>
+      <div class="card-desc">Estructura con timing para presentar un análisis en reuniones cortas. Incluye espacio para objeciones.</div>
+      <div class="card-file">📄 04_guion_reunion.html</div>
+    </div>
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-orange">📊</div>
+        <span class="card-num">05</span>
+      </div>
+      <div class="card-name">Mapa KPI → Decisión</div>
+      <div class="card-desc">Conectá cada KPI con la pregunta de negocio que responde y la decisión concreta que habilita.</div>
+      <div class="card-file">📄 05_mapa_kpi.html</div>
+    </div>
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-orange">🎯</div>
+        <span class="card-num">08</span>
+      </div>
+      <div class="card-name">Plantilla proyecto PMVI</div>
+      <div class="card-desc">Definí tu Proyecto Mínimo Viable de Impacto con problema, herramientas, entregable y fecha comprometida.</div>
+      <div class="card-file">📄 08_plantilla_pmvi.html</div>
+    </div>
+  </div>
+
+  <!-- CHECKLISTS -->
+  <div class="section-title">
+    <span class="section-icon">✅</span>
+    <h2>Checklists y herramientas de seguimiento</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-green">✔️</div>
+        <span class="card-num">06</span>
+      </div>
+      <div class="card-name">Checklist del analista profesional</div>
+      <div class="card-desc">Lista de verificación antes de cada entrega. Los estándares que separan un análisis bueno de uno de impacto.</div>
+      <div class="card-file">📄 06_checklist_analista.html</div>
+    </div>
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-green">🎤</div>
+        <span class="card-num">07</span>
+      </div>
+      <div class="card-name">Checklist de storytelling</div>
+      <div class="card-desc">Verificá que tu narrativa de datos cumpla todos los criterios antes de presentarla a cualquier audiencia.</div>
+      <div class="card-file">📄 07_checklist_storytelling.html</div>
+    </div>
+    <div class="card">
+      <div class="card-top">
+        <div class="card-icon ic-green">🧠</div>
+        <span class="card-num">09</span>
+      </div>
+      <div class="card-name">Test de mentalidad</div>
+      <div class="card-desc">Autodiagnóstico de mentalidad analítica. Repetilo cada 30 días para medir tu progreso real.</div>
+      <div class="card-file">📄 09_test_mentalidad.html</div>
+    </div>
+  </div>
+
+  <!-- CASOS -->
+  <div class="section-title">
+    <span class="section-icon">📁</span>
+    <h2>Casos de estudio completos</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-blue">📈</div>
+        <span class="card-num">10A</span>
+      </div>
+      <div class="card-name">Casos de estudio — Nivel Junior</div>
+      <div class="card-desc">Los 3 casos completos (Logística, Marketing, RRHH) en formato guiado. Ideal para empezar a aplicar los 3 pilares.</div>
+      <div class="card-file">📕 10_Casos_Junior_Los_Tres_Pilares.pdf</div>
+    </div>
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-blue">📊</div>
+        <span class="card-num">10B</span>
+      </div>
+      <div class="card-name">Casos de estudio — Nivel Mid/Senior</div>
+      <div class="card-desc">Los mismos 3 casos con mayor profundidad: reporte ejecutivo, informe de consultoría y dashboard de KPIs.</div>
+      <div class="card-file">📕 10_Casos_MidSenior_Los_Tres_Pilares.pdf</div>
+    </div>
+  </div>
+
+  <!-- IA -->
+  <div class="section-title">
+    <span class="section-icon">🤖</span>
+    <h2>Inteligencia artificial y contexto de negocio</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-purple">⚡</div>
+        <span class="card-num">10</span>
+      </div>
+      <div class="card-name">Guía de prompts de IA</div>
+      <div class="card-desc">Prompts probados para SQL, storytelling, análisis de KPIs y preparación de entrevistas técnicas.</div>
+      <div class="card-file">📄 10_prompts_ia.html</div>
+    </div>
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-purple">🗺️</div>
+        <span class="card-num">11</span>
+      </div>
+      <div class="card-name">Mapa de KPIs por industria</div>
+      <div class="card-desc">9 industrias con KPIs clave, señales de alarma y decisiones que habilitan. Tu referencia rápida de contexto de negocio.</div>
+      <div class="card-file">📄 11_mapa_kpis.html</div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <div class="section-title">
+    <span class="section-icon">🚀</span>
+    <h2>Portfolio y búsqueda de empleo</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-teal">⌨️</div>
+        <span class="card-num">07</span>
+      </div>
+      <div class="card-name">Plantilla README para GitHub</div>
+      <div class="card-desc">Estructura lista para documentar tu primer proyecto de portfolio de forma profesional y clara.</div>
+      <div class="card-file">📝 07_README_template.md</div>
+    </div>
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-teal">💼</div>
+        <span class="card-num">12</span>
+      </div>
+      <div class="card-name">Guía de portfolio 2026</div>
+      <div class="card-desc">Cómo estructurar 3 proyectos que consiguen entrevistas. Con ejemplos reales y criterios de selección.</div>
+      <div class="card-file">📄 12_guia_portfolio.html</div>
+    </div>
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-teal">❓</div>
+        <span class="card-num">13</span>
+      </div>
+      <div class="card-name">50 preguntas poderosas</div>
+      <div class="card-desc">Las preguntas clave para hacer en tu primer mes en una empresa nueva y entender el negocio rápido.</div>
+      <div class="card-file">📄 13_preguntas_poderosas.html</div>
+    </div>
+    <div class="card">
+      <div class="badge-extra">Extra</div>
+      <div class="card-top">
+        <div class="card-icon ic-teal">🎙️</div>
+        <span class="card-num">14</span>
+      </div>
+      <div class="card-name">Elevator pitch</div>
+      <div class="card-desc">Construí tu presentación personal de 60-90 segundos para LinkedIn, entrevistas y networking.</div>
+      <div class="card-file">📄 14_elevator_pitch.html</div>
+    </div>
+  </div>
+
+  <!-- TIP -->
+  <div class="tip">
+    💡 <strong>Cómo usar este kit:</strong> los archivos <strong>.html</strong> se abren en cualquier navegador — completá los campos y usá el botón "Imprimir / Guardar PDF" para guardar tu trabajo. Los <strong>.pdf</strong> se abren directamente. El <strong>.md</strong> lo podés abrir en cualquier editor de texto o pegarlo directo en GitHub.
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">LOS TRES PILARES DEL ANALISTA DE DATOS · <span>Edición 2026</span> · Erick Emmanuel Dorado</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#64748b">emmanueldorado.gumroad.com</div>
+  </div>
+
+</div>
+</body>
+</html>

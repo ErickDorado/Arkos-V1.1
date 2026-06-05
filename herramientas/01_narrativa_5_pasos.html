@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantilla Narrativa 5 Pasos — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f2044;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --gold: #f59e0b;
+    --white: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --gray-700: #334155;
+    --step-1: #3b82f6;
+    --step-2: #8b5cf6;
+    --step-3: #ec4899;
+    --step-4: #f97316;
+    --step-5: #10b981;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p {
+    color: var(--gray-300);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  /* META INFO */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .meta-field {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .meta-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .meta-field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    width: 100%;
+    padding: 4px 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .meta-field input:focus { border-bottom-color: var(--orange); }
+  .meta-field input::placeholder { color: var(--gray-500); font-style: italic; }
+
+  /* STEPS */
+  .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .steps-container::before {
+    content: '';
+    position: absolute;
+    left: 32px;
+    top: 48px;
+    bottom: 48px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--step-1), var(--step-2), var(--step-3), var(--step-4), var(--step-5));
+    opacity: 0.4;
+  }
+
+  .step-card {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 0;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .step-number {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 24px;
+    position: relative;
+    z-index: 1;
+  }
+  .step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .step-circle::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+
+  .step-1 .step-circle { background: var(--step-1); box-shadow: 0 0 20px rgba(59,130,246,0.4); }
+  .step-2 .step-circle { background: var(--step-2); box-shadow: 0 0 20px rgba(139,92,246,0.4); }
+  .step-3 .step-circle { background: var(--step-3); box-shadow: 0 0 20px rgba(236,72,153,0.4); }
+  .step-4 .step-circle { background: var(--step-4); box-shadow: 0 0 20px rgba(249,115,22,0.4); }
+  .step-5 .step-circle { background: var(--step-5); box-shadow: 0 0 20px rgba(16,185,129,0.4); }
+
+  .step-body {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-left: 8px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .step-body:focus-within {
+    background: rgba(255,255,255,0.06);
+  }
+  .step-1 .step-body:focus-within { border-color: rgba(59,130,246,0.4); }
+  .step-2 .step-body:focus-within { border-color: rgba(139,92,246,0.4); }
+  .step-3 .step-body:focus-within { border-color: rgba(236,72,153,0.4); }
+  .step-4 .step-body:focus-within { border-color: rgba(249,115,22,0.4); }
+  .step-5 .step-body:focus-within { border-color: rgba(16,185,129,0.4); }
+
+  .step-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .step-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+  .step-1 .step-tag { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .step-2 .step-tag { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+  .step-3 .step-tag { background: rgba(236,72,153,0.15); color: #f9a8d4; }
+  .step-4 .step-tag { background: rgba(249,115,22,0.15); color: #fdba74; }
+  .step-5 .step-tag { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+
+  .step-purpose {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    font-style: italic;
+  }
+
+  .step-body textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 12px 14px;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .step-body textarea:focus { border-color: rgba(255,255,255,0.25); }
+  .step-body textarea::placeholder { color: var(--gray-500); font-style: italic; }
+
+  .step-hint {
+    font-size: 0.76rem;
+    color: var(--gray-500);
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .step-hint::before { content: '→'; opacity: 0.5; }
+
+  /* ORAL VERSION */
+  .oral-section {
+    margin-top: 32px;
+    background: linear-gradient(135deg, rgba(249,115,22,0.08) 0%, rgba(245,158,11,0.05) 100%);
+    border: 1px solid rgba(249,115,22,0.25);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .oral-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--orange-light);
+    margin-bottom: 6px;
+  }
+  .oral-section p.sub {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-bottom: 16px;
+  }
+  .oral-section textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(249,115,22,0.2);
+    border-radius: 4px;
+    color: var(--white);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    padding: 16px;
+    resize: vertical;
+    min-height: 120px;
+    outline: none;
+  }
+  .oral-section textarea:focus { border-color: rgba(249,115,22,0.5); }
+  .oral-section textarea::placeholder { color: var(--gray-500); font-style: italic; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-500);
+    letter-spacing: 1px;
+  }
+  .footer-brand span { color: var(--orange); }
+  .print-btn {
+    background: var(--orange);
+    color: white;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--orange-light); }
+
+  @media print {
+    body { background: white; color: #0a1628; padding: 20px; }
+    .print-btn { display: none; }
+    .header { border-bottom-color: #0a1628; }
+  }
+  @media (max-width: 600px) {
+    .meta-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 2rem; }
+    .steps-container::before { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge">Pilar 2 — Soft Skills</div>
+    <h1>Narrativa de <span>5 Pasos</span></h1>
+    <p>De números a decisiones · Plantilla editable profesional</p>
+  </div>
+
+  <!-- META -->
+  <div class="meta-grid">
+    <div class="meta-field">
+      <label>Analista</label>
+      <input type="text" placeholder="Tu nombre">
+    </div>
+    <div class="meta-field">
+      <label>Área / Proyecto</label>
+      <input type="text" placeholder="Ej: Análisis de Carriers Q3">
+    </div>
+    <div class="meta-field">
+      <label>Fecha</label>
+      <input type="text" placeholder="DD/MM/AAAA">
+    </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps-container">
+
+    <div class="step-card step-1">
+      <div class="step-number">
+        <div class="step-circle">1</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-tag">Contexto</span>
+          <span class="step-purpose">Situás al oyente en el escenario</span>
+        </div>
+        <textarea placeholder="Analicé [qué datos], de [qué período/fuente], para entender [objetivo general]..."></textarea>
+        <p class="step-hint">Ejemplo: "Analicé los 1.000 pedidos del último trimestre de tres carriers en cuatro zonas."</p>
+      </div>
+    </div>
+
+    <div class="step-card step-2">
+      <div class="step-number">
+        <div class="step-circle">2</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-tag">Problema</span>
+          <span class="step-purpose">El hallazgo principal en una oración</span>
+        </div>
+        <textarea placeholder="El principal problema es que [hallazgo concreto con número]..."></textarea>
+        <p class="step-hint">Ejemplo: "El OTD global es 67.7%, pero EnvioTotal en zona Norte solo alcanza 59.7%."</p>
+      </div>
+    </div>
+
+    <div class="step-card step-3">
+      <div class="step-number">
+        <div class="step-circle">3</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-tag">Evidencia</span>
+          <span class="step-purpose">2–3 datos concretos y comparables</span>
+        </div>
+        <textarea placeholder="Los datos que respaldan esto son: [dato 1], [dato 2] y [dato 3]..."></textarea>
+        <p class="step-hint">Ejemplo: "EnvioTotal cobra $180 por pedido (el más caro) y tiene el peor desempeño — 13.7 pts por debajo del siguiente carrier."</p>
+      </div>
+    </div>
+
+    <div class="step-card step-4">
+      <div class="step-number">
+        <div class="step-circle">4</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-tag">Implicancia</span>
+          <span class="step-purpose">Qué significa esto para el negocio</span>
+        </div>
+        <textarea placeholder="Esto significa que el negocio está [perdiendo / arriesgando / dejando de ganar]..."></textarea>
+        <p class="step-hint">Ejemplo: "Estamos pagando más por el carrier que peor cumple. Cada pedido tardío genera reclamos y reduce la tasa de recompra."</p>
+      </div>
+    </div>
+
+    <div class="step-card step-5">
+      <div class="step-number">
+        <div class="step-circle">5</div>
+      </div>
+      <div class="step-body">
+        <div class="step-header">
+          <span class="step-tag">Recomendación</span>
+          <span class="step-purpose">Acción concreta, viable y con timeline</span>
+        </div>
+        <textarea placeholder="La acción recomendada es [qué hacer], [cómo/cuánto], en [timeframe]. El impacto esperado es [resultado medible]..."></textarea>
+        <p class="step-hint">Ejemplo: "Reasignar el 40% del volumen de EnvioTotal a RapidoExpress en zona Norte como prueba piloto de 30 días."</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VERSIÓN ORAL -->
+  <div class="oral-section">
+    <h3>Versión Oral (90 segundos)</h3>
+    <p class="sub">Integrá los 5 pasos en un discurso fluido · Aprox. 180–220 palabras</p>
+    <textarea placeholder="Buenas [tardes/días]. Analicé [contexto]...
+
+El problema principal es [problema]...
+
+Los datos muestran que [evidencia]...
+
+Esto significa que [implicancia]...
+
+Por eso recomiendo [acción concreta y timeframe]."></textarea>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Soft Skills</span> · emmanueldorado.gumroad.com</div>
+    <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>25 Prompts de IA para Analistas — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #111e35;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --green: #10b981;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --yellow: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: -1px; left: 50%;
+    transform: translateX(-50%); width: 60px; height: 3px; background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light); font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px; margin-bottom: 12px;
+  }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; margin-top: 8px; }
+
+  /* WARNING */
+  .warning {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-left: 4px solid var(--yellow);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 0.86rem;
+    color: var(--gray-300);
+    line-height: 1.7;
+  }
+  .warning strong { color: #fcd34d; }
+
+  /* CATEGORY FILTER */
+  .filter-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .filter-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    color: var(--gray-300);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 0.5px;
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover { border-color: var(--orange); color: var(--orange-light); }
+  .filter-btn.active { background: rgba(249,115,22,0.15); border-color: var(--orange); color: var(--orange-light); }
+
+  /* PROMPT GRID */
+  .prompts-grid { display: flex; flex-direction: column; gap: 12px; }
+
+  .prompt-card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .prompt-card:hover { border-color: rgba(249,115,22,0.25); }
+  .prompt-card.hidden { display: none; }
+
+  .prompt-top {
+    padding: 14px 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .prompt-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--orange); opacity: 0.5;
+    min-width: 28px; flex-shrink: 0;
+  }
+  .prompt-meta {}
+  .prompt-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+  .prompt-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 10px;
+  }
+  .tag-sql    { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .tag-story  { background: rgba(249,115,22,0.15); color: var(--orange-light); }
+  .tag-biz    { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .tag-eda    { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+  .tag-career { background: rgba(245,158,11,0.15); color: #fcd34d; }
+  .tag-kpi    { background: rgba(236,72,153,0.15); color: #f9a8d4; }
+
+  .prompt-body { padding: 16px 18px; }
+  .prompt-box {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: #d1e8ff;
+    position: relative;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .var { color: var(--orange-light); background: rgba(249,115,22,0.15); padding: 1px 4px; border-radius: 3px; }
+
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    color: var(--gray-500);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: rgba(249,115,22,0.15); border-color: var(--orange); color: var(--orange-light); }
+  .copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+  .prompt-tip {
+    margin-top: 10px;
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .prompt-tip strong { color: var(--gray-300); font-style: normal; }
+
+  /* COUNT BAR */
+  .count-bar {
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    margin-bottom: 16px;
+  }
+  .count-bar span { color: var(--orange); }
+
+  /* FOOTER */
+  .outer-footer {
+    margin-top: 32px; padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+  .footer-brand span { color: var(--orange); }
+  .btn { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.7rem; }
+    .filter-row { gap: 6px; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .filter-row, .copy-btn { display: none; }
+    .prompt-card.hidden { display: block !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">IA · Productividad · 2026</div>
+    <h1>25 <span>Prompts</span> para Analistas de Datos</h1>
+    <p>Listos para usar en Claude, ChatGPT o Grok · Personalizá las variables en naranja</p>
+  </div>
+
+  <div class="warning">
+    <strong>Regla de oro:</strong> Nunca copies y pegues directamente el output de la IA sin revisarlo. Usá estos prompts para acelerar tu trabajo, pero siempre validá los resultados. La IA multiplica al analista que entiende el negocio; no reemplaza el criterio.
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filter(this, 'all')">Todos (25)</button>
+    <button class="filter-btn" onclick="filter(this, 'sql')">SQL</button>
+    <button class="filter-btn" onclick="filter(this, 'story')">Storytelling</button>
+    <button class="filter-btn" onclick="filter(this, 'biz')">Negocio</button>
+    <button class="filter-btn" onclick="filter(this, 'eda')">EDA / Datos</button>
+    <button class="filter-btn" onclick="filter(this, 'kpi')">KPIs</button>
+    <button class="filter-btn" onclick="filter(this, 'career')">Carrera</button>
+  </div>
+
+  <div class="count-bar">Mostrando <span id="visibleCount">25</span> de 25 prompts</div>
+
+  <div class="prompts-grid" id="promptsGrid">
+
+    <!-- SQL -->
+    <div class="prompt-card" data-tags="sql">
+      <div class="prompt-top">
+        <div class="prompt-num">01</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Query OTD por carrier y zona (con tendencia)</div>
+          <div class="prompt-tags"><span class="tag tag-sql">SQL</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un Senior Data Analyst especializado en logística. Escribí una query SQL optimizada para <span class="var">[DuckDB / PostgreSQL / BigQuery]</span> que calcule el OTD (On-Time Delivery) por carrier y zona, incluyendo la tendencia mes a mes. La tabla se llama <span class="var">[nombre_tabla]</span> y tiene las columnas: pedido_id, carrier, zona, fecha_entrega_real, fecha_entrega_prometida. Incluí comentarios explicando cada parte.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Al empezar el análisis de carriers. Reemplazá el motor de BD y los nombres de columnas con los reales de tu dataset.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="sql">
+      <div class="prompt-top">
+        <div class="prompt-num">02</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Calcular CAC y LTV por canal de adquisición</div>
+          <div class="prompt-tags"><span class="tag tag-sql">SQL</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de marketing. Escribí una query SQL en <span class="var">[motor]</span> que calcule el CAC (Costo de Adquisición de Cliente) y el LTV estimado a 12 meses, agrupado por canal de adquisición. Tengo dos tablas: <span class="var">[tabla_inversión]</span> (canal, mes, inversión_total) y <span class="var">[tabla_clientes]</span> (cliente_id, canal_origen, fecha_primera_compra, ticket_promedio, frecuencia_compra_mensual). Mostrá también el ratio CAC/LTV.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Para analizar rentabilidad de canales de marketing. Esencial para el caso 2 del libro.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="sql">
+      <div class="prompt-top">
+        <div class="prompt-num">03</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Detectar outliers en datos de ventas</div>
+          <div class="prompt-tags"><span class="tag tag-sql">SQL</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como Senior Analyst de datos. Escribí una query SQL para detectar outliers en la columna <span class="var">[columna_monto]</span> de la tabla <span class="var">[nombre_tabla]</span> usando el método IQR (rango intercuartílico). Identificá cuáles filas son outliers, su porcentaje sobre el total y si podrían ser errores de carga o transacciones legítimas extraordinarias.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Antes de presentar cualquier análisis. Los outliers pueden distorsionar promedios y llevar a conclusiones incorrectas.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="sql">
+      <div class="prompt-top">
+        <div class="prompt-num">04</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Análisis de cohortes de retención</div>
+          <div class="prompt-tags"><span class="tag tag-sql">SQL</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de e-commerce. Escribí una query SQL para calcular la retención de clientes por cohorte mensual de primera compra, mostrando el porcentaje de clientes que volvieron a comprar en los meses 1, 2 y 3 post-adquisición. La tabla de pedidos se llama <span class="var">[tabla]</span> con columnas: cliente_id, fecha_pedido. Motor: <span class="var">[motor]</span>.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Para análisis de tasa de recompra. Complementa cualquier análisis de CAC/LTV.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="sql">
+      <div class="prompt-top">
+        <div class="prompt-num">05</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Revisar y optimizar una query existente</div>
+          <div class="prompt-tags"><span class="tag tag-sql">SQL</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como DBA experto en optimización de SQL para <span class="var">[motor]</span>. Revisá esta query y decime: (1) si hay errores de lógica, (2) cómo optimizarla para mejor performance, (3) si el resultado que produce es el que realmente necesito. También explicá cada parte en español simple para que pueda entenderla y defenderla en una reunión.
+
+[Pegá acá tu query]<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Cuando tenés una query que "funciona" pero no estás seguro si hace exactamente lo que querés. Siempre validá el resultado contra datos conocidos.</div>
+      </div>
+    </div>
+
+    <!-- STORYTELLING -->
+    <div class="prompt-card" data-tags="story">
+      <div class="prompt-top">
+        <div class="prompt-num">06</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Convertir resultado técnico en narrativa ejecutiva (5 pasos)</div>
+          <div class="prompt-tags"><span class="tag tag-story">Storytelling</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de datos experto en comunicación ejecutiva. Convertí este resultado técnico en una narrativa de storytelling de 5 pasos (Contexto → Problema → Evidencia → Implicancia → Recomendación) para presentar a un gerente de <span class="var">[área]</span> que no tiene background técnico. Usá lenguaje simple, porcentajes humanizados y conectá el hallazgo con dinero, tiempo o riesgo para el negocio.
+
+Resultado del análisis: <span class="var">[pegá acá los números / hallazgos]</span><button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Siempre antes de una presentación importante. Recordá adaptar el output al perfil específico del stakeholder.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="story">
+      <div class="prompt-top">
+        <div class="prompt-num">07</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Adaptar un hallazgo a tres perfiles de stakeholder</div>
+          <div class="prompt-tags"><span class="tag tag-story">Storytelling</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de datos. Tomá este hallazgo y escribí tres versiones del mensaje para tres perfiles distintos:
+1. Operativo (30-45 segundos, acción concreta, lenguaje directo)
+2. Gerente (2 minutos, impacto en el negocio, riesgo/beneficio)
+3. Técnico (detalles de metodología, cómo verificarlo)
+
+Hallazgo: <span class="var">[describí el hallazgo con los números clave]</span><button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Cuando el mismo análisis debe comunicarse a distintas áreas. El mismo dato necesita tres "idiomas" distintos.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="story">
+      <div class="prompt-top">
+        <div class="prompt-num">08</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Escribir email de recomendación ejecutiva</div>
+          <div class="prompt-tags"><span class="tag tag-story">Storytelling</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Escribí un email profesional de recomendación para enviarle a <span class="var">[cargo del destinatario]</span> de <span class="var">[empresa/área]</span>. El email debe: tener asunto claro, un resumen ejecutivo de 2 oraciones, el hallazgo principal con números, la recomendación concreta, el impacto esperado medible y los próximos pasos. Máximo 200 palabras. Tono: profesional pero directo.
+
+Contexto del análisis: <span class="var">[resumí el hallazgo]</span><button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Para comunicaciones escritas importantes. Editá el output antes de enviar: agregá tu voz y contexto específico.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="story">
+      <div class="prompt-top">
+        <div class="prompt-num">09</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Anticipar y preparar respuestas a objeciones</div>
+          <div class="prompt-tags"><span class="tag tag-story">Storytelling</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como un gerente escéptico con experiencia en <span class="var">[industria]</span>. Voy a presentarte esta recomendación: <span class="var">[describí la recomendación]</span>. Generame las 5 objeciones más probables que podrías hacerme y para cada una, escribí una respuesta profesional que defienda el resultado de negocio (no el ego del analista). Incluí cómo usar datos o pilotos para reducir el riesgo percibido.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Antes de reuniones importantes. Prepararte para las objeciones es la diferencia entre una presentación que genera acción y una que termina en "lo analizamos".</div>
+      </div>
+    </div>
+
+    <!-- NEGOCIO -->
+    <div class="prompt-card" data-tags="biz">
+      <div class="prompt-top">
+        <div class="prompt-num">10</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Entender el modelo de negocio de una empresa</div>
+          <div class="prompt-tags"><span class="tag tag-biz">Negocio</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como gerente general con 15 años de experiencia en <span class="var">[industria]</span>. Explicame cómo genera dinero una empresa de este tipo, cuáles son las 3-5 decisiones más importantes que se toman regularmente, qué KPIs son los más críticos y cuáles son los dolores más comunes que tiene el negocio. Quiero entender el contexto rápido para proponer análisis relevantes desde el primer mes.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Cuando entrás a una industria nueva o buscás trabajo en un sector que no conocés. Complementá con investigación propia.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="biz">
+      <div class="prompt-top">
+        <div class="prompt-num">11</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Qué decisión habilita este KPI</div>
+          <div class="prompt-tags"><span class="tag tag-biz">Negocio</span><span class="tag tag-kpi">KPI</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como gerente de <span class="var">[área: operaciones / marketing / finanzas / RRHH]</span>. Tengo este KPI: <span class="var">[pegá el KPI con su valor actual]</span>. ¿Qué decisiones concretas puedo tomar con esta información? ¿Cuál sería la señal de alarma que me diría que el problema es grave? ¿Qué análisis adicional necesitaría para tomar una decisión con confianza?<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Siempre antes de presentar un KPI. Un número sin decisión asociada es solo decoración.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="biz">
+      <div class="prompt-top">
+        <div class="prompt-num">12</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Proponer un análisis proactivo (sin que te lo pidan)</div>
+          <div class="prompt-tags"><span class="tag tag-biz">Negocio</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de datos senior en una empresa de <span class="var">[industria]</span>. Con esta información de contexto: <span class="var">[describí brevemente el negocio, su tamaño, su principal problema actual]</span>, generame 5 ideas de análisis proactivos que puedo proponer esta semana sin que me lo pidan. Para cada uno: qué pregunta de negocio responde, qué datos necesito y cuál sería la recomendación más probable.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> En tus primeras semanas en una empresa o cuando querés generar visibilidad. El analista que propone se diferencia del que espera.</div>
+      </div>
+    </div>
+
+    <!-- EDA / DATOS -->
+    <div class="prompt-card" data-tags="eda">
+      <div class="prompt-top">
+        <div class="prompt-num">13</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Guía de EDA paso a paso para un dataset nuevo</div>
+          <div class="prompt-tags"><span class="tag tag-eda">EDA</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de datos con experiencia en <span class="var">[industria]</span>. Tengo un dataset nuevo de <span class="var">[describí brevemente el dataset: qué contiene, cuántas filas aproximadas, qué columnas principales]</span>. Guiame paso a paso por el proceso de EDA (Exploratory Data Analysis): qué revisar primero, qué preguntas hacerme, qué visualizaciones hacer y qué problemas de calidad buscar antes de empezar el análisis real.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Siempre que recibas datos nuevos. El EDA bien hecho evita llegar a conclusiones incorrectas por datos sucios.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="eda">
+      <div class="prompt-top">
+        <div class="prompt-num">14</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Interpretar un error en los datos</div>
+          <div class="prompt-tags"><span class="tag tag-eda">EDA</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista experto en calidad de datos. En mi dataset de <span class="var">[describí el contexto]</span> encontré esta anomalía: <span class="var">[describí el problema: valores nulos, duplicados, valores imposibles, etc.]</span>. Explicame: (1) las causas más probables de este problema, (2) cómo verificar cuál es la correcta, (3) cómo tratar los datos antes del análisis y (4) si debo mencionarlo en mi presentación y cómo.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Cuando encontrás algo "raro" en los datos. No ignorar nunca un dato que parece extraño sin antes entender por qué.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="eda">
+      <div class="prompt-top">
+        <div class="prompt-num">15</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Código Python para limpiar y explorar datos con pandas</div>
+          <div class="prompt-tags"><span class="tag tag-eda">EDA</span><span class="tag tag-sql">Python</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un Data Engineer. Escribí código Python usando pandas para: (1) cargar un CSV desde <span class="var">[ruta o descripción]</span>, (2) explorar su estructura (shape, dtypes, nulls, duplicados), (3) aplicar las limpiezas básicas más comunes, (4) generar estadísticas descriptivas y (5) exportar el dataset limpio. Incluí comentarios en español en cada bloque.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Al iniciar cualquier proyecto con Python. Adaptá las rutas y nombres de columnas a tu dataset real.</div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="prompt-card" data-tags="kpi">
+      <div class="prompt-top">
+        <div class="prompt-num">16</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Diseñar el mapa de KPIs para un área</div>
+          <div class="prompt-tags"><span class="tag tag-kpi">KPI</span><span class="tag tag-biz">Negocio</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como consultor de análisis de negocio. Necesito diseñar el mapa de KPIs para el área de <span class="var">[área]</span> en una empresa de <span class="var">[industria y tamaño aproximado]</span>. Para cada KPI necesito: nombre, fórmula básica, señal de alarma (cuándo preocuparse), decisión que habilita y con qué frecuencia medirlo. Dame los 6 KPIs más importantes del área, ordenados por impacto en el negocio.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Al entrar a una empresa nueva o al comenzar un proyecto en un área que no conocés bien.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="kpi">
+      <div class="prompt-top">
+        <div class="prompt-num">17</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Crear un dashboard mínimo para stakeholders</div>
+          <div class="prompt-tags"><span class="tag tag-kpi">KPI</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de datos. Necesito diseñar un dashboard mínimo y efectivo para el área de <span class="var">[área]</span> en una empresa de <span class="var">[industria]</span>. El dashboard lo verá <span class="var">[perfil del usuario: gerente / operativo / dirección]</span> una vez por <span class="var">[día / semana / mes]</span>. Dame: (1) qué 4-6 KPIs incluir y por qué, (2) qué tipo de visualización usar para cada uno, (3) qué no incluir (qué sobra) y (4) cómo estructurar el layout para que la decisión sea obvia.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Antes de construir cualquier dashboard. Un dashboard que sobrecarga con datos genera parálisis, no decisiones.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="kpi">
+      <div class="prompt-top">
+        <div class="prompt-num">18</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Aplicar el Framework 5 Preguntas a un KPI</div>
+          <div class="prompt-tags"><span class="tag tag-kpi">KPI</span><span class="tag tag-biz">Negocio</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de datos usando el Framework de las 5 Preguntas. Tengo este KPI: <span class="var">[nombre del KPI: valor actual]</span> en el área de <span class="var">[área]</span>. Aplicá las 5 preguntas (Qué / Cuánto / Cuándo / Dónde / Por qué) para convertirlo en un diagnóstico completo. Al final, escribí la hipótesis de causa raíz más probable y la recomendación más accionable basada solo en este dato.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Como primer paso de cualquier análisis. Structurar antes de abrir el SQL.</div>
+      </div>
+    </div>
+
+    <!-- CARRERA -->
+    <div class="prompt-card" data-tags="career">
+      <div class="prompt-top">
+        <div class="prompt-num">19</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Preparar respuesta "Contame sobre vos" para entrevistas</div>
+          <div class="prompt-tags"><span class="tag tag-career">Carrera</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un coach de carrera especializado en perfiles de datos. Ayudame a preparar mi respuesta de 60-90 segundos para la pregunta "Contame sobre vos" en una entrevista para un puesto de Data Analyst en <span class="var">[tipo de empresa / industria]</span>. Mi background es: <span class="var">[describí tu experiencia, rubro anterior y proyectos principales]</span>. La respuesta debe conectar mi experiencia con el contexto de negocio, mencionar los 3 Pilares (mentalidad, soft skills, contexto) y terminar con mi motivación concreta para ese puesto.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Antes de cada proceso de selección. Personalizá la respuesta para cada empresa donde apliques.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="career">
+      <div class="prompt-top">
+        <div class="prompt-num">20</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Escribir el README de un proyecto de portfolio</div>
+          <div class="prompt-tags"><span class="tag tag-career">Carrera</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un analista de datos con foco en portfolios que consiguen entrevistas. Escribí un README profesional para mi proyecto de GitHub titulado "<span class="var">[nombre del proyecto]</span>". El README debe incluir: (1) problema de negocio en lenguaje no técnico, (2) hallazgo principal con números, (3) recomendación y resultado esperado, (4) herramientas usadas, (5) estructura de archivos, (6) cómo reproducir el análisis. Contexto del proyecto: <span class="var">[describí brevemente qué hiciste]</span>.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Al publicar cada proyecto. Un buen README es lo que convierte un repo de código en un proyecto que genera entrevistas.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="career">
+      <div class="prompt-top">
+        <div class="prompt-num">21</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Optimizar perfil de LinkedIn como analista de datos</div>
+          <div class="prompt-tags"><span class="tag tag-career">Carrera</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un experto en personal branding para perfiles de datos en Latam. Revisá mi sección "Sobre mí" de LinkedIn y reescribila para que destaque mis 3 pilares: mentalidad analítica, capacidad de comunicación y contexto de negocio. Usá keywords relevantes para 2026 en Data Analytics en Latam. Mi texto actual: <span class="var">[pegá tu "Sobre mí" actual o escribí "no tengo uno todavía"]</span>. Background: <span class="var">[describí tu experiencia]</span>.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Al iniciar tu búsqueda laboral. Tu LinkedIn es tu tarjeta de presentación pasiva que trabaja 24/7.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="career">
+      <div class="prompt-top">
+        <div class="prompt-num">22</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Simular una entrevista técnica de Data Analyst</div>
+          <div class="prompt-tags"><span class="tag tag-career">Carrera</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como entrevistador técnico senior para un puesto de Data Analyst en una empresa de <span class="var">[industria]</span>. Haceme 5 preguntas de entrevista que combinen: habilidades técnicas (SQL, visualización), soft skills (comunicación, stakeholders) y contexto de negocio (KPIs, decisiones). Después de que responda cada una, dame feedback honesto sobre qué estuvo bien, qué faltó y cómo mejorarla usando el Framework de los 3 Pilares.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Semanas antes de entrevistas importantes. Practicar en voz alta después de generar las respuestas.</div>
+      </div>
+    </div>
+
+    <!-- BONUS -->
+    <div class="prompt-card" data-tags="biz eda">
+      <div class="prompt-top">
+        <div class="prompt-num">23</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Traducir jerga técnica a lenguaje de negocio</div>
+          <div class="prompt-tags"><span class="tag tag-story">Storytelling</span><span class="tag tag-biz">Negocio</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un intérprete entre el mundo técnico de datos y el mundo de negocios. Convertí estas frases técnicas en lenguaje claro para un gerente o área comercial que no tiene conocimiento de datos. Para cada frase, además de la traducción, explicá qué implicancia de negocio tiene.
+
+Frases a traducir:
+<span class="var">[Pegá acá las frases técnicas que querés traducir, una por línea]</span><button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Antes de reuniones con perfiles no técnicos. Recordá: el que comunica bien siempre es más valioso que el que sabe más.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="eda sql">
+      <div class="prompt-top">
+        <div class="prompt-num">24</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Elegir la visualización correcta para un hallazgo</div>
+          <div class="prompt-tags"><span class="tag tag-eda">EDA</span><span class="tag tag-story">Storytelling</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Sos un experto en visualización de datos. Tengo este hallazgo: <span class="var">[describí el hallazgo y el tipo de datos: tendencia temporal / comparación / distribución / parte-todo / correlación]</span>. ¿Qué tipo de gráfico es el más efectivo para comunicar esto a <span class="var">[perfil: ejecutivo / operativo / técnico]</span>? Dame 3 opciones de menor a mayor complejidad, con los pros y contras de cada una y cuándo usar cada una.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Antes de crear visualizaciones. El gráfico equivocado puede ocultar el insight o confundir la audiencia.</div>
+      </div>
+    </div>
+
+    <div class="prompt-card" data-tags="biz career">
+      <div class="prompt-top">
+        <div class="prompt-num">25</div>
+        <div class="prompt-meta">
+          <div class="prompt-title">Plan de 30 días para aprender contexto de negocio en empresa nueva</div>
+          <div class="prompt-tags"><span class="tag tag-biz">Negocio</span><span class="tag tag-career">Carrera</span></div>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-box">Actuá como mentor de analistas de datos con 10 años de experiencia. Acabo de entrar como analista de datos en una empresa de <span class="var">[industria]</span>. Mi objetivo es entender el negocio y proponer mi primer análisis relevante en 30 días. Diseñame un plan semana a semana usando el método del libro "Los Tres Pilares": qué preguntas hacer, qué reuniones observar, qué documentos pedir y cuándo hacer mi primera propuesta de análisis sin que me la pidan.<button class="copy-btn" onclick="copyPrompt(this)">Copiar</button></div>
+        <div class="prompt-tip"><strong>Cuándo usarlo:</strong> Tu primera semana en una empresa nueva. Los primeros 30 días definen cómo te van a ver el resto de tu estadía.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Prompts IA</span> · emmanueldorado.gumroad.com</div>
+    <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+
+</div>
+<script>
+  function filter(btn, tag) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    let visible = 0;
+    document.querySelectorAll('.prompt-card').forEach(card => {
+      if (tag === 'all' || card.dataset.tags.includes(tag)) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    document.getElementById('visibleCount').textContent = visible;
+  }
+
+  function copyPrompt(btn) {
+    const box = btn.parentElement;
+    const text = box.innerText.replace('Copiar', '').replace('Copiado!', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+</script>
+</body>
+</html>

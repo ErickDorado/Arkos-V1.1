@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist de Storytelling de Datos — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #111e35;
+    --navy-light: #1a3060;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --green: #10b981;
+    --green-light: #6ee7b7;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  .container { max-width: 820px; margin: 0 auto; }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(249,115,22,0.3);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: var(--orange);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.15);
+    border: 1px solid rgba(249,115,22,0.4);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 14px; border-radius: 2px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; font-weight: 900;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; margin-top: 8px; }
+
+  /* INTRO BAR */
+  .intro-bar {
+    background: linear-gradient(135deg, rgba(249,115,22,0.1) 0%, rgba(245,158,11,0.05) 100%);
+    border: 1px solid rgba(249,115,22,0.25);
+    border-left: 4px solid var(--orange);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 0.9rem;
+    color: var(--gray-300);
+    line-height: 1.7;
+  }
+  .intro-bar strong { color: var(--orange-light); }
+
+  /* PHASE BLOCK */
+  .phase {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .phase-header {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .phase-header.orange { background: rgba(249,115,22,0.1); border-bottom-color: rgba(249,115,22,0.2); }
+  .phase-header.green  { background: rgba(16,185,129,0.08); border-bottom-color: rgba(16,185,129,0.2); }
+  .phase-header.blue   { background: rgba(59,130,246,0.08); border-bottom-color: rgba(59,130,246,0.2); }
+  .phase-header.yellow { background: rgba(245,158,11,0.08); border-bottom-color: rgba(245,158,11,0.2); }
+
+  .phase-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .orange .phase-num { background: var(--orange); color: white; }
+  .green  .phase-num { background: var(--green);  color: white; }
+  .blue   .phase-num { background: #3b82f6;        color: white; }
+  .yellow .phase-num { background: var(--yellow);  color: #0a1628; }
+
+  .phase-title-wrap {}
+  .phase-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 2px;
+  }
+  .orange .phase-label { color: var(--orange); }
+  .green  .phase-label { color: var(--green-light); }
+  .blue   .phase-label { color: #93c5fd; }
+  .yellow .phase-label { color: var(--yellow); }
+
+  .phase-title {
+    font-size: 1rem; font-weight: 600;
+    color: var(--white);
+  }
+
+  .checklist-body { padding: 8px 0; }
+
+  /* CHECKLIST ITEM */
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: rgba(255,255,255,0.03); }
+  .item.checked { opacity: 0.55; }
+  .item.checked .item-text { text-decoration: line-through; }
+
+  .checkbox {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .item.checked .checkbox {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .checkbox svg { display: none; }
+  .item.checked .checkbox svg { display: block; }
+
+  .item-content {}
+  .item-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--gray-300);
+    transition: color 0.15s;
+  }
+  .item.checked .item-text { color: var(--gray-500); }
+  .item-note {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    font-style: italic;
+    margin-top: 3px;
+  }
+
+  /* CRITICAL BADGE */
+  .critical {
+    display: inline-block;
+    background: rgba(239,68,68,0.15);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: #fca5a5;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 6px; border-radius: 2px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .tip-badge {
+    display: inline-block;
+    background: rgba(249,115,22,0.12);
+    border: 1px solid rgba(249,115,22,0.25);
+    color: var(--orange-light);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8px; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 6px; border-radius: 2px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: var(--navy-mid);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .progress-info { flex: 1; }
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 8px;
+  }
+  .progress-bar-bg {
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), var(--green));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-count {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700;
+    color: var(--orange);
+    white-space: nowrap;
+  }
+  .progress-count span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    font-weight: 400;
+  }
+
+  /* RESET + PRINT */
+  .controls {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+  .footer-brand span { color: var(--orange); }
+  .btn-group { display: flex; gap: 10px; }
+  .btn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 9px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--gray-300);
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none;
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 8px;
+    padding: 16px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--green-light);
+    font-size: 0.9rem;
+  }
+  .success-msg.show { display: block; }
+
+  @media (max-width: 600px) {
+    .header h1 { font-size: 1.7rem; }
+    .progress-wrap { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .controls .btn { display: none; }
+    .phase { border: 1px solid #e2e8f0; }
+    .checkbox { border-color: #94a3b8; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">Pilar 2 — Soft Skills</div>
+    <h1>Checklist de <span>Storytelling</span> de Datos</h1>
+    <p>Revisá cada punto antes de presentar tu análisis · Marca lo que ya tenés listo</p>
+  </div>
+
+  <div class="intro-bar">
+    <strong>¿Cómo usar este checklist?</strong> Completalo antes de cada presentación, reunión o email con stakeholders. Cada ítem sin marcar es un riesgo de que tu análisis no genere el impacto esperado. <strong>El objetivo no es la perfección: es la claridad.</strong>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <div class="progress-label">Progreso del checklist</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
+    <div class="progress-count" id="progressCount">0 <span>/ 28</span></div>
+  </div>
+
+  <div class="success-msg" id="successMsg">
+    ✓ &nbsp; ¡Checklist completo! Tu análisis está listo para generar impacto.
+  </div>
+
+  <!-- FASE 1 -->
+  <div class="phase">
+    <div class="phase-header orange">
+      <div class="phase-num">1</div>
+      <div class="phase-title-wrap">
+        <div class="phase-label">Antes de empezar</div>
+        <div class="phase-title">Claridad de propósito</div>
+      </div>
+    </div>
+    <div class="checklist-body">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Sé exactamente cuál es la <strong>decisión que quiero habilitar</strong> con este análisis <span class="critical">crítico</span></div>
+          <div class="item-note">Sin decisión clara → el análisis es decoración, no herramienta.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Identifiqué el <strong>perfil de la audiencia</strong> (Operativo, Gerente o Técnico)</div>
+          <div class="item-note">El mismo hallazgo necesita tres mensajes distintos.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Tengo claro el <strong>tiempo disponible</strong> para la presentación o lectura</div>
+          <div class="item-note">Reunión de 5 min ≠ email largo ≠ reunión formal de 30 min.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Apliqué el <strong>Framework de las 5 Preguntas</strong> antes de armar la narrativa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="phase">
+    <div class="phase-header orange">
+      <div class="phase-num">2</div>
+      <div class="phase-title-wrap">
+        <div class="phase-label">Estructura de la narrativa</div>
+        <div class="phase-title">Los 5 pasos están completos</div>
+      </div>
+    </div>
+    <div class="checklist-body">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text"><strong>Paso 1 — Contexto:</strong> situé al oyente en qué datos analicé, período y alcance</div>
+          <div class="item-note">Máximo 2 oraciones. No asumas que ya saben de qué se trata.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text"><strong>Paso 2 — Problema:</strong> el hallazgo principal está en 1 sola oración con número concreto <span class="critical">crítico</span></div>
+          <div class="item-note">Si necesitás más de una oración, el problema no está claro aún.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text"><strong>Paso 3 — Evidencia:</strong> incluí 2 o 3 datos comparativos que sostienen el problema</div>
+          <div class="item-note">Usar benchmarks, períodos anteriores o comparaciones entre segmentos.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text"><strong>Paso 4 — Implicancia:</strong> traduje el hallazgo a dinero, tiempo o riesgo para el negocio <span class="critical">crítico</span></div>
+          <div class="item-note">Ej: "esto nos cuesta $X por mes" o "esto afecta la calificación en Mercado Libre".</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text"><strong>Paso 5 — Recomendación:</strong> propuse una acción concreta con qué, cuánto y cuándo <span class="critical">crítico</span></div>
+          <div class="item-note">Una recomendación vaga ("mejorar el proceso") no genera acción.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="phase">
+    <div class="phase-header blue">
+      <div class="phase-num">3</div>
+      <div class="phase-title-wrap">
+        <div class="phase-label">Comunicación y lenguaje</div>
+        <div class="phase-title">Hablar para la audiencia, no para los datos</div>
+      </div>
+    </div>
+    <div class="checklist-body">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Empecé por el <strong>negocio</strong>, no por la metodología ni la herramienta usada</div>
+          <div class="item-note">Nunca arrancar con "apliqué un LEFT JOIN..." si la audiencia no es técnica.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Usé <strong>porcentajes humanizados</strong> ("4 de cada 10") en lugar de solo decimales</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Eliminé o expliqué todos los <strong>términos técnicos</strong> que la audiencia puede no conocer</div>
+          <div class="item-note">OTD, CAC, ROAS, JOIN, KPI — todos deben estar explicados si no son técnicos.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">El mensaje <strong>principal cabe en una oración</strong> que puedo decir en 10 segundos</div>
+          <div class="item-note">Si tardás más, no está lo suficientemente claro aún.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Preparé la <strong>versión adaptada</strong> al perfil de quien recibirá el análisis</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 4 -->
+  <div class="phase">
+    <div class="phase-header green">
+      <div class="phase-num">4</div>
+      <div class="phase-title-wrap">
+        <div class="phase-label">Datos y evidencia</div>
+        <div class="phase-title">Confiabilidad del análisis</div>
+      </div>
+    </div>
+    <div class="checklist-body">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Verifiqué que los datos usados son <strong>correctos y actualizados</strong> <span class="critical">crítico</span></div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Aclaré el <strong>período y la fuente</strong> de los datos</div>
+          <div class="item-note">Ej: "datos del Q3 2026, extraídos del ERP el 15/10".</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Mencioné las <strong>limitaciones o supuestos</strong> si los hay (datos incompletos, estimaciones)</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Los gráficos o tablas <strong>ilustran el punto</strong>, no confunden ni sobrecargan</div>
+          <div class="item-note">Si quitás el gráfico y el punto sigue claro, el gráfico es un extra, no el eje.</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Puedo <strong>responder preguntas básicas</strong> sobre los datos si me las hacen</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FASE 5 -->
+  <div class="phase">
+    <div class="phase-header yellow">
+      <div class="phase-num">5</div>
+      <div class="phase-title-wrap">
+        <div class="phase-label">Recomendación y cierre</div>
+        <div class="phase-title">Del análisis a la acción</div>
+      </div>
+    </div>
+    <div class="checklist-body">
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">La recomendación es <strong>específica</strong> (tiene qué hacer, cuánto, y cuándo)</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Incluí el <strong>impacto esperado medible</strong> (KPI objetivo, timeframe, cómo medir)</div>
+          <div class="item-note">Ej: "+8 puntos de OTD en 30 días, medido semana a semana".</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Anticipé al menos <strong>2 objeciones posibles</strong> y tengo respuesta para cada una</div>
+          <div class="item-note">Las más comunes: "muy caro", "no tenemos datos suficientes", "ya lo intentamos".</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Tengo claros los <strong>próximos pasos</strong> concretos (quién hace qué y cuándo)</div>
+        </div>
+      </div>
+      <div class="item" onclick="toggle(this)">
+        <div class="checkbox"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="item-content">
+          <div class="item-text">Sé qué <strong>decisión necesito del stakeholder</strong> al final de la presentación</div>
+          <div class="item-note">Nunca terminar sin un pedido claro: aprobación, fecha, presupuesto, etc.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="footer-brand">LOS TRES PILARES · <span>Storytelling</span> · emmanueldorado.gumroad.com</div>
+    <div class="btn-group">
+      <button class="btn btn-ghost" onclick="resetAll()">Reiniciar</button>
+      <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL = document.querySelectorAll('.item').length;
+
+  function toggle(el) {
+    el.classList.toggle('checked');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const checked = document.querySelectorAll('.item.checked').length;
+    const pct = (checked / TOTAL) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressCount').innerHTML = checked + ' <span>/ ' + TOTAL + '</span>';
+    document.getElementById('successMsg').classList.toggle('show', checked === TOTAL);
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.item').forEach(el => el.classList.remove('checked'));
+    updateProgress();
+  }
+
+  updateProgress();
+</script>
+</body>
+</html>

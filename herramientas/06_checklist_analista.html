@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist del Analista Profesional — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f2044;
+    --orange: #f97316;
+    --orange-light: #fb923c;
+    --gold: #f59e0b;
+    --white: #f8fafc;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --green: #10b981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #0d1b2e;
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 720px;
+    background: var(--navy);
+    border: 1px solid rgba(249,115,22,0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    position: relative;
+  }
+
+  /* Decorative corner accent */
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle at top right, rgba(249,115,22,0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* TOP HEADER */
+  .page-header {
+    background: linear-gradient(135deg, #0f2044 0%, #1a3060 100%);
+    border-bottom: 3px solid var(--orange);
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 20px;
+  }
+  .header-left {}
+  .header-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    opacity: 0.8;
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  .header-title span { color: var(--orange); }
+  .header-sub {
+    font-size: 0.82rem;
+    color: var(--gray-300);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+  .header-right {
+    text-align: center;
+  }
+  .big-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--orange);
+    line-height: 1;
+    opacity: 0.6;
+  }
+  .big-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-top: 4px;
+  }
+
+  /* BODY */
+  .page-body {
+    padding: 24px 32px 20px;
+  }
+
+  /* Section */
+  .check-section {
+    margin-bottom: 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .section-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .icon-1 { background: rgba(59,130,246,0.2); }
+  .icon-2 { background: rgba(249,115,22,0.2); }
+  .icon-3 { background: rgba(16,185,129,0.2); }
+  .icon-4 { background: rgba(139,92,246,0.2); }
+
+  .section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .color-1 { color: #93c5fd; }
+  .color-2 { color: #fdba74; }
+  .color-3 { color: #6ee7b7; }
+  .color-4 { color: #c4b5fd; }
+
+  .section-num {
+    margin-left: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+  }
+
+  /* Items */
+  .check-items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 4px;
+  }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { background: rgba(255,255,255,0.03); }
+  .check-item.checked { background: rgba(16,185,129,0.05); }
+  .check-item.checked .item-text { color: var(--gray-500); text-decoration: line-through; text-decoration-color: rgba(100,116,139,0.5); }
+  .check-item.checked .checkbox { background: var(--green); border-color: var(--green); }
+  .check-item.checked .checkbox::after { opacity: 1; }
+
+  .checkbox {
+    width: 18px; height: 18px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .checkbox::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    color: white;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .item-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--white);
+    transition: color 0.15s;
+    flex: 1;
+  }
+  .item-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    padding: 2px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+  .tag-m { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .tag-s { background: rgba(249,115,22,0.15); color: #fdba74; }
+  .tag-n { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+  .tag-x { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+
+  /* Progress */
+  .progress-area {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 16px;
+  }
+  .progress-bar-bg {
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, #3b82f6, var(--orange), var(--green));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-bottom: 6px;
+  }
+  .progress-count {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .progress-total {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gray-500);
+  }
+
+  /* Date row */
+  .date-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .date-field {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 5px;
+    padding: 10px 12px;
+  }
+  .date-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .date-field input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    color: var(--white);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    width: 100%;
+    padding: 2px 0;
+    outline: none;
+  }
+  .date-field input::placeholder { color: var(--gray-500); }
+
+  /* Footer */
+  .page-footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0.15);
+  }
+  .footer-brand {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--gray-500);
+  }
+  .footer-brand span { color: var(--orange); }
+  .print-btn {
+    background: var(--orange);
+    color: white;
+    border: none;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .print-btn:hover { background: var(--orange-light); }
+
+  @media (max-width: 600px) {
+    .page-header { grid-template-columns: 1fr; }
+    .header-right { display: none; }
+    .date-row { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { background: white; padding: 0; }
+    .page { border-radius: 0; box-shadow: none; border-color: #ddd; background: white; }
+    .page-header { background: #0a1628; }
+    .print-btn { display: none; }
+    .check-item:hover { background: transparent; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-eyebrow">Los Tres Pilares del Analista de Datos</div>
+      <div class="header-title">Checklist del<br><span>Analista Profesional</span></div>
+      <div class="header-sub">Antes de cada entrega · Revisión mensual · Crecimiento continuo</div>
+    </div>
+    <div class="header-right">
+      <div class="big-number">20</div>
+      <div class="big-label">ítems clave</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="page-body">
+
+    <!-- Progress -->
+    <div class="progress-area">
+      <div>
+        <div class="progress-label">Progreso — tildá los ítems para avanzar</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div class="progress-count" id="progressCount">0</div>
+        <div class="progress-total">/ 20</div>
+      </div>
+    </div>
+
+    <!-- PILAR 1 — MENTALIDAD -->
+    <div class="check-section">
+      <div class="section-header">
+        <div class="section-icon icon-1">🧠</div>
+        <span class="section-title color-1">Pilar 1 — Mentalidad</span>
+        <span class="section-num color-1">5 ítems</span>
+      </div>
+      <div class="check-items">
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Apliqué el Framework de las 5 Preguntas antes de abrir cualquier herramienta</span>
+          <span class="item-tag tag-m">Mentalidad</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Tengo al menos un proyecto pequeño en marcha esta semana</span>
+          <span class="item-tag tag-m">Mentalidad</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">No empecé un curso nuevo antes de terminar el proyecto actual</span>
+          <span class="item-tag tag-m">Mentalidad</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Anoté qué funcionó, qué falló y qué aprendí en mi último análisis</span>
+          <span class="item-tag tag-m">Mentalidad</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Me comparé solo con mi versión de hace 30 días, no con seniors de LinkedIn</span>
+          <span class="item-tag tag-m">Mentalidad</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PILAR 2 — SOFT SKILLS -->
+    <div class="check-section">
+      <div class="section-header">
+        <div class="section-icon icon-2">💬</div>
+        <span class="section-title color-2">Pilar 2 — Soft Skills</span>
+        <span class="section-num color-2">7 ítems</span>
+      </div>
+      <div class="check-items">
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Usé la estructura de 5 pasos (Contexto → Problema → Evidencia → Implicancia → Recomendación)</span>
+          <span class="item-tag tag-s">Soft Skills</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Entrego una recomendación concreta, no solo números o gráficos</span>
+          <span class="item-tag tag-s">Soft Skills</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Adapté el mensaje al perfil del stakeholder (Operativo / Gerente / Técnico)</span>
+          <span class="item-tag tag-s">Soft Skills</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Evité jerga técnica (SQL, queries, JOINs) en comunicaciones a no técnicos</span>
+          <span class="item-tag tag-s">Soft Skills</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Anticipé al menos 2 objeciones y preparé respuestas antes de la reunión</span>
+          <span class="item-tag tag-s">Soft Skills</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">El análisis tiene título claro, contexto y una recomendación visible al inicio</span>
+          <span class="item-tag tag-s">Soft Skills</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Conecté los hallazgos con dinero, tiempo o riesgo — los tres idiomas del gerente</span>
+          <span class="item-tag tag-s">Soft Skills</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PILAR 3 — CONTEXTO -->
+    <div class="check-section">
+      <div class="section-header">
+        <div class="section-icon icon-3">🏢</div>
+        <span class="section-title color-3">Pilar 3 — Contexto de Negocio</span>
+        <span class="section-num color-3">5 ítems</span>
+      </div>
+      <div class="check-items">
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Sé qué decisión concreta habilita este análisis antes de empezar</span>
+          <span class="item-tag tag-n">Negocio</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Identifiqué al menos un análisis para proponer sin que me lo pidan este mes</span>
+          <span class="item-tag tag-n">Negocio</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Usé mi ventaja de dominio (expertise previo) como diferenciador en el análisis</span>
+          <span class="item-tag tag-n">Negocio</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Conozco los 3–5 KPIs más importantes del área que estoy analizando</span>
+          <span class="item-tag tag-n">Negocio</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Pregunté "¿qué haría diferente el stakeholder si supiera este dato?" antes de presentar</span>
+          <span class="item-tag tag-n">Negocio</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PORTFOLIO & CRECIMIENTO -->
+    <div class="check-section">
+      <div class="section-header">
+        <div class="section-icon icon-4">🚀</div>
+        <span class="section-title color-4">Portfolio & Crecimiento</span>
+        <span class="section-num color-4">3 ítems</span>
+      </div>
+      <div class="check-items">
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Actualicé mi portfolio / GitHub con el análisis o proyecto más reciente</span>
+          <span class="item-tag tag-x">Portfolio</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Repetí el Test de Mentalidad este mes y anoté mi puntaje para comparar</span>
+          <span class="item-tag tag-x">Crecimiento</span>
+        </div>
+        <div class="check-item" onclick="toggle(this)">
+          <div class="checkbox"></div>
+          <span class="item-text">Compartí un avance (análisis, pregunta o aprendizaje) con alguien de mi comunidad</span>
+          <span class="item-tag tag-x">Comunidad</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Date row -->
+    <div class="date-row">
+      <div class="date-field">
+        <label>Fecha actual</label>
+        <input type="text" placeholder="DD/MM/AAAA">
+      </div>
+      <div class="date-field">
+        <label>Próxima revisión</label>
+        <input type="text" placeholder="DD/MM/AAAA (+30 días)">
+      </div>
+      <div class="date-field">
+        <label>Puntaje Test Mentalidad</label>
+        <input type="text" placeholder="__ / 25">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>Checklist Profesional</span> · emmanueldorado.gumroad.com</div>
+    <button class="print-btn" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+
+</div>
+
+<script>
+  const total = 20;
+  function toggle(el) {
+    el.classList.toggle('checked');
+    updateProgress();
+  }
+  function updateProgress() {
+    const checked = document.querySelectorAll('.check-item.checked').length;
+    document.getElementById('progressCount').textContent = checked;
+    document.getElementById('progressBar').style.width = (checked / total * 100) + '%';
+  }
+</script>
+</body>
+</html>

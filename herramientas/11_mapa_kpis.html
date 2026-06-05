@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa de KPIs por Industria — Los Tres Pilares</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628; --navy-mid: #111e35; --orange: #f97316;
+    --orange-light: #fb923c; --white: #f8fafc; --gray-300: #cbd5e1;
+    --gray-500: #64748b; --green: #10b981; --blue: #3b82f6;
+    --purple: #8b5cf6; --pink: #ec4899; --yellow: #f59e0b; --teal: #14b8a6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; padding: 40px 20px; }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 36px; padding-bottom: 24px; border-bottom: 1px solid rgba(249,115,22,0.3); position: relative; }
+  .header::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--orange); }
+  .badge { display: inline-block; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.4); color: var(--orange-light); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; padding: 5px 14px; border-radius: 2px; margin-bottom: 12px; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; margin-bottom: 6px; }
+  .header h1 span { color: var(--orange); }
+  .header p { color: var(--gray-300); font-size: 0.9rem; font-weight: 300; margin-top: 8px; }
+
+  .gold-rule {
+    background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.2);
+    border-left: 4px solid var(--orange); border-radius: 6px;
+    padding: 14px 18px; margin-bottom: 28px;
+    font-size: 0.88rem; color: var(--gray-300); line-height: 1.7;
+  }
+  .gold-rule strong { color: var(--orange-light); }
+
+  /* INDUSTRY TABS */
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .tab-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px; color: var(--gray-300);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+    padding: 8px 16px; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tab-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+  .tab-btn.active { color: white; }
+  .tab-btn[data-ind="logistics"].active    { background: rgba(249,115,22,0.2); border-color: var(--orange); }
+  .tab-btn[data-ind="ecommerce"].active    { background: rgba(59,130,246,0.2); border-color: var(--blue); }
+  .tab-btn[data-ind="finance"].active      { background: rgba(16,185,129,0.2); border-color: var(--green); }
+  .tab-btn[data-ind="hr"].active           { background: rgba(139,92,246,0.2); border-color: var(--purple); }
+  .tab-btn[data-ind="retail"].active       { background: rgba(236,72,153,0.2); border-color: var(--pink); }
+  .tab-btn[data-ind="cx"].active           { background: rgba(245,158,11,0.2); border-color: var(--yellow); }
+  .tab-btn[data-ind="tech"].active         { background: rgba(20,184,166,0.2); border-color: var(--teal); }
+  .tab-btn[data-ind="health"].active       { background: rgba(239,68,68,0.2); border-color: #ef4444; }
+
+  /* INDUSTRY PANEL */
+  .industry-panel { display: none; }
+  .industry-panel.active { display: block; }
+
+  .industry-header {
+    padding: 18px 22px; border-radius: 10px 10px 0 0;
+    display: flex; align-items: center; gap: 14px; margin-bottom: 0;
+  }
+  .ind-icon { font-size: 1.6rem; }
+  .ind-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
+  .ind-sub { font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace; letter-spacing: 1px; opacity: 0.7; margin-top: 2px; }
+
+  .logistics-h    { background: linear-gradient(135deg, rgba(249,115,22,0.15), rgba(249,115,22,0.05)); border: 1px solid rgba(249,115,22,0.3); }
+  .ecommerce-h    { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(59,130,246,0.05)); border: 1px solid rgba(59,130,246,0.3); }
+  .finance-h      { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); }
+  .hr-h           { background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.05)); border: 1px solid rgba(139,92,246,0.3); }
+  .retail-h       { background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.05)); border: 1px solid rgba(236,72,153,0.3); }
+  .cx-h           { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05)); border: 1px solid rgba(245,158,11,0.3); }
+  .tech-h         { background: linear-gradient(135deg, rgba(20,184,166,0.15), rgba(20,184,166,0.05)); border: 1px solid rgba(20,184,166,0.3); }
+  .health-h       { background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05)); border: 1px solid rgba(239,68,68,0.3); }
+
+  /* KPI TABLE */
+  .kpi-table-wrap {
+    border: 1px solid rgba(255,255,255,0.08); border-top: none;
+    border-radius: 0 0 10px 10px; overflow: hidden; margin-bottom: 24px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: rgba(0,0,0,0.25); }
+  thead th {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray-500); padding: 12px 16px; text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  tbody tr { border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody td { padding: 14px 16px; vertical-align: top; font-size: 0.84rem; line-height: 1.6; color: var(--gray-300); }
+  .kpi-name { font-weight: 600; color: var(--white); font-size: 0.88rem; }
+  .kpi-formula { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--gray-500); margin-top: 3px; }
+  .alarm { color: #fca5a5; font-size: 0.82rem; }
+  .decision { color: #d1fae5; font-size: 0.82rem; }
+  .decision-item { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 3px; }
+  .decision-item::before { content: '→'; color: var(--orange); flex-shrink: 0; font-size: 0.75rem; margin-top: 2px; }
+
+  /* FREQ BADGE */
+  .freq {
+    font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 1px;
+    text-transform: uppercase; padding: 2px 7px; border-radius: 10px;
+    display: inline-block; margin-top: 4px;
+  }
+  .freq-d  { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .freq-w  { background: rgba(249,115,22,0.15); color: var(--orange-light); }
+  .freq-m  { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .freq-q  { background: rgba(139,92,246,0.15); color: #c4b5fd; }
+
+  /* FOOTER */
+  .outer-footer { margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; }
+  .footer-brand { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+  .footer-brand span { color: var(--orange); }
+  .btn { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.82rem; font-weight: 500; padding: 9px 20px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: var(--orange-light); }
+
+  @media (max-width: 700px) {
+    .header h1 { font-size: 1.6rem; }
+    thead th:nth-child(3), tbody td:nth-child(3) { display: none; }
+    .tabs { gap: 6px; }
+    .tab-btn { font-size: 0.7rem; padding: 6px 10px; }
+  }
+  @media print {
+    body { background: white; color: #0a1628; }
+    .industry-panel { display: block !important; page-break-after: always; }
+    .tabs, .outer-footer .btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">Pilar 3 — Contexto de Negocio</div>
+    <h1>Mapa de <span>KPIs</span> por Industria</h1>
+    <p>8 industrias · KPI → Señal de alarma → Decisión que habilita · Frecuencia de medición</p>
+  </div>
+
+  <div class="gold-rule">
+    <strong>Regla de oro:</strong> Un KPI sin una decisión asociada es solo decoración. Siempre preguntate: <strong>"¿Qué haría diferente si este número cambia?"</strong> Si no tenés respuesta concreta, ese KPI no debería estar en tu dashboard.
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-ind="logistics" onclick="showInd(this)">🚚 Logística</button>
+    <button class="tab-btn" data-ind="ecommerce" onclick="showInd(this)">🛒 E-commerce</button>
+    <button class="tab-btn" data-ind="finance" onclick="showInd(this)">💰 Finanzas</button>
+    <button class="tab-btn" data-ind="hr" onclick="showInd(this)">👥 RRHH</button>
+    <button class="tab-btn" data-ind="retail" onclick="showInd(this)">🏪 Retail</button>
+    <button class="tab-btn" data-ind="cx" onclick="showInd(this)">⭐ Customer Exp.</button>
+    <button class="tab-btn" data-ind="tech" onclick="showInd(this)">💻 Tech / SaaS</button>
+    <button class="tab-btn" data-ind="health" onclick="showInd(this)">🏥 Salud</button>
+  </div>
+
+  <!-- LOGÍSTICA -->
+  <div class="industry-panel active" id="ind-logistics">
+    <div class="industry-header logistics-h">
+      <div class="ind-icon">🚚</div>
+      <div><div class="ind-name">Logística / Supply Chain</div><div class="ind-sub">Carriers · Distribución · Almacén · OTD</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">OTD % (On-Time Delivery)</div><div class="kpi-formula">Entregas a tiempo / Total entregas</div></td><td class="alarm">Cae por debajo del SLA contratado o del trimestre anterior. Concentrado en un carrier o zona específica.</td><td class="decision"><div class="decision-item">¿Renovamos, renegociamos o cambiamos carrier?</div><div class="decision-item">¿Reasignamos volumen por zona?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Fill Rate %</div><div class="kpi-formula">Líneas completas / Total líneas pedidas</div></td><td class="alarm">Baja del 95%. Pedidos incompletos frecuentes. Aumentan los pedidos parciales.</td><td class="decision"><div class="decision-item">¿Ajustamos el stock mínimo?</div><div class="decision-item">¿Revisamos el proveedor de ese SKU?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Demora promedio (días)</div><div class="kpi-formula">Suma de días de atraso / Pedidos atrasados</div></td><td class="alarm">Sube más de 1 día respecto al período anterior. Concentrado en cierta región o temporada.</td><td class="decision"><div class="decision-item">¿Cambiamos la ruta de distribución?</div><div class="decision-item">¿Renegociamos SLA con carrier?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Costo por envío ($)</div><div class="kpi-formula">Costo total envíos / Pedidos enviados</div></td><td class="alarm">Supera el presupuesto por carrier o zona. El carrier más caro tiene el peor OTD.</td><td class="decision"><div class="decision-item">¿Buscamos carrier alternativo?</div><div class="decision-item">¿Consolidamos envíos por zona?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Tasa de devolución logística %</div><div class="kpi-formula">Devoluciones por logística / Total envíos</div></td><td class="alarm">Sube más de 2 puntos. Concentrada en productos específicos o en cierto carrier.</td><td class="decision"><div class="decision-item">¿Revisamos el embalaje?</div><div class="decision-item">¿Auditamos al carrier?</div><div class="decision-item">¿Suspendemos SKU problemático?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Tiempo de picking (min)</div><div class="kpi-formula">Min totales picking / Pedidos procesados</div></td><td class="alarm">Sube más del 15% sin aumento de volumen. Diferencia grande entre turnos.</td><td class="decision"><div class="decision-item">¿Reorganizamos el almacén?</div><div class="decision-item">¿Revisamos capacitación del equipo?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- E-COMMERCE -->
+  <div class="industry-panel" id="ind-ecommerce">
+    <div class="industry-header ecommerce-h">
+      <div class="ind-icon">🛒</div>
+      <div><div class="ind-name">E-commerce / Marketing Digital</div><div class="ind-sub">Ads · CAC · ROAS · Conversión · Recompra</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">Conversión % (visita → compra)</div><div class="kpi-formula">Compras / Visitas únicas × 100</div></td><td class="alarm">Cae más de 1 punto sin caída de tráfico. El problema está en el proceso, no en la demanda.</td><td class="decision"><div class="decision-item">¿Revisamos el checkout?</div><div class="decision-item">¿Cambiamos la landing?</div><div class="decision-item">¿Mejoramos la ficha de producto?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">ROAS por canal</div><div class="kpi-formula">Ingresos atribuidos / Inversión en ads</div></td><td class="alarm">Un canal cae por debajo de 2x. La diferencia entre canales supera el 50%.</td><td class="decision"><div class="decision-item">¿Reasignamos presupuesto?</div><div class="decision-item">¿Pausamos el canal?</div><div class="decision-item">¿Cambiamos creatividades?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">CAC (Costo Adquisición Cliente)</div><div class="kpi-formula">Inversión total / Clientes nuevos adquiridos</div></td><td class="alarm">Supera el 30% del LTV proyectado a 12 meses. Sube sin mejora en volumen ni calidad.</td><td class="decision"><div class="decision-item">¿Pausamos inversión en ese canal?</div><div class="decision-item">¿Mejoramos experiencia post-compra?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Tasa de recompra %</div><div class="kpi-formula">Clientes que recompraron / Total clientes activos</div></td><td class="alarm">Cae más de 5 puntos. Los clientes de un canal específico no vuelven.</td><td class="decision"><div class="decision-item">¿Activamos email post-compra?</div><div class="decision-item">¿Revisamos calidad del canal de adquisición?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Abandono de carrito %</div><div class="kpi-formula">Carritos abandonados / Carritos iniciados</div></td><td class="alarm">Sube del 70%. La caída ocurre específicamente en el paso de pago.</td><td class="decision"><div class="decision-item">¿Agregamos métodos de pago?</div><div class="decision-item">¿Simplificamos el formulario?</div><div class="decision-item">¿Activamos email de recuperación?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Ticket promedio ($)</div><div class="kpi-formula">Ingresos totales / Número de pedidos</div></td><td class="alarm">Cae más del 10% sin cambios de catálogo. Los descuentos aumentan pero el ticket no sube.</td><td class="decision"><div class="decision-item">¿Revisamos estrategia de descuentos?</div><div class="decision-item">¿Activamos upselling o bundles?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FINANZAS -->
+  <div class="industry-panel" id="ind-finance">
+    <div class="industry-header finance-h">
+      <div class="ind-icon">💰</div>
+      <div><div class="ind-name">Finanzas</div><div class="ind-sub">Margen · EBITDA · Flujo · Deuda · Cobros</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">Margen bruto %</div><div class="kpi-formula">(Ventas - Costo de ventas) / Ventas</div></td><td class="alarm">Cae más de 3 puntos. El costo de producto sube sin aumento de precio de venta.</td><td class="decision"><div class="decision-item">¿Renegociamos con proveedores?</div><div class="decision-item">¿Subimos precios?</div><div class="decision-item">¿Discontinuamos SKUs no rentables?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">EBITDA</div><div class="kpi-formula">Resultado operativo + Amortizaciones</div></td><td class="alarm">Negativo o debajo del benchmark sectorial. Gastos operativos crecen más rápido que ingresos.</td><td class="decision"><div class="decision-item">¿Auditamos los gastos fijos?</div><div class="decision-item">¿Revisamos la estructura operativa?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Días de cobro (DSO)</div><div class="kpi-formula">Cuentas por cobrar / (Ventas / 30)</div></td><td class="alarm">Supera los 45 días. Concentrado en ciertos clientes o regiones.</td><td class="decision"><div class="decision-item">¿Cambiamos condiciones de pago?</div><div class="decision-item">¿Activamos cobranza preventiva?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Flujo de caja libre</div><div class="kpi-formula">Flujo operativo - Capex</div></td><td class="alarm">Negativo por más de 2 meses consecutivos. La diferencia entre cobros y pagos se amplía.</td><td class="decision"><div class="decision-item">¿Renegociamos plazos con proveedores?</div><div class="decision-item">¿Revisamos el ciclo de caja?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Ratio deuda/EBITDA</div><div class="kpi-formula">Deuda financiera neta / EBITDA</div></td><td class="alarm">Supera 3x. La deuda crece más rápido que el resultado operativo.</td><td class="decision"><div class="decision-item">¿Frenamos inversiones?</div><div class="decision-item">¿Buscamos refinanciamiento?</div><div class="decision-item">¿Aceleramos cobros?</div></td><td><span class="freq freq-q">Trimestral</span></td></tr>
+          <tr><td><div class="kpi-name">Costo fijo como % de ingresos</div><div class="kpi-formula">Costos fijos totales / Ingresos × 100</div></td><td class="alarm">Sube del 40%. En meses de baja, los ingresos variables no cubren los fijos.</td><td class="decision"><div class="decision-item">¿Renegociamos contratos fijos?</div><div class="decision-item">¿Convertimos costos fijos en variables?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RRHH -->
+  <div class="industry-panel" id="ind-hr">
+    <div class="industry-header hr-h">
+      <div class="ind-icon">👥</div>
+      <div><div class="ind-name">Recursos Humanos</div><div class="ind-sub">Rotación · Contratación · Productividad · Clima</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">Rotación % anual</div><div class="kpi-formula">Bajas en período / Plantel promedio × 100</div></td><td class="alarm">Supera el benchmark de la industria (18-22%). Concentrada en empleados con menos de 6 meses.</td><td class="decision"><div class="decision-item">¿Revisamos el onboarding?</div><div class="decision-item">¿Ajustamos salarios?</div><div class="decision-item">¿Mejoramos condiciones del puesto?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Tiempo de contratación (días)</div><div class="kpi-formula">Días desde apertura hasta incorporación</div></td><td class="alarm">Supera los 30 días para posiciones operativas. Los candidatos se caen en la etapa final.</td><td class="decision"><div class="decision-item">¿Revisamos el proceso de selección?</div><div class="decision-item">¿Ampliamos los canales de búsqueda?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Ausentismo %</div><div class="kpi-formula">Días ausentes / Días laborables totales × 100</div></td><td class="alarm">Supera el 5% mensual. Concentrado en un área o turno específico.</td><td class="decision"><div class="decision-item">¿Auditamos las condiciones de trabajo?</div><div class="decision-item">¿Revisamos la carga horaria?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">eNPS (Employee NPS)</div><div class="kpi-formula">% Promotores - % Detractores</div></td><td class="alarm">Por debajo de 20. Caída de más de 10 puntos en 6 meses.</td><td class="decision"><div class="decision-item">¿Investigamos las causas raíz?</div><div class="decision-item">¿Activamos planes de retención?</div><div class="decision-item">¿Mejoramos el clima organizacional?</div></td><td><span class="freq freq-q">Trimestral</span></td></tr>
+          <tr><td><div class="kpi-name">Costo por contratación ($)</div><div class="kpi-formula">Inversión en selección / Incorporaciones</div></td><td class="alarm">Supera 2x el salario mensual del puesto. Las búsquedas externas cuestan mucho más que el desarrollo interno.</td><td class="decision"><div class="decision-item">¿Invertimos en desarrollo interno?</div><div class="decision-item">¿Cambiamos el canal de reclutamiento?</div></td><td><span class="freq freq-q">Trimestral</span></td></tr>
+          <tr><td><div class="kpi-name">Productividad por empleado</div><div class="kpi-formula">Output total / Número de empleados</div></td><td class="alarm">Cae más del 10% sin reducción de plantel. Diferencia grande entre equipos o turnos.</td><td class="decision"><div class="decision-item">¿Revisamos la capacitación?</div><div class="decision-item">¿Ajustamos la estructura del equipo?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RETAIL -->
+  <div class="industry-panel" id="ind-retail">
+    <div class="industry-header retail-h">
+      <div class="ind-icon">🏪</div>
+      <div><div class="ind-name">Ventas / Retail</div><div class="ind-sub">Tienda física · Stock · Ticket · Frecuencia</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">Ventas por m²</div><div class="kpi-formula">Ventas totales / Metros cuadrados de venta</div></td><td class="alarm">Cae más del 8% sin obras ni cambios de local. Diferencia grande entre sucursales.</td><td class="decision"><div class="decision-item">¿Revisamos el layout?</div><div class="decision-item">¿Cambiamos la exhibición?</div><div class="decision-item">¿Analizamos tráfico por zona?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Conversión en tienda %</div><div class="kpi-formula">Transacciones / Entradas al local</div></td><td class="alarm">Cae sin caída de tráfico. El problema está en la atención o el surtido, no en la demanda.</td><td class="decision"><div class="decision-item">¿Capacitamos al equipo de venta?</div><div class="decision-item">¿Revisamos el mix de productos?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Rotación de stock (días)</div><div class="kpi-formula">Inventario promedio / (Ventas / 30)</div></td><td class="alarm">Sube más de 15 días. Hay productos parados hace más de 60 días.</td><td class="decision"><div class="decision-item">¿Activamos promociones?</div><div class="decision-item">¿Discontinuamos el SKU?</div><div class="decision-item">¿Ajustamos el pedido al proveedor?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Shrinkage % (pérdida de inventario)</div><div class="kpi-formula">(Inv. teórico - Inv. real) / Inv. teórico</div></td><td class="alarm">Supera el 1.5%. Diferencia grande entre inventario contable y físico.</td><td class="decision"><div class="decision-item">¿Revisamos el proceso de recepción?</div><div class="decision-item">¿Auditamos accesos al depósito?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Ticket promedio ($)</div><div class="kpi-formula">Ingresos / Número de transacciones</div></td><td class="alarm">Cae más del 10%. Los clientes compran menos ítems por visita.</td><td class="decision"><div class="decision-item">¿Activamos cross-selling en caja?</div><div class="decision-item">¿Revisamos la exhibición por complementariedad?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Frecuencia de visita</div><div class="kpi-formula">Visitas totales / Clientes únicos activos</div></td><td class="alarm">Cae más del 20% en clientes activos. Los clientes frecuentes empiezan a venir 1 vez/mes en lugar de 2.</td><td class="decision"><div class="decision-item">¿Activamos programa de fidelidad?</div><div class="decision-item">¿Revisamos la propuesta de valor?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUSTOMER EXPERIENCE -->
+  <div class="industry-panel" id="ind-cx">
+    <div class="industry-header cx-h">
+      <div class="ind-icon">⭐</div>
+      <div><div class="ind-name">Customer Experience</div><div class="ind-sub">NPS · CSAT · FCR · Churn · Tiempo de respuesta</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">NPS (Net Promoter Score)</div><div class="kpi-formula">% Promotores - % Detractores</div></td><td class="alarm">Cae más de 10 puntos. Los detractores aumentan en un segmento específico.</td><td class="decision"><div class="decision-item">¿Investigamos el motivo de detracción?</div><div class="decision-item">¿Activamos recuperación de clientes?</div></td><td><span class="freq freq-q">Trimestral</span></td></tr>
+          <tr><td><div class="kpi-name">CSAT (Satisfacción post-contacto)</div><div class="kpi-formula">Votos positivos / Total encuestas</div></td><td class="alarm">Cae del 80%. Concentrado en un canal de atención o tipo de consulta.</td><td class="decision"><div class="decision-item">¿Revisamos los guiones de atención?</div><div class="decision-item">¿Capacitamos al equipo?</div><div class="decision-item">¿Cambiamos el canal?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">FCR % (Resolución en primer contacto)</div><div class="kpi-formula">Casos resueltos en 1 contacto / Total casos</div></td><td class="alarm">Cae del 70%. Los clientes llaman más de una vez por el mismo problema.</td><td class="decision"><div class="decision-item">¿Revisamos los procesos de resolución?</div><div class="decision-item">¿Ampliamos la base de conocimiento?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Tiempo de respuesta (horas)</div><div class="kpi-formula">Suma de horas hasta primer contacto / Casos</div></td><td class="alarm">Supera las 24 hs en canales digitales. Los clientes escalan antes de recibir respuesta.</td><td class="decision"><div class="decision-item">¿Automatizamos la primera respuesta?</div><div class="decision-item">¿Ajustamos la dotación de atención?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Churn rate % (baja de clientes)</div><div class="kpi-formula">Clientes que se dan de baja / Clientes totales</div></td><td class="alarm">Supera el 5% mensual. Concentrado en clientes con menos de 3 meses.</td><td class="decision"><div class="decision-item">¿Activamos onboarding proactivo?</div><div class="decision-item">¿Revisamos la experiencia temprana del cliente?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Tasa de escalamiento %</div><div class="kpi-formula">Casos escalados / Total casos atendidos</div></td><td class="alarm">Supera el 15%. Los agentes de primera línea no pueden resolver por sí solos.</td><td class="decision"><div class="decision-item">¿Revisamos los límites de autorización?</div><div class="decision-item">¿Capacitamos en resolución autónoma?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TECH / SAAS -->
+  <div class="industry-panel" id="ind-tech">
+    <div class="industry-header tech-h">
+      <div class="ind-icon">💻</div>
+      <div><div class="ind-name">Tecnología / SaaS</div><div class="ind-sub">MRR · Churn · DAU/MAU · Activación · Uptime</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">MRR (Monthly Recurring Revenue)</div><div class="kpi-formula">Suma de ingresos recurrentes del mes</div></td><td class="alarm">Crece menos del 10% mensual en etapa early. La tasa de crecimiento cae 3 meses seguidos.</td><td class="decision"><div class="decision-item">¿Revisamos la estrategia de adquisición?</div><div class="decision-item">¿Ajustamos el pricing?</div><div class="decision-item">¿Activamos upselling?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Churn de ingresos %</div><div class="kpi-formula">MRR perdido por bajas / MRR inicio del mes</div></td><td class="alarm">Supera el 3% mensual. Los clientes que se van tienen más MRR que los que entran.</td><td class="decision"><div class="decision-item">¿Mejoramos el onboarding?</div><div class="decision-item">¿Activamos customer success proactivo?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">DAU/MAU (Engagement ratio)</div><div class="kpi-formula">Usuarios activos diarios / Usuarios activos mensuales</div></td><td class="alarm">Cae del 20%. Los usuarios registrados no usan el producto activamente.</td><td class="decision"><div class="decision-item">¿Revisamos la propuesta de valor?</div><div class="decision-item">¿Activamos notificaciones o casos de uso nuevos?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Tiempo de activación (días)</div><div class="kpi-formula">Días hasta completar acción clave post-registro</div></td><td class="alarm">Los usuarios tardan más de 7 días en completar la acción clave. Muchos se registran y nunca activan.</td><td class="decision"><div class="decision-item">¿Simplificamos el onboarding?</div><div class="decision-item">¿Reducimos los pasos de activación?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">CAC Payback (meses)</div><div class="kpi-formula">CAC / MRR promedio por cliente</div></td><td class="alarm">Supera los 12 meses en B2B o 6 en B2C. El costo de adquisición no se recupera con el LTV esperado.</td><td class="decision"><div class="decision-item">¿Reducimos el CAC?</div><div class="decision-item">¿Aumentamos el LTV con planes anuales?</div><div class="decision-item">¿Pivotamos el canal?</div></td><td><span class="freq freq-q">Trimestral</span></td></tr>
+          <tr><td><div class="kpi-name">Uptime %</div><div class="kpi-formula">Minutos disponible / Minutos totales × 100</div></td><td class="alarm">Cae del 99.5%. Hay más de 2 incidentes por mes que afectan a usuarios.</td><td class="decision"><div class="decision-item">¿Revisamos la infraestructura?</div><div class="decision-item">¿Implementamos monitoreo proactivo?</div></td><td><span class="freq freq-d">Diaria</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SALUD -->
+  <div class="industry-panel" id="ind-health">
+    <div class="industry-header health-h">
+      <div class="ind-icon">🏥</div>
+      <div><div class="ind-name">Salud / Clínicas</div><div class="ind-sub">Ausentismo · Tiempos · Reinternación · Facturación · NPS</div></div>
+    </div>
+    <div class="kpi-table-wrap">
+      <table>
+        <thead><tr><th style="width:22%">KPI</th><th style="width:30%">Señal de alarma</th><th style="width:35%">Decisión que habilita</th><th style="width:13%">Frecuencia</th></tr></thead>
+        <tbody>
+          <tr><td><div class="kpi-name">Tasa de ausentismo de pacientes %</div><div class="kpi-formula">Turnos no concurridos / Turnos asignados</div></td><td class="alarm">Supera el 20%. Concentrado en ciertos días o especialidades.</td><td class="decision"><div class="decision-item">¿Activamos recordatorios automáticos?</div><div class="decision-item">¿Revisamos la política de turnos?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Tiempo de espera (minutos)</div><div class="kpi-formula">Tiempo real de atención - Hora de turno</div></td><td class="alarm">Supera los 30 minutos en consultas programadas. Diferencia grande entre médicos o sucursales.</td><td class="decision"><div class="decision-item">¿Redistribuimos la agenda?</div><div class="decision-item">¿Ajustamos la duración de los turnos?</div></td><td><span class="freq freq-w">Semanal</span></td></tr>
+          <tr><td><div class="kpi-name">Tasa de reinternación % (30 días)</div><div class="kpi-formula">Reinternaciones en 30 días / Egresos totales</div></td><td class="alarm">Supera el 8%. Concentrado en ciertas patologías o grupos de pacientes.</td><td class="decision"><div class="decision-item">¿Revisamos el protocolo de alta?</div><div class="decision-item">¿Activamos seguimiento post-alta?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">Facturación por cama/día</div><div class="kpi-formula">Facturación total / (Camas ocupadas × días)</div></td><td class="alarm">Cae más del 10%. La ocupación sube pero la facturación no acompaña.</td><td class="decision"><div class="decision-item">¿Revisamos la codificación de prestaciones?</div><div class="decision-item">¿Auditamos los rechazos de obras sociales?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+          <tr><td><div class="kpi-name">NPS del paciente</div><div class="kpi-formula">% Promotores - % Detractores</div></td><td class="alarm">Cae del 70. Los comentarios negativos se concentran en atención administrativa.</td><td class="decision"><div class="decision-item">¿Capacitamos al personal de recepción?</div><div class="decision-item">¿Simplificamos el proceso de admisión?</div></td><td><span class="freq freq-q">Trimestral</span></td></tr>
+          <tr><td><div class="kpi-name">Costo por episodio ($)</div><div class="kpi-formula">Costo total de atención / Episodios tratados</div></td><td class="alarm">Sube más del 15% sin cambios de protocolo. Diferencia grande entre médicos para la misma patología.</td><td class="decision"><div class="decision-item">¿Estandarizamos protocolos?</div><div class="decision-item">¿Revisamos el uso de insumos?</div></td><td><span class="freq freq-m">Mensual</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="outer-footer">
+    <div class="footer-brand">LOS TRES PILARES · <span>KPIs</span> · emmanueldorado.gumroad.com</div>
+    <button class="btn btn-primary" onclick="window.print()">Imprimir / PDF</button>
+  </div>
+</div>
+
+<script>
+  function showInd(btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.industry-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('ind-' + btn.dataset.ind).classList.add('active');
+  }
+</script>
+</body>
+</html>
